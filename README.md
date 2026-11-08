@@ -1,70 +1,77 @@
 # Entrega 2 — Modelo Lógico, Implementação SQL e Apresentação Final
 
-### Modelagem de um sistema de gestão de informações para uma organização de pequeno porte
+### Modelagem de um sistema de gestão de informações para um restaurante
 
-> Este arquivo é o esqueleto dos artefatos finais do grupo, a serem organizados no repositório GitHub. **Será corrigido exclusivamente o conteúdo da branch `main` do repositório** — arquivos que estiverem em qualquer outra branch não serão considerados, mesmo que o link enviado aponte para ela. Preencha cada seção com o conteúdo do seu projeto. Alguns itens são documentos Markdown, outros são arquivos separados (diagramas, dicionário de dados, script `.sql`, massa de dados, slides) — está indicado em cada seção. Nesta etapa vocês atuam como uma **software house** implementando o banco de dados completo do sistema modelado na Entrega 1 e revisado na seção 1.1 — seja para uma empresa, uma ONG ou outra organização escolhida pelo grupo.
-
-> **Lembrete:** termos como "empresa" e "negócio" usados abaixo são o vocabulário técnico padrão de modelagem de dados e se aplicam a qualquer tipo de organização, com ou sem fins lucrativos.
-
-> **Importante:** esta etapa exige uma **organização real**, com evidências de existência e contato com um responsável.
-
-> - **Se a organização da Entrega 1 era real**, continue com ela — não é permitido trocá-la por outra.  
-> - **Se a organização da Entrega 1 era fictícia** (ou não teve a existência comprovada na correção), o grupo deve **procurar agora uma organização real** e refazer, para ela, toda a base da Entrega 1, inclusive o DER (ver seção 1.1, Caso B).
-
-> Em qualquer caso, o grupo deve manter o acesso à organização, pois pode ser necessário voltar a campo para validar regras, tirar dúvidas sobre o processo de normalização ou conferir se a massa de dados reflete a realidade observada.
-
----
 
 ## 1\. Relatório Técnico Final
 
-*(arquivo Markdown — reúne a maior parte da Dimensão Conceitual, 30%)*
-
-**O Relatório Técnico Final deve ser o próprio `README.md` da raiz da branch `main`**, seguindo a estrutura deste esqueleto. Relatório entregue em outro arquivo (PDF, Word, outro `.md`, Google Docs, wiki do GitHub etc.) **não será corrigido**. Os demais artefatos (DER, modelo lógico, dicionário de dados, levantamento, script SQL, massa de dados, slides) ficam em arquivos separados no repositório, com link a partir do README.
 
 ### Integrantes
 
 | Nome completo do aluno | RGM | Usuário do GitHub |
 | :---- | :---- | :---- |
-| Nome | RGM | usuario |
+| Diego Xavier Ribeiro | 47793007 | ytiow-die |
+| Luiz Felipe de Brito Carvalho | 47857714 | felipeBrito-369 |
+| Nicolas Vieira de Lima | 47212021 | n1kDev |
+| Renan Caio de Lima | 46915575 | SnyQ285 |
 
-&nbsp;
 
-### 1.1 Revisão do Modelo Conceitual
+## 1.1 Revisão do Modelo Conceitual
+ 
+### Caracterização da organização
+ 
+**Nome e natureza.** Ponto A – Restaurante e Pizzaria, restaurante real com fins lucrativos, na Rua Dante Pellacani, 192, Vila Regente Feijó, São Paulo (SP). A casa tem salão, deck e subsolo, e vende pratos de cozinha, pizzas, comida japonesa, bebidas e narguilé.
+ 
+**Contexto e porte.** Números informados pelo responsável na entrevista:
+ 
+| Indicador | Valor |
+|---|---|
+| Funcionários | de 60 a 70 (67 na soma dos cargos listados) |
+| Funcionamento | de segunda a segunda, em dois turnos |
+| Pessoas atendidas por dia | cerca de 500 em dia útil e 1.000 em fim de semana e feriado |
+| Pedidos por dia | de 2.000 a 5.000 |
+| Pedidos atípicos | cerca de 10 por quinzena (garrafas premium) |
+| Mesas | 55, com 4 lugares cada: 22 no salão, 13 no deck e 20 no subsolo |
+| Itens do cardápio | de 400 a 800, em 5 categorias (bar, cozinha, narguilé, comida japonesa e pizzaria) |
+| Fornecedores | de 40 a 60, com entregas de segunda a sábado |
+ 
+A equipe tem garçons (11), bar (6), caixa (3), valet (5), cozinha (15), narguilé (3), limpeza (4), sushiman (2), pizzaiolo (2), segurança (5), cumim (4), RH (1), maître (3) e gerente (3). O pedido é feito por aparelho de mão (Palmer) e a casa usa hoje o sistema xMenu.
+ 
+**Problemas e necessidades identificados.**
+ 
+- **P1 – Acesso aos ambientes (Deck).** A entrada no Deck nos horários de pico é por ordem de chegada, conduzida pela gerência. Nada é registrado: não há horário de solicitação, de entrada nem de saída, e o tempo de espera não é medido. A gerência não sabe quanto o cliente espera nem quanto cada ambiente está ocupado.
+- **P2 – Controle de estoque de bebidas.** A saída é registrada por requisição do bar, e o pedido só dá uma quantidade aproximada do que saiu. O xMenu não direciona o funcionário na contagem nem controla as doses. A contagem é feita pelos maîtres, que também definem o estoque mínimo, com uma base diária. A quebra é a divergência mais comum.
+Os dois problemas foram confirmados pelo responsável como os que a casa quer resolver: "estoque e triagem de mesa".
+ 
+**Escopo do sistema.** O banco reúne os dados de todo o atendimento: pulseira e visita, mesas e ambientes, controle de acesso, pedidos e itens, pagamentos e caixa, cardápio, estoque, compras e fornecedores, e funcionários. Ficam fora do modelo as reservas, a escala da equipe e os registros sanitários, que a administração trata manualmente fora do sistema de atendimento.
+ 
+**Justificativa da escolha.** O Ponto A tem volume alto, vários processos ligados entre si (acesso, pedido, estoque, compra e caixa) e dois problemas de gestão de informação que um banco de dados resolve. Além de ser um lugar onde um dos integrantes do grupo trabalha e convive com esses problemas diariamente e por acaso decidiu dar a ideia para tentarmos resolver essa questão.
+ 
+**Evidências da organização.**
+ 
+- Perfil no Google: [Perfil no maps](https://maps.app.goo.gl/XJJXeGhYZD4S7TNm9)
+- Endereço: Rua Dante Pellacani, 192 - Vila Reg. Feijó, São Paulo - SP, 03334-070
+- Contato: [site da casa](https://ponto-a.cluvi.com.br), Fone: 01126722292
+- Foto da visita: [foto](evidencias/fotoEntrevista.jpg)
+**Responsável:** Luiz Eduardo Almeida, maître do Ponto A, telefone 11 91101-7123.
+ 
+---
 
-*(obrigatória, sem peso próprio — mas todo o restante da entrega é construído e avaliado sobre este modelo: um erro que permanecer no DER revisado se propaga para a conversão, a normalização, o modelo lógico e o script SQL)*
+### Relato da entrevista
+ 
+- **Quem:** Luiz Eduardo Almeida, maître. Entrevistador: Renan Caio de Lima. Outros integrantes presentes: apenas o Renan.
+- **Quando e onde:** 06/11/2026, no Ponto A – Restaurante e Pizzaria, no ambiente da organização.
+- **Comprovação:** foto da entrevista em [evidencia](evidencias/Fotoentrevista2.jpg).
+- **O que foi levantado.** A entrevista teve 39 perguntas sobre porte, atendimento, controle de acesso, estoque, compras, caixa, regras e indicadores. Ela confirmou os dois problemas declarados e trouxe os volumes da casa. Também mudou o modelo em quatro pontos: o cliente não é cadastrado e só a pulseira o identifica, não há sangria no caixa, cada prato fica em uma só categoria e o cancelamento é feito pela gerência, item a item. O levantamento completo está em [levantamento/levantamento.md](levantamento/levantamento.md).
+**Observação presencial** (o que o grupo viu, separado das respostas):
+ 
+- O pedido sai do aparelho do garçom e o sistema envia uma comanda a cada setor.
+- Os papéis e sistemas da rotina ficam no escritório.
+- A pulseira é conferida e recolhida na saída, no fechamento da conta, pelo caixa.
+- A fila e a entrada no Deck seguem a ordem de chegada.
+- As bebidas saem do estoque quando o responsável do bar informa a quantidade retirada.
 
-**Caracterização da organização (todos os grupos)**
-
-*Repita aqui a caracterização da organização — atualizada, mesmo que a organização seja a da Entrega 1\. Na Entrega 1, os erros mais comuns foram: porte sem números, problema declarado que depois não aparecia no DER, evidências fora do repositório e modelo cobrindo só parte da organização. Evite-os:*
-
-- **Nome e natureza da organização:** qual organização real o grupo escolheu (com acesso garantido para pesquisa de campo) — pode ser uma empresa (livraria, lanchonete, pet shop), uma ONG, uma associação comunitária ou outra instituição.  
-- **Contexto e porte:** com ou sem fins lucrativos; tamanho da operação; número de pessoas envolvidas (funcionários, voluntários, membros, fiéis); volume de atividades (vendas, atendimentos, doações, rituais, eventos). **Informe números**, não só adjetivos (ex.: "cerca de 300 pedidos por semana", e não "grande movimento") — são eles que justificam o tamanho da massa de dados (seção 4).  
-- **Problemas e necessidades identificados:** qual é a "crise operacional" — o que está desorganizado hoje (planilhas soltas, papel, falta de controle de estoque/doações/cadastros etc.)? Numere cada problema (`P1`, `P2`…). **Todo problema declarado aqui precisa ser resolvido pelo modelo:** deve aparecer no DER e ter ao menos uma consulta gerencial no script SQL (ver a tabela de rastreabilidade da seção 1.6). O problema deve ser de **gestão de informações** — refazer o site ou melhorar a divulgação da organização, por exemplo, não é um problema que um banco de dados resolva.  
-- **Escopo do sistema:** o banco de dados deve reunir **todos os dados da organização**, não só os de um setor ou processo. Mesmo que os problemas declarados se concentrem em uma área, o modelo não pode servir somente a um recorte (ex.: só o estoque de uma clínica, deixando de fora pacientes e atendimentos).  
-- **Justificativa da escolha:** por que essa organização foi escolhida e por que ela é um bom caso para o projeto? Se algum integrante trabalha na organização ou tem vínculo familiar com os responsáveis, declare isso — o vínculo não gera desconto, mas **não dispensa a comprovação da entrevista com o responsável, realizada no ambiente da organização**.  
-- **Evidências da organização:** comprove que a organização existe e que o grupo teve acesso a ela — fotos do local/da visita, link da organização no Google, endereço completo e forma de contato. **Prefira o perfil da organização no Google Meu Negócio (Google Business Profile)**, que é a comprovação mais direta; site e redes sociais complementam. As fotos só são aceitas como **arquivos JPG ou PNG dentro do repositório** — fotos hospedadas fora dele (Google Drive, Imgur, anexos colados no editor do GitHub etc.) não são consideradas.  
-- **Responsável pela organização:** **nome e telefone** de quem atendeu o grupo — o professor pode entrar em contato para confirmar as informações.
-
-**Relato da entrevista (todos os grupos)**
-
-*Relate a entrevista com o responsável pela organização. A entrevista da Entrega 1 pode ser reaproveitada se atender a todos os itens abaixo — inclusive ter sido feita no ambiente da organização, com foto — e se tiver levantado o necessário para os processos, requisitos e regras desta etapa. Se algo precisou ser confirmado depois (ex.: processos típicos levantados por pesquisa), relate também a nova visita.*
-
-- **Quem:** nome e função do entrevistado e quais integrantes do grupo participaram.  
-- **Quando e onde:** data e local — a entrevista deve ser realizada **no ambiente da organização**. A **observação presencial** da rotina é parte importante do levantamento de requisitos: o que o grupo vê acontecer no local (como um pedido é anotado, onde o estoque é controlado, que papéis e planilhas circulam) muitas vezes difere do que é dito na entrevista. **Destaque os achados obtidos pela observação**, separados dos obtidos pelas respostas do entrevistado.  
-- **Comprovação:** ao menos uma foto da entrevista no local, como arquivo JPG ou PNG no repositório.  
-- **O que foi levantado:** o que foi perguntado, o que foi confirmado e, se houve nova visita, o que mudou em relação à Entrega 1 (processos, regras, volumes, problemas). O levantamento completo fica em **um arquivo Markdown (`.md`) à parte no repositório**, com link no README — **recomenda-se fortemente** colocá-lo numa pasta chamada **`levantamento`** (ex.: `levantamento/levantamento.md`). Esse arquivo é um **texto organizado, escrito pelo grupo**, sobre o que foi levantado — **não** é um vídeo ou áudio da entrevista, nem a transcrição crua de formulários ou de perguntas e respostas. **No README, apresente um resumo do levantamento.**
-
-**Nível de detalhe — processos, requisitos e regras de negócio (todos os grupos)**
-
-*Frases genéricas como "o sistema deve permitir cadastrar cliente" são **superficiais** e não bastam. Em processos, requisitos e regras, indique **quais dados** estão envolvidos — todos os campos que aparecem no trabalho (DER, dicionário de dados, modelo lógico):*
-
-| Superficial | Detalhado |
-| :---- | :---- |
-| *O sistema deve permitir cadastrar cliente.* | *RF03 — O sistema deve permitir cadastrar cliente com nome completo, CPF, telefone, e-mail e endereço (logradouro, número, bairro, CEP).* |
-| *O cliente faz o pedido.* | *O garçom anota no pedido a mesa, o número da pulseira do cliente e, para cada item, o produto, a quantidade e as observações.* |
-| *O cliente precisa estar cadastrado.* | *RN05 — Todo cliente deve ter CPF válido e único; telefone e nome completo são obrigatórios.* |
-
-&nbsp;
+---
 
 **Processos de negócio (todos os grupos)**
 
