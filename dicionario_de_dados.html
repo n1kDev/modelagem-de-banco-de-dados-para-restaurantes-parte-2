@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dicionário de Dados Conceitual — Restaurante e Pizzaria Ponto A</title>
+<style>
+  :root {
+    --text: #243047;
+    --muted: #697386;
+    --line: #d7dbe3;
+    --head: #eaf0fb;
+    --code-bg: #eef2f7;
+    --navy: #263b66;
+    --blue: #3f67a8;
+    --gold: #d59a3a;
+    --surface: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 20px 80px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text);
+    background: linear-gradient(135deg, #f7f9fd 0%, #edf3fa 100%);
+  }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 42px 48px;
+    background: var(--surface);
+    border: 1px solid #e0e5ed;
+    border-radius: 10px;
+    box-shadow: 0 8px 28px rgba(38, 59, 102, 0.08);
+  }
+  h1 { font-size: 1.8rem; margin: 0 0 4px; color: var(--navy); }
+  .subtitle { color: var(--blue); margin: 0 0 32px; font-style: italic; }
+  h2 {
+    font-size: 1.25rem;
+    margin: 40px 0 12px;
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 6px;
+    color: var(--navy);
+  }
+  h3 { font-size: 1.08rem; margin: 32px 0 8px; color: var(--blue); }
+  p { margin: 0 0 12px; }
+  code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.88em;
+    color: #2d527f;
+    background: var(--code-bg);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  pre.notation {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.88rem;
+    color: var(--navy);
+    background: #f5f7fb;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--blue);
+    padding: 10px 12px;
+    margin: 0 0 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    border-radius: 4px;
+  }
+  .table-wrap { overflow-x: auto; margin: 0 0 14px; border-radius: 5px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--head); color: var(--navy); }
+  tbody tr:nth-child(even) { background: #fafbfe; }
+  tbody tr:hover { background: #f2f6fc; }
+  table.dict col.c1 { width: 27%; }
+  table.dict col.c2 { width: 36%; }
+  table.dict col.c3 { width: 37%; }
+  td .attr { font-weight: bold; color: var(--blue); }
+  td .meta { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+  .idx { margin-bottom: 8px; color: var(--muted); }
+  @media print {
+    body { padding: 0; }
+    h3 { page-break-after: avoid; }
+    table { page-break-inside: auto; }
+    tr { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Dicionário de Dados Conceitual</h1>
+<p class="subtitle">Entrega 2 — Modelo Conceitual revisado (DER) · Restaurante e Pizzaria Ponto A</p>
+
+<h2>1. Modelo conceitual</h2>
+<p>Este modelo representa um restaurante no qual cada cliente é identificado na chegada por uma comanda (pulseira numerada), ocupa uma mesa durante uma visita, pode aguardar e entrar em ambientes de capacidade limitada, e, ao longo da visita, faz pedidos de pratos registrados por um funcionário. Ao final, a conta é paga em um caixa e a comanda é baixada. O modelo também cobre o controle de estoque de bebidas e a reposição por compras de fornecedores.</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Entidade</th><th>Relaciona-se com</th><th>Cardinalidade</th></tr></thead>
+  <tbody>
+    <tr><td>CLIENTE</td><td>VISITA (Realiza)</td><td>N:N (0,n)–(1,n) — um cliente participa de várias visitas ao longo do tempo (ou de nenhuma, se apenas cadastrado), e uma visita reúne um ou mais clientes (ex.: grupo na mesma mesa)</td></tr>
+    <tr><td>MESA</td><td>VISITA (Recebe)</td><td>N:N (0,n)–(1,n) — uma mesa recebe várias visitas ao longo do tempo, e uma visita pode ocupar mais de uma mesa</td></tr>
+    <tr><td>AMBIENTE</td><td>MESA (Possui)</td><td>1:N (1,n)–(1,1) — um ambiente possui várias mesas, cada mesa pertence a um único ambiente</td></tr>
+    <tr><td>AMBIENTE</td><td>CONTROLE_ACESSO (Controla)</td><td>1:N (0,n)–(1,1) — um ambiente tem vários registros de acesso, cada registro é de um único ambiente</td></tr>
+    <tr><td>VISITA</td><td>CONTROLE_ACESSO (Solicita)</td><td>1:N (0,n)–(1,1) — uma visita pode solicitar acesso a vários ambientes (ou a nenhum), cada registro de acesso é de uma única visita</td></tr>
+    <tr><td>COMANDA</td><td>VISITA (Identifica)</td><td>1:1 (1,1)–(1,1) — toda comanda identifica exatamente uma visita, toda visita está vinculada a uma única comanda</td></tr>
+    <tr><td>VISITA</td><td>PEDIDO (Gera)</td><td>1:N (1,n)–(1,1) — uma visita gera vários pedidos ao longo do atendimento, cada pedido pertence a uma única visita</td></tr>
+    <tr><td>VISITA</td><td>PAGAMENTO (Quita)</td><td>1:N (1,n)–(1,1) — uma visita é quitada por um ou mais pagamentos (divisão de conta), cada pagamento pertence a uma única visita</td></tr>
+    <tr><td>FUNCIONARIO</td><td>PEDIDO (Atende)</td><td>1:N (1,n)–(1,1) — um funcionário atende vários pedidos, cada pedido é atendido por um único funcionário</td></tr>
+    <tr><td>FUNCIONARIO</td><td>PAGAMENTO (Arrecada)</td><td>N:N (1,n)–(1,n) — um funcionário arrecada vários pagamentos, e um pagamento pode envolver mais de um funcionário (ex.: o garçom realiza a cobrança e o caixa finaliza)</td></tr>
+    <tr><td>PEDIDO</td><td>ITEM_PEDIDO (Contém)</td><td>1:N (1,n)–(1,1) — um pedido tem ao menos um item, cada item pertence a um único pedido</td></tr>
+    <tr><td>PRATO</td><td>ITEM_PEDIDO (Refere-se a)</td><td>1:N (0,n)–(1,1) — um prato pode constar em vários itens de pedido (ou em nenhum), cada item se refere a um único prato</td></tr>
+    <tr><td>CATEGORIA_PRATO</td><td>PRATO (Classifica)</td><td>N:N (1,n)–(1,n) — uma categoria classifica vários pratos, e um prato pode pertencer a mais de uma categoria</td></tr>
+    <tr><td>PRATO</td><td>PRODUTO_ESTOQUE (Corresponde a)</td><td>N:1 (0,1)–(0,n) — um prato (bebida vendida como vem) corresponde a no máximo um produto de estoque; pratos de cozinha não correspondem a nenhum</td></tr>
+    <tr><td>FUNCIONARIO</td><td>MOVIMENTACAO_ESTOQUE (Executa)</td><td>1:N (0,n)–(1,1) — um funcionário executa várias movimentações, cada movimentação é executada por um único funcionário</td></tr>
+    <tr><td>PRODUTO_ESTOQUE</td><td>MOVIMENTACAO_ESTOQUE (Movimenta)</td><td>1:N (0,n)–(1,1) — um produto tem várias movimentações, cada movimentação é de um único produto</td></tr>
+    <tr><td>COMPRA</td><td>MOVIMENTACAO_ESTOQUE (Abastece)</td><td>1:N (0,n)–(0,1) — uma compra recebida origina várias movimentações de entrada; uma movimentação de entrada pode ou não ter compra de origem</td></tr>
+    <tr><td>FUNCIONARIO</td><td>COMPRA (Efetua)</td><td>1:N (0,n)–(1,1) — um funcionário efetua várias compras, cada compra é efetuada por um único funcionário</td></tr>
+    <tr><td>FORNECEDOR</td><td>COMPRA (Fornece)</td><td>1:N (0,n)–(1,1) — um fornecedor atende várias compras, cada compra é de um único fornecedor</td></tr>
+    <tr><td>COMPRA</td><td>ITEM_COMPRA (Inclui)</td><td>1:N (1,n)–(1,1) — uma compra tem ao menos um item, cada item pertence a uma única compra</td></tr>
+    <tr><td>PRODUTO_ESTOQUE</td><td>ITEM_COMPRA (É comprado em)</td><td>1:N (0,n)–(1,1) — um produto pode constar em vários itens de compra (ou em nenhum), cada item é de um único produto</td></tr>
+    <tr><td>FUNCIONARIO</td><td>CAIXA (Opera)</td><td>1:N (0,n)–(1,1) — um funcionário opera vários turnos de caixa, cada turno é operado por um único funcionário</td></tr>
+    <tr><td>CAIXA</td><td>PAGAMENTO (Recebe)</td><td>1:N (0,n)–(1,1) — um caixa recebe vários pagamentos, cada pagamento é finalizado em um único caixa</td></tr>
+    <tr><td>CAIXA</td><td>SANGRIA (Sofre)</td><td>1:N (0,n)–(1,1) — um caixa pode sofrer várias sangrias, cada sangria é de um único caixa</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Neste modelo conceitual, ITEM_PEDIDO e ITEM_COMPRA são entidades próprias, com atributos, que resolvem as ligações entre pedido e prato e entre compra e produto de estoque. Os demais relacionamentos N:N (Realiza, Recebe, Classifica e Arrecada) são mantidos como relacionamentos, e sua transformação em entidades associativas ficará para o modelo lógico. VISITA é o eixo do modelo: liga cliente(s), mesa(s) e comanda e, a partir dela, derivam-se os acessos aos ambientes, os pedidos e os pagamentos.</p>
+
+<p><b>Cliente</b> é a pessoa física atendida pelo restaurante, identificada por CPF.</p>
+<p><b>Mesa</b> é o posto de atendimento do salão, identificado por um número e vinculado a um ambiente.</p>
+<p><b>Ambiente</b> é cada espaço físico do restaurante com capacidade própria (ex.: salão, Deck, subsolo), cujo acesso é controlado.</p>
+<p><b>Controle de acesso</b> é o registro de cada solicitação de entrada de uma visita em um ambiente, da fila à saída.</p>
+<p><b>Comanda</b> é a pulseira numerada (de 1 a 9.999) entregue ao cliente na chegada, que o identifica durante a visita e é baixada no caixa ao final.</p>
+<p><b>Visita</b> é o evento de atendimento, da chegada ao encerramento da conta, no qual cliente(s), mesa(s) e comanda se encontram.</p>
+<p><b>Funcionário</b> é a pessoa que opera o sistema em alguma função: garçom, caixa, produção (bar, cozinha, pizza, sushi, lounge) ou gerência.</p>
+<p><b>Categoria de prato</b> é o agrupamento do cardápio (ex.: pizzas, culinária japonesa, pratos tradicionais, bebidas) e define o setor de produção dos pratos.</p>
+<p><b>Prato</b> é o item do cardápio, alimento ou bebida, que pode ser pedido.</p>
+<p><b>Pedido</b> é o conjunto de pratos solicitados numa visita, registrado por um funcionário e encaminhado à produção.</p>
+<p><b>Item de pedido</b> é cada prato pedido, com a quantidade, o preço praticado e as observações do cliente.</p>
+<p><b>Pagamento</b> é o evento de quitação, total ou parcial, da conta de uma visita, finalizado em um caixa.</p>
+<p><b>Caixa</b> é o turno de caixa, da abertura ao fechamento, no qual os pagamentos são recebidos.</p>
+<p><b>Sangria</b> é a retirada de dinheiro do caixa durante o turno, com valor e motivo.</p>
+<p><b>Produto de estoque</b> é o item controlado no estoque (ex.: bebidas), com quantidade atual e estoque mínimo.</p>
+<p><b>Movimentação de estoque</b> é o registro de cada entrada, saída ou ajuste de conferência de um produto de estoque.</p>
+<p><b>Fornecedor</b> é a empresa que fornece bebidas e insumos ao restaurante.</p>
+<p><b>Compra</b> é o pedido de reposição de produtos feito a um fornecedor.</p>
+<p><b>Item de compra</b> é cada produto comprado, com a quantidade e o custo unitário.</p>
+
+<h2>2. Fluxo de dados (visão de DFD)</h2>
+<p>Cliente chega ao restaurante → recebe a pulseira, com registro em COMANDA, e é cadastrado ou consultado em CLIENTE → abertura de VISITA, que liga o(s) CLIENTE(s), a MESA e a COMANDA → quando a visita precisa entrar em um ambiente de capacidade limitada (ex.: o Deck), a solicitação, a entrada e a saída são registradas em CONTROLE_ACESSO, respeitando a capacidade máxima do AMBIENTE → um FUNCIONARIO (garçom) registra o PEDIDO, com um ITEM_PEDIDO para cada PRATO solicitado, e o encaminha ao setor de produção da CATEGORIA_PRATO → a produção prepara e libera, e o pedido é entregue ao cliente; quando o prato é uma bebida ligada a um PRODUTO_ESTOQUE, a saída é registrada em MOVIMENTACAO_ESTOQUE → ao final, a conta é quitada em um ou mais PAGAMENTOs, arrecadados pelo garçom e/ou finalizados no CAIXA aberto → o caixa dá baixa na COMANDA e a VISITA passa a fechada → durante o turno, as retiradas de dinheiro ficam em SANGRIA, e o fechamento do CAIXA registra o valor conferido → em paralelo, a reposição segue o caminho COMPRA ao FORNECEDOR, com um ITEM_COMPRA por produto; no recebimento, as entradas em MOVIMENTACAO_ESTOQUE atualizam o saldo do PRODUTO_ESTOQUE → alterações e cancelamentos ficam preservados no log de acesso do SGBD (§5), o que sustenta auditoria e conformidade com a LGPD (§6).</p>
+
+<h2>3. Convenções do dicionário</h2>
+<p><b>SGBD:</b> MySQL 8, mecanismo de armazenamento InnoDB — cuida da persistência dos arquivos de dados, do log de transações (redo/undo) e mantém o índice primário clusterizado por chave.</p>
+<p><b>Codificação de caracteres:</b> utf8mb4 com collation utf8mb4_0900_ai_ci. Escolhida em vez de latin1 por cobrir acentuação do português sem perda em campos de nome e texto livre.</p>
+<p><b>Notação formal</b> (símbolos usados neste dicionário):</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Símbolo</th><th>Significado</th></tr></thead>
+  <tbody>
+    <tr><td><code>=</code></td><td>é composto de</td></tr>
+    <tr><td><code>+</code></td><td>e (conecta elementos obrigatórios)</td></tr>
+    <tr><td><code>( )</code></td><td>opcional</td></tr>
+    <tr><td><code>{ }</code>, <code>n{ }m</code></td><td>iteração, com limite mínimo n e máximo m</td></tr>
+    <tr><td><code>[ | ]</code></td><td>escolha obrigatória entre alternativas</td></tr>
+    <tr><td><code>/ /</code></td><td>rótulo de um grupo repetitivo</td></tr>
+    <tr><td><code>@</code></td><td>identificador (chave primária)</td></tr>
+    <tr><td><code>* *</code></td><td>comentário, fora da estrutura formal</td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>Prefixos:</b> NM_ nome, DT_ data (e hora), ID_ identificador (não sofre operação matemática), CD_ código de domínio, QT_ quantidade, TP_ tipo (categorização), IN_ indicador booleano. Este dicionário também usa VL_ (valor monetário) — não está entre os sete prefixos-padrão, mas segue o mesmo princípio de tornar o tipo do dado explícito no nome — e DS_ (descrição/texto livre).</p>
+<p><b>Restrições de integridade:</b> na coluna “Regra de negócio associada”, <i>obrigatório</i> corresponde a NOT NULL, <i>único</i> a UNIQUE, <i>valores possíveis</i> e as faixas numéricas a CHECK e <i>valor padrão</i> a DEFAULT. Atributos de domínio fechado (TP_) são definidos em uma segunda linha da expressão formal, com os valores entre colchetes. As colunas de chave estrangeira aparecem apenas no modelo lógico.</p>
+<p><b>Versão deste dicionário:</b> v2.0, 7/novembro/2026. Qualquer alteração de estrutura deve gerar nova revisão registrada nesta seção.</p>
+<p><b>Histórico de revisões:</b> v1.0 (4/outubro/2026) — 9 entidades, versão preliminar da Entrega 1. v2.0 (7/novembro/2026) — Entrega 2: 19 entidades; incluídos AMBIENTE, CONTROLE_ACESSO, ITEM_PEDIDO, CAIXA, SANGRIA, PRODUTO_ESTOQUE, MOVIMENTACAO_ESTOQUE, FORNECEDOR, COMPRA e ITEM_COMPRA; COMANDA_ACESSO renomeada para COMANDA; atributos acrescentados a CLIENTE (nomes conforme o DER), VISITA, FUNCIONARIO, CATEGORIA_PRATO, PRATO, PEDIDO e PAGAMENTO; atributos de domínio fechado definidos em linha própria da expressão; restrições de integridade explicitadas por coluna.</p>
+
+<h2>4. Dicionário de dados por entidade</h2>
+<p>Cada atributo aparece com o nome padronizado do dicionário e, logo abaixo, o nome usado no DER, o tipo físico e a marcação de chave.</p>
+
+
+<!-- CLIENTE -->
+<h3>CLIENTE</h3>
+<pre class="notation">CLIENTE = @ID_CLIENTE + NM_CLIENTE + ID_CPF + DT_NASCIMENTO + DS_TELEFONE</pre>
+<p><b>Leitura:</b> @ID_CLIENTE é o identificador único; os quatro campos seguintes são obrigatórios e conectados por +. ID_CPF usa o prefixo de identificador porque é um documento emitido por órgão externo, e não um código interno de domínio.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_CLIENTE</span><span class="meta">id_cliente · integer · PK</span></td><td>Código de localização do registro do cliente; não sofre operação matemática.</td><td>Obrigatório; gerado pelo sistema e nunca reutilizado.</td></tr>
+    <tr><td><span class="attr">NM_CLIENTE</span><span class="meta">nome_cliente · varchar(120)</span></td><td>Nome completo do cliente.</td><td>Obrigatório.</td></tr>
+    <tr><td><span class="attr">ID_CPF</span><span class="meta">cpf_cliente · varchar(14)</span></td><td>Número do CPF; identifica o cliente de forma única, inclusive em visitas futuras.</td><td>Obrigatório e único. Dado pessoal protegido pela LGPD (§6).</td></tr>
+    <tr><td><span class="attr">DT_NASCIMENTO</span><span class="meta">data_nasc · date</span></td><td>Data de nascimento do cliente; permite calcular a idade no momento do atendimento.</td><td>Obrigatório; não pode ser posterior à data atual. Sustenta a verificação da idade mínima legal para venda e consumo de bebida alcoólica.</td></tr>
+    <tr><td><span class="attr">DS_TELEFONE</span><span class="meta">telefone · varchar(20)</span></td><td>Telefone de contato do cliente, com DDD.</td><td>Obrigatório.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_CLIENTE (clusterizado); índice único em ID_CPF (localizar cliente recorrente na chegada).</p>
+
+<!-- MESA -->
+<h3>MESA</h3>
+<pre class="notation">MESA = @ID_MESA + ID_NUMERO_MESA</pre>
+<p><b>Leitura:</b> @ID_MESA é o identificador único; ID_NUMERO_MESA é obrigatório e recebe o prefixo ID_ — e não CD_ — porque é um rótulo físico da mesa, e não uma classificação de domínio. O ambiente da mesa é expresso pelo relacionamento Possui.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_MESA</span><span class="meta">id_mesa · integer · PK</span></td><td>Identificador da mesa no sistema.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">ID_NUMERO_MESA</span><span class="meta">numero · integer</span></td><td>Número que identifica a mesa no salão, usado por clientes e funcionários.</td><td>Obrigatório e único; maior que zero.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_MESA; índice único em ID_NUMERO_MESA.</p>
+
+<!-- AMBIENTE -->
+<h3>AMBIENTE</h3>
+<pre class="notation">AMBIENTE = @ID_AMBIENTE + NM_AMBIENTE + QT_CAPACIDADE_MAXIMA + TP_STATUS_AMBIENTE
+TP_STATUS_AMBIENTE = [ativo | inativo]</pre>
+<p><b>Leitura:</b> NM_AMBIENTE e QT_CAPACIDADE_MAXIMA são obrigatórios. TP_STATUS_AMBIENTE é um atributo de domínio fechado, definido na segunda linha: exige escolher exatamente um dos valores. O controle de entrada e de saída nos ambientes é expresso pelo relacionamento Controla.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_AMBIENTE</span><span class="meta">id_ambiente · integer · PK</span></td><td>Identificador do ambiente.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">NM_AMBIENTE</span><span class="meta">nome_ambiente · varchar(60)</span></td><td>Nome do ambiente do restaurante (ex.: salão, Deck, subsolo).</td><td>Obrigatório e único.</td></tr>
+    <tr><td><span class="attr">QT_CAPACIDADE_MAXIMA</span><span class="meta">capacidade_maxima · integer</span></td><td>Número máximo de pessoas que o ambiente comporta ao mesmo tempo.</td><td>Obrigatório; maior que zero. Um cliente só entra no ambiente se houver capacidade disponível naquele momento; caso contrário, aguarda em fila.</td></tr>
+    <tr><td><span class="attr">TP_STATUS_AMBIENTE</span><span class="meta">status · varchar(10)</span></td><td>Situação do ambiente: em operação ou desativado.</td><td>Obrigatório; valores possíveis: ativo ou inativo; valor padrão: ativo. Ambiente inativo não recebe novos acessos.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_AMBIENTE; índice único em NM_AMBIENTE.</p>
+
+<!-- CONTROLE_ACESSO -->
+<h3>CONTROLE_ACESSO</h3>
+<pre class="notation">CONTROLE_ACESSO = @ID_CONTROLE_ACESSO + DT_SOLICITACAO + (DT_ENTRADA) + (DT_SAIDA) + QT_PESSOAS + TP_STATUS_ACESSO
+TP_STATUS_ACESSO = [aguardando | no ambiente | encerrado | desistiu]</pre>
+<p><b>Leitura:</b> DT_SOLICITACAO é sempre registrada; DT_ENTRADA e DT_SAIDA são opcionais (entre parênteses) porque só passam a existir quando o cliente entra e quando sai. A visita e o ambiente do registro são expressos pelos relacionamentos Solicita e Controla.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_CONTROLE_ACESSO</span><span class="meta">id_controle_acesso · integer · PK</span></td><td>Identificador do registro de acesso a um ambiente.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">DT_SOLICITACAO</span><span class="meta">data_hora_solicitacao · datetime</span></td><td>Data e hora em que a visita pediu para entrar no ambiente (entrada na fila).</td><td>Obrigatório; valor padrão: data e hora atuais.</td></tr>
+    <tr><td><span class="attr">DT_ENTRADA</span><span class="meta">data_hora_entrada · datetime</span></td><td>Data e hora em que a visita efetivamente entrou no ambiente.</td><td>Opcional até a entrada; quando preenchida, não pode ser anterior à solicitação. Toda entrada deve ser registrada.</td></tr>
+    <tr><td><span class="attr">DT_SAIDA</span><span class="meta">data_hora_saida · datetime</span></td><td>Data e hora em que a visita saiu do ambiente.</td><td>Opcional até a saída; só pode existir se houver entrada e não pode ser anterior a ela. Toda saída deve ser registrada, para que a ocupação corrente seja sempre calculável.</td></tr>
+    <tr><td><span class="attr">QT_PESSOAS</span><span class="meta">quant_pessoas · integer</span></td><td>Quantidade de pessoas do grupo que solicitou acesso.</td><td>Obrigatório; maior que zero. Entra no cálculo da ocupação em relação à capacidade máxima do ambiente.</td></tr>
+    <tr><td><span class="attr">TP_STATUS_ACESSO</span><span class="meta">status · varchar(15)</span></td><td>Situação do acesso: aguardando na fila, no ambiente, encerrado (já saiu) ou desistiu da espera.</td><td>Obrigatório; valores possíveis: aguardando, no ambiente, encerrado ou desistiu; valor padrão: aguardando.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_CONTROLE_ACESSO; índice em TP_STATUS_ACESSO (listar a fila e a ocupação corrente); índice em DT_SOLICITACAO (tempo de espera por período).</p>
+
+<!-- COMANDA -->
+<h3>COMANDA</h3>
+<pre class="notation">COMANDA = @ID_COMANDA + ID_CODIGO + TP_STATUS_COMANDA
+TP_STATUS_COMANDA = [em uso | baixada | perdida]</pre>
+<p><b>Leitura:</b> @ID_COMANDA é o identificador interno do registro; ID_CODIGO é o número gravado na pulseira entregue ao cliente. Como a numeração é limitada a 9.999, ela pode ser reaproveitada depois da baixa, e por isso a unicidade de ID_CODIGO vale apenas entre as comandas em uso. TP_STATUS_COMANDA acompanha o ciclo da pulseira, inclusive a perda.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_COMANDA</span><span class="meta">id_comanda · integer · PK</span></td><td>Identificador interno do registro da comanda.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">ID_CODIGO</span><span class="meta">codigo · integer</span></td><td>Número da pulseira entregue ao cliente na chegada; é o que o caixa confere na baixa.</td><td>Obrigatório; valor de 1 a 9.999; único entre as comandas em uso. Uma comanda em uso só pode estar vinculada a uma visita.</td></tr>
+    <tr><td><span class="attr">TP_STATUS_COMANDA</span><span class="meta">status · varchar(10)</span></td><td>Situação da pulseira: em uso durante a visita, baixada no caixa ou perdida pelo cliente.</td><td>Obrigatório; valores possíveis: em uso, baixada ou perdida; valor padrão: em uso. A baixa da pulseira encerra o atendimento.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_COMANDA; índice em ID_CODIGO (localizar a comanda na baixa do caixa), com unicidade aplicada apenas às comandas em uso.</p>
+
+<!-- VISITA -->
+<h3>VISITA</h3>
+<pre class="notation">VISITA = @ID_VISITA + DT_ABERTURA + (DT_FECHAMENTO) + TP_STATUS_VISITA
+TP_STATUS_VISITA = [aberta | fechada]</pre>
+<p><b>Leitura:</b> TP_STATUS_VISITA exige escolher exatamente um estado para a visita; DT_FECHAMENTO é opcional porque só existe depois do encerramento da conta. Os vínculos da visita com cliente(s), mesa(s), comanda, acessos, pedidos e pagamentos são expressos pelos relacionamentos do modelo, e não por atributos.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_VISITA</span><span class="meta">id_visita · integer · PK</span></td><td>Identificador da visita.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">DT_ABERTURA</span><span class="meta">data_hora_abertura · datetime</span></td><td>Data e hora da chegada do cliente, quando a visita é aberta.</td><td>Obrigatório; valor padrão: data e hora atuais.</td></tr>
+    <tr><td><span class="attr">DT_FECHAMENTO</span><span class="meta">data_hora_fechamento · datetime</span></td><td>Data e hora do encerramento da conta.</td><td>Opcional enquanto a visita está aberta; obrigatório quando fechada; não pode ser anterior à abertura.</td></tr>
+    <tr><td><span class="attr">TP_STATUS_VISITA</span><span class="meta">status · varchar(10)</span></td><td>Situação corrente da visita: aberta enquanto o cliente está sendo atendido, fechada após o encerramento da conta.</td><td>Obrigatório; valores possíveis: aberta ou fechada; valor padrão: aberta. Todo consumo deve estar vinculado a uma visita aberta, e a visita só passa a fechada depois que todos os itens consumidos foram registrados e a conta foi quitada.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_VISITA; índice em TP_STATUS_VISITA (listar as visitas abertas); índice em DT_ABERTURA (consultas por período).</p>
+
+<!-- FUNCIONARIO -->
+<h3>FUNCIONARIO</h3>
+<pre class="notation">FUNCIONARIO = @ID_FUNCIONARIO + NM_FUNCIONARIO + TP_CARGO
+TP_CARGO = [garçom | caixa | produção | gerente]</pre>
+<p><b>Leitura:</b> TP_CARGO exige escolher exatamente uma função para o funcionário; a função, e não a pessoa, é o que define o que ele pode fazer no sistema.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_FUNCIONARIO</span><span class="meta">id_func · integer · PK</span></td><td>Identificador do funcionário.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">NM_FUNCIONARIO</span><span class="meta">nome_func · varchar(120)</span></td><td>Nome completo do funcionário.</td><td>Obrigatório.</td></tr>
+    <tr><td><span class="attr">TP_CARGO</span><span class="meta">cargo · varchar(20)</span></td><td>Função exercida pelo funcionário: garçom, caixa, produção (bar, cozinha, pizza, sushi, lounge) ou gerência.</td><td>Obrigatório; valores possíveis: garçom, caixa, produção ou gerente. Cada funcionário só acessa as funções do sistema compatíveis com o seu cargo.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_FUNCIONARIO; índice em TP_CARGO.</p>
+
+<!-- CATEGORIA_PRATO -->
+<h3>CATEGORIA_PRATO</h3>
+<pre class="notation">CATEGORIA_PRATO = @ID_CATEGORIA + NM_CATEGORIA + TP_SETOR_PRODUCAO
+TP_SETOR_PRODUCAO = [bar | cozinha | pizza | sushi | lounge]</pre>
+<p><b>Leitura:</b> Os três atributos são sempre obrigatórios e conectados por +. TP_SETOR_PRODUCAO indica o setor que prepara os pratos da categoria e para onde o pedido é encaminhado.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_CATEGORIA</span><span class="meta">id_categ · integer · PK</span></td><td>Identificador da categoria.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">NM_CATEGORIA</span><span class="meta">nome · varchar(60)</span></td><td>Nome da categoria do cardápio (ex.: pizzas, culinária japonesa, pratos tradicionais, bebidas).</td><td>Obrigatório e único.</td></tr>
+    <tr><td><span class="attr">TP_SETOR_PRODUCAO</span><span class="meta">setor_producao · varchar(10)</span></td><td>Setor de produção responsável pelos pratos da categoria.</td><td>Obrigatório; valores possíveis: bar, cozinha, pizza, sushi ou lounge.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_CATEGORIA; índice único em NM_CATEGORIA.</p>
+
+<!-- PRATO -->
+<h3>PRATO</h3>
+<pre class="notation">PRATO = @ID_PRATO + NM_PRATO + VL_PRECO</pre>
+<p><b>Leitura:</b> NM_PRATO identifica o item para clientes e funcionários. VL_PRECO é o atributo de valor monetário do prato e usa o prefixo VL_ descrito na seção 3; a categoria do prato é expressa pelo relacionamento Classifica, e o produto de estoque, quando é bebida, pelo relacionamento Corresponde a.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_PRATO</span><span class="meta">id_prato · integer · PK</span></td><td>Identificador do prato.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">NM_PRATO</span><span class="meta">nome_prato · varchar(80)</span></td><td>Nome do prato ou bebida, como aparece no cardápio.</td><td>Obrigatório.</td></tr>
+    <tr><td><span class="attr">VL_PRECO</span><span class="meta">preco · decimal(10,2)</span></td><td>Preço de venda vigente do prato, em reais.</td><td>Obrigatório; maior que zero. O valor cobrado de cada item fica registrado no próprio item do pedido.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_PRATO; índice em NM_PRATO (busca no cardápio).</p>
+
+<!-- PEDIDO -->
+<h3>PEDIDO</h3>
+<pre class="notation">PEDIDO = @ID_PEDIDO + DT_PEDIDO + (DT_ENTREGA) + TP_STATUS_PEDIDO
+TP_STATUS_PEDIDO = [registrado | em preparo | pronto | entregue | cancelado]</pre>
+<p><b>Leitura:</b> TP_STATUS_PEDIDO exige escolher exatamente um estado para o pedido; DT_ENTREGA é opcional porque só existe depois da entrega. A visita, o funcionário e os itens do pedido são expressos pelos relacionamentos Gera, Atende e Contém.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_PEDIDO</span><span class="meta">id_pedido · integer · PK</span></td><td>Identificador do pedido.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">DT_PEDIDO</span><span class="meta">data_hora · datetime</span></td><td>Data e hora em que o pedido foi registrado pelo garçom.</td><td>Obrigatório; valor padrão: data e hora atuais.</td></tr>
+    <tr><td><span class="attr">DT_ENTREGA</span><span class="meta">data_hora_entrega · datetime</span></td><td>Data e hora em que o pedido foi entregue ao cliente.</td><td>Opcional; obrigatório quando o status é entregue; não pode ser anterior ao registro do pedido.</td></tr>
+    <tr><td><span class="attr">TP_STATUS_PEDIDO</span><span class="meta">status · varchar(15)</span></td><td>Situação corrente do pedido, desde o registro pelo garçom até a entrega ao cliente, ou o cancelamento.</td><td>Obrigatório; valores possíveis: registrado, em preparo, pronto, entregue ou cancelado; valor padrão: registrado. Nenhum produto é entregue sem estar registrado no pedido, e um pedido cancelado permanece registrado, nunca é excluído.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_PEDIDO; índice em TP_STATUS_PEDIDO (fila de preparo da produção); índice em DT_PEDIDO (consultas por período).</p>
+
+<!-- ITEM_PEDIDO -->
+<h3>ITEM_PEDIDO</h3>
+<pre class="notation">ITEM_PEDIDO = @ID_ITEM + QT_ITEM + VL_PRECO_UNITARIO + (DS_OBSERVACAO)</pre>
+<p><b>Leitura:</b> ITEM_PEDIDO resolve a ligação entre pedido e prato: cada item guarda quanto foi pedido de um prato e a que preço. DS_OBSERVACAO é opcional (entre parênteses). O pedido e o prato do item são expressos pelos relacionamentos Contém e Refere-se a.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_ITEM</span><span class="meta">id_item · integer · PK</span></td><td>Identificador do item do pedido.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">QT_ITEM</span><span class="meta">qtd · integer</span></td><td>Quantidade pedida do prato.</td><td>Obrigatório; maior que zero.</td></tr>
+    <tr><td><span class="attr">VL_PRECO_UNITARIO</span><span class="meta">preco_unitario · decimal(10,2)</span></td><td>Preço unitário praticado no momento do pedido, em reais.</td><td>Obrigatório; maior que zero. Preserva o valor cobrado mesmo que o preço do prato mude depois.</td></tr>
+    <tr><td><span class="attr">DS_OBSERVACAO</span><span class="meta">observacao · varchar(255)</span></td><td>Observações do cliente para o preparo do item (ex.: sem cebola, ponto da carne).</td><td>Opcional.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_ITEM; índice em cada vínculo do item (pedido e prato).</p>
+
+<!-- PAGAMENTO -->
+<h3>PAGAMENTO</h3>
+<pre class="notation">PAGAMENTO = @ID_PAGAMENTO + VL_TOTAL + VL_TAXA_SERVICO + TP_FORMA_PAGAMENTO + DT_PAGAMENTO + (ID_NUMERO_NF)
+TP_FORMA_PAGAMENTO = [dinheiro | cartão de crédito | cartão de débito | pix]</pre>
+<p><b>Leitura:</b> VL_TOTAL é obrigatório e representa o valor deste pagamento, e não o da conta inteira: como uma visita pode ser quitada por mais de um pagamento, a soma dos pagamentos da visita é que corresponde ao total consumido. VL_TAXA_SERVICO é a parcela de VL_TOTAL correspondente à taxa de serviço. ID_NUMERO_NF é opcional (entre parênteses) porque só existe depois da emissão do documento fiscal.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_PAGAMENTO</span><span class="meta">id_pgto · integer · PK</span></td><td>Identificador do pagamento.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">VL_TOTAL</span><span class="meta">valor_total · decimal(10,2)</span></td><td>Valor quitado neste pagamento, em reais, incluída a taxa de serviço.</td><td>Obrigatório; maior que zero. Só pode ser registrado depois que os itens consumidos estão registrados na conta; após o fechamento da conta, alterações só por funcionário autorizado, com registro de autor e motivo.</td></tr>
+    <tr><td><span class="attr">VL_TAXA_SERVICO</span><span class="meta">valor_taxa_servico · decimal(10,2)</span></td><td>Parcela do valor do pagamento referente à taxa de serviço, em reais.</td><td>Obrigatório; maior ou igual a zero e menor ou igual a VL_TOTAL; valor padrão: 0,00.</td></tr>
+    <tr><td><span class="attr">TP_FORMA_PAGAMENTO</span><span class="meta">forma_pgto · varchar(20)</span></td><td>Forma com que o pagamento foi realizado.</td><td>Obrigatório; valores possíveis: dinheiro, cartão de crédito, cartão de débito ou pix.</td></tr>
+    <tr><td><span class="attr">DT_PAGAMENTO</span><span class="meta">data_hora · datetime</span></td><td>Data e hora em que o pagamento foi registrado.</td><td>Obrigatório; valor padrão: data e hora atuais.</td></tr>
+    <tr><td><span class="attr">ID_NUMERO_NF</span><span class="meta">numero_nf · varchar(20)</span></td><td>Número do documento fiscal (cupom ou nota) emitido para o pagamento.</td><td>Opcional; quando preenchido, único.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_PAGAMENTO; índice em DT_PAGAMENTO (faturamento por período); índice único em ID_NUMERO_NF.</p>
+
+<!-- CAIXA -->
+<h3>CAIXA</h3>
+<pre class="notation">CAIXA = @ID_CAIXA + DT_ABERTURA + VL_ABERTURA + (DT_FECHAMENTO) + (VL_FECHAMENTO) + TP_STATUS_CAIXA
+TP_STATUS_CAIXA = [aberto | fechado]</pre>
+<p><b>Leitura:</b> CAIXA representa um turno de caixa: abertura no início do expediente e fechamento ao final. DT_FECHAMENTO e VL_FECHAMENTO são opcionais porque só existem depois do fechamento. O funcionário que opera o caixa, os pagamentos recebidos e as sangrias são expressos pelos relacionamentos Opera, Recebe e Sofre.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_CAIXA</span><span class="meta">id_caixa · integer · PK</span></td><td>Identificador do turno de caixa.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">DT_ABERTURA</span><span class="meta">data_hora_abertura · datetime</span></td><td>Data e hora da abertura do caixa.</td><td>Obrigatório; valor padrão: data e hora atuais.</td></tr>
+    <tr><td><span class="attr">VL_ABERTURA</span><span class="meta">valor_abertura · decimal(10,2)</span></td><td>Valor inicial do caixa (fundo de troco), em reais.</td><td>Obrigatório; maior ou igual a zero; valor padrão: 0,00.</td></tr>
+    <tr><td><span class="attr">DT_FECHAMENTO</span><span class="meta">data_hora_fechamento · datetime</span></td><td>Data e hora do fechamento do caixa.</td><td>Opcional enquanto o caixa está aberto; obrigatório quando fechado; não pode ser anterior à abertura.</td></tr>
+    <tr><td><span class="attr">VL_FECHAMENTO</span><span class="meta">valor_fechamento · decimal(10,2)</span></td><td>Valor conferido no fechamento do caixa, em reais.</td><td>Opcional enquanto o caixa está aberto; obrigatório quando fechado; maior ou igual a zero.</td></tr>
+    <tr><td><span class="attr">TP_STATUS_CAIXA</span><span class="meta">status · varchar(10)</span></td><td>Situação do turno de caixa.</td><td>Obrigatório; valores possíveis: aberto ou fechado; valor padrão: aberto.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_CAIXA; índice em TP_STATUS_CAIXA; índice em DT_ABERTURA (consultas por período).</p>
+
+<!-- SANGRIA -->
+<h3>SANGRIA</h3>
+<pre class="notation">SANGRIA = @ID_SANGRIA + DT_SANGRIA + VL_SANGRIA + DS_MOTIVO</pre>
+<p><b>Leitura:</b> SANGRIA é a retirada de dinheiro do caixa durante o turno. O caixa de origem é expresso pelo relacionamento Sofre.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_SANGRIA</span><span class="meta">id_sangria · integer · PK</span></td><td>Identificador da sangria.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">DT_SANGRIA</span><span class="meta">data_hora · datetime</span></td><td>Data e hora da retirada.</td><td>Obrigatório; valor padrão: data e hora atuais.</td></tr>
+    <tr><td><span class="attr">VL_SANGRIA</span><span class="meta">valor · decimal(10,2)</span></td><td>Valor retirado do caixa, em reais.</td><td>Obrigatório; maior que zero. Movimentação autorizada e registrada; não é apagada.</td></tr>
+    <tr><td><span class="attr">DS_MOTIVO</span><span class="meta">motivo · varchar(150)</span></td><td>Motivo da retirada.</td><td>Obrigatório.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_SANGRIA; índice no vínculo com o caixa.</p>
+
+<!-- PRODUTO_ESTOQUE -->
+<h3>PRODUTO_ESTOQUE</h3>
+<pre class="notation">PRODUTO_ESTOQUE = @ID_PRODUTO + NM_PRODUTO + QT_ATUAL + QT_ESTOQUE_MINIMO</pre>
+<p><b>Leitura:</b> PRODUTO_ESTOQUE é o item controlado no estoque (ex.: garrafa ou lata de bebida). QT_ATUAL é o saldo corrente e QT_ESTOQUE_MINIMO é o limite abaixo do qual o responsável deve ser avisado. O vínculo com o cardápio é expresso pelo relacionamento Corresponde a.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_PRODUTO</span><span class="meta">id_produto · integer · PK</span></td><td>Identificador do produto de estoque.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">NM_PRODUTO</span><span class="meta">nome · varchar(80)</span></td><td>Nome do produto controlado no estoque.</td><td>Obrigatório e único.</td></tr>
+    <tr><td><span class="attr">QT_ATUAL</span><span class="meta">qtd_atual · integer</span></td><td>Quantidade disponível em estoque.</td><td>Obrigatório; maior ou igual a zero; valor padrão: 0. Toda saída ou entrada deve gerar um registro que atualize a quantidade disponível.</td></tr>
+    <tr><td><span class="attr">QT_ESTOQUE_MINIMO</span><span class="meta">estoque_minimo · integer</span></td><td>Quantidade mínima desejada em estoque.</td><td>Obrigatório; maior ou igual a zero; valor padrão: 0. Quando QT_ATUAL atinge o mínimo, o responsável pelo estoque é sinalizado.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_PRODUTO; índice único em NM_PRODUTO.</p>
+
+<!-- MOVIMENTACAO_ESTOQUE -->
+<h3>MOVIMENTACAO_ESTOQUE</h3>
+<pre class="notation">MOVIMENTACAO_ESTOQUE = @ID_MOVIMENTACAO + TP_MOVIMENTACAO + QT_MOVIMENTADA + DT_MOVIMENTACAO
+TP_MOVIMENTACAO = [entrada | saída | ajuste positivo | ajuste negativo]</pre>
+<p><b>Leitura:</b> Cada movimentação é um registro permanente de entrada, saída ou ajuste de um produto. Os ajustes registram as divergências encontradas na conferência periódica do estoque. O produto, o funcionário responsável e a compra de origem (nas entradas) são expressos pelos relacionamentos Movimenta, Executa e Abastece.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_MOVIMENTACAO</span><span class="meta">id_movimentacao · integer · PK</span></td><td>Identificador da movimentação de estoque.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">TP_MOVIMENTACAO</span><span class="meta">tipo · varchar(20)</span></td><td>Natureza da movimentação: entrada, saída ou ajuste de conferência (positivo ou negativo).</td><td>Obrigatório; valores possíveis: entrada, saída, ajuste positivo ou ajuste negativo.</td></tr>
+    <tr><td><span class="attr">QT_MOVIMENTADA</span><span class="meta">qtd · integer</span></td><td>Quantidade movimentada do produto.</td><td>Obrigatório; maior que zero (o sentido da movimentação é dado pelo tipo).</td></tr>
+    <tr><td><span class="attr">DT_MOVIMENTACAO</span><span class="meta">data_hora · datetime</span></td><td>Data e hora do registro da movimentação.</td><td>Obrigatório; valor padrão: data e hora atuais. Registro não é apagado nem alterado.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_MOVIMENTACAO; índice em DT_MOVIMENTACAO (consultas por período); índice no vínculo com o produto.</p>
+
+<!-- FORNECEDOR -->
+<h3>FORNECEDOR</h3>
+<pre class="notation">FORNECEDOR = @ID_FORNECEDOR + NM_RAZAO_SOCIAL + ID_CNPJ + DS_TELEFONE</pre>
+<p><b>Leitura:</b> ID_CNPJ usa o prefixo de identificador porque é um documento emitido por órgão externo. Os quatro atributos são obrigatórios e conectados por +.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_FORNECEDOR</span><span class="meta">id_fornecedor · integer · PK</span></td><td>Identificador do fornecedor.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">NM_RAZAO_SOCIAL</span><span class="meta">razao_social · varchar(120)</span></td><td>Razão social do fornecedor.</td><td>Obrigatório.</td></tr>
+    <tr><td><span class="attr">ID_CNPJ</span><span class="meta">cnpj · varchar(18)</span></td><td>CNPJ do fornecedor.</td><td>Obrigatório e único. Compra só de fornecedor cadastrado.</td></tr>
+    <tr><td><span class="attr">DS_TELEFONE</span><span class="meta">telefone · varchar(20)</span></td><td>Telefone de contato do fornecedor, com DDD.</td><td>Obrigatório.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_FORNECEDOR; índice único em ID_CNPJ.</p>
+
+<!-- COMPRA -->
+<h3>COMPRA</h3>
+<pre class="notation">COMPRA = @ID_COMPRA + DT_COMPRA + (DT_RECEBIMENTO) + VL_TOTAL + TP_STATUS_COMPRA
+TP_STATUS_COMPRA = [pedida | recebida | cancelada]</pre>
+<p><b>Leitura:</b> COMPRA é o pedido de reposição feito a um fornecedor. DT_RECEBIMENTO é opcional porque só existe depois da chegada da mercadoria. O fornecedor, o funcionário e os itens são expressos pelos relacionamentos Fornece, Efetua e Inclui.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_COMPRA</span><span class="meta">id_compra · integer · PK</span></td><td>Identificador da compra.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">DT_COMPRA</span><span class="meta">data_compra · date</span></td><td>Data em que a compra foi feita ao fornecedor.</td><td>Obrigatório; valor padrão: data atual.</td></tr>
+    <tr><td><span class="attr">DT_RECEBIMENTO</span><span class="meta">data_recebimento · date</span></td><td>Data em que a mercadoria foi recebida.</td><td>Opcional; obrigatório quando o status é recebida; não pode ser anterior à data da compra.</td></tr>
+    <tr><td><span class="attr">VL_TOTAL</span><span class="meta">valor_total · decimal(10,2)</span></td><td>Valor total da compra, em reais.</td><td>Obrigatório; maior que zero.</td></tr>
+    <tr><td><span class="attr">TP_STATUS_COMPRA</span><span class="meta">status · varchar(10)</span></td><td>Situação da compra.</td><td>Obrigatório; valores possíveis: pedida, recebida ou cancelada; valor padrão: pedida. Compra cancelada permanece registrada.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_COMPRA; índice em DT_COMPRA (consultas por período); índice no vínculo com o fornecedor.</p>
+
+<!-- ITEM_COMPRA -->
+<h3>ITEM_COMPRA</h3>
+<pre class="notation">ITEM_COMPRA = @ID_ITEM_COMPRA + QT_ITEM_COMPRA + VL_CUSTO_UNITARIO</pre>
+<p><b>Leitura:</b> ITEM_COMPRA resolve a ligação entre compra e produto de estoque, guardando quanto foi comprado de cada produto e a que custo. A compra e o produto do item são expressos pelos relacionamentos Inclui e É comprado em.</p>
+<div class="table-wrap">
+<table class="dict">
+  <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
+  <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <tbody>
+    <tr><td><span class="attr">ID_ITEM_COMPRA</span><span class="meta">id_item_compra · integer · PK</span></td><td>Identificador do item da compra.</td><td>Obrigatório; gerado pelo sistema.</td></tr>
+    <tr><td><span class="attr">QT_ITEM_COMPRA</span><span class="meta">qtd · integer</span></td><td>Quantidade comprada do produto.</td><td>Obrigatório; maior que zero.</td></tr>
+    <tr><td><span class="attr">VL_CUSTO_UNITARIO</span><span class="meta">custo_unitario · decimal(10,2)</span></td><td>Custo unitário pago pelo produto, em reais.</td><td>Obrigatório; maior que zero.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="idx"><b>Índices:</b> PK ID_ITEM_COMPRA; índice em cada vínculo do item (compra e produto).</p>
+
+<h2>5. Log de acesso (metadado operacional)</h2>
+<p>As tabelas do modelo ficam sob o mesmo mecanismo de auditoria do SGBD: o plugin audit_log do MySQL, configurado para gravar em formato JSON no caminho definido por audit_log_file. Na ausência do plugin, a alternativa é o log geral (general_log=ON, log_output=TABLE), consultável em mysql.general_log. Retenção e rotação do log seguem política própria, independente da retenção dos dados de negócio.</p>
+
+<h2>6. Acesso por operação e conformidade com a LGPD (metadado administrativo)</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Tabela</th><th>LER</th><th>INSERIR</th><th>ATUALIZAR</th><th>APAGAR</th></tr></thead>
+  <tbody>
+    <tr><td>CLIENTE</td><td>Recepção, Garçom, Caixa, Gerência, Auditoria</td><td>Recepção</td><td>Recepção, Gerência</td><td>Nenhum papel — apenas anonimização ao fim da retenção</td></tr>
+    <tr><td>MESA</td><td>Todos os funcionários</td><td>Gerência</td><td>Gerência</td><td>Gerência, somente se nunca teve visita</td></tr>
+    <tr><td>AMBIENTE</td><td>Todos os funcionários</td><td>Gerência</td><td>Gerência</td><td>Gerência, somente se nunca teve acesso registrado</td></tr>
+    <tr><td>CONTROLE_ACESSO</td><td>Recepção, Garçom, Gerência, Auditoria</td><td>Recepção, Garçom</td><td>Recepção, Garçom (entrada, saída e status)</td><td>Nenhum papel</td></tr>
+    <tr><td>COMANDA</td><td>Recepção, Garçom, Caixa, Gerência</td><td>Recepção</td><td>Caixa (baixa)</td><td>Nenhum papel</td></tr>
+    <tr><td>VISITA</td><td>Recepção, Garçom, Caixa, Gerência, Auditoria</td><td>Recepção</td><td>Caixa (fechamento), Gerência</td><td>Nenhum papel</td></tr>
+    <tr><td>FUNCIONARIO</td><td>Gerência, Auditoria</td><td>Gerência</td><td>Gerência</td><td>Nenhum papel — o funcionário desligado é inativado</td></tr>
+    <tr><td>CATEGORIA_PRATO</td><td>Todos os funcionários</td><td>Gerência</td><td>Gerência</td><td>Gerência, somente se não tiver pratos</td></tr>
+    <tr><td>PRATO</td><td>Todos os funcionários</td><td>Gerência</td><td>Gerência</td><td>Gerência, somente se nunca foi pedido</td></tr>
+    <tr><td>PEDIDO</td><td>Garçom, Produção, Caixa, Gerência, Auditoria</td><td>Garçom</td><td>Garçom, Produção (status)</td><td>Nenhum papel — o pedido cancelado permanece registrado</td></tr>
+    <tr><td>ITEM_PEDIDO</td><td>Garçom, Produção, Caixa, Gerência, Auditoria</td><td>Garçom</td><td>Garçom, enquanto o pedido está registrado</td><td>Nenhum papel</td></tr>
+    <tr><td>PAGAMENTO</td><td>Caixa, Gerência, Auditoria</td><td>Garçom, Caixa</td><td>Funcionário autorizado, com registro de autor e motivo</td><td>Nenhum papel — estornos ficam registrados</td></tr>
+    <tr><td>CAIXA</td><td>Caixa, Gerência, Auditoria</td><td>Caixa (abertura)</td><td>Caixa (fechamento), Gerência</td><td>Nenhum papel</td></tr>
+    <tr><td>SANGRIA</td><td>Caixa, Gerência, Auditoria</td><td>Caixa</td><td>Funcionário autorizado, com registro de autor e motivo</td><td>Nenhum papel</td></tr>
+    <tr><td>PRODUTO_ESTOQUE</td><td>Produção, Gerência, Auditoria</td><td>Gerência</td><td>Gerência (o saldo é atualizado a cada movimentação)</td><td>Gerência, somente se nunca teve movimentação</td></tr>
+    <tr><td>MOVIMENTACAO_ESTOQUE</td><td>Produção, Gerência, Auditoria</td><td>Produção, Gerência</td><td>Nenhum papel</td><td>Nenhum papel</td></tr>
+    <tr><td>FORNECEDOR</td><td>Gerência, Auditoria</td><td>Gerência</td><td>Gerência</td><td>Gerência, somente se nunca teve compra</td></tr>
+    <tr><td>COMPRA</td><td>Gerência, Auditoria</td><td>Gerência</td><td>Gerência (recebimento e status)</td><td>Nenhum papel — a compra cancelada permanece registrada</td></tr>
+    <tr><td>ITEM_COMPRA</td><td>Gerência, Auditoria</td><td>Gerência</td><td>Gerência, enquanto a compra está pedida</td><td>Nenhum papel</td></tr>
+  </tbody>
+</table>
+</div>
+<p>CLIENTE concentra os dados pessoais do modelo — nome, CPF, data de nascimento e telefone —, classificados como dado pessoal comum (LGPD, art. 5º, I) e tratados com base na execução do contrato de prestação do serviço (art. 7º, V). O acesso é restrito aos papéis envolvidos no atendimento mais a auditoria, e toda consulta fica registrada no log de acesso (§5), o que sustenta o princípio de responsabilização (art. 6º, X). Encerrado o prazo de retenção, os dados do cliente são anonimizados — nunca apagados fisicamente — preservando o histórico de visitas, pedidos e pagamentos sem identificar a pessoa. Exemplos de valores usados na operação (como o número da pulseira ou as categorias do cardápio) são ilustrativos, e nenhum dado real de clientes ou funcionários consta neste documento.</p>
+
+</main>
+</body>
+</html>
