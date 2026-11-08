@@ -85,14 +85,79 @@
 
 *Na Entrega 1, os erros mais comuns foram: requisitos de um sistema diferente do que foi mapeado (ex.: cardápio por QR Code ou motor de recomendação, quando o processo real é o garçom anotar o pedido), problemas declarados sem nenhum requisito que os resolva e requisitos técnicos (autenticação por JWT, hospedagem em nuvem) listados como funcionais. Os requisitos devem corresponder aos processos de negócio descritos acima e cobrir todos os problemas declarados (`P1`, `P2`…).*
 
-**Regras de negócio (todos os grupos)**
+---
 
-*Liste as regras de negócio vigentes, cada uma com um código (`RN01`, `RN02`…) — mantenha os códigos da Entrega 1 quando já existirem. Esses códigos são citados nas justificativas das restrições (seção 1.5) e nas consultas de auditoria do script SQL (seção 3).*
+### Regras de negócio
 
-- **Levante as regras típicas do tipo de organização.** Assim como nos processos e nos requisitos, é recomendável usar pesquisas e ferramentas de IA para descobrir quais regras são comuns em organizações semelhantes e conferir se elas valem na organização escolhida — o que pode exigir confirmação com o responsável. Considere tanto as **regras operacionais** (ex.: pedido só é entregue se estiver registrado; cancelamento fica no histórico, não é apagado) quanto as **restrições legais e organizacionais** (ex.: LGPD, emissão de nota fiscal, normas sanitárias, idade mínima, acesso por cargo). Registre esse uso de IA na seção 6\.  
-- **Justifique as regras prováveis não incluídas:** se uma regra comum nesse tipo de organização ficou de fora, explique por quê (ex.: a organização não realiza o processo correspondente, ou a regra não se aplica ao porte ou à natureza dela).
+As regras abaixo vêm da entrevista no Ponto A e da observação no local. As que dependem de uma proposta do banco (RN06 e RN07) estão marcadas. Os nomes entre crases são as colunas do modelo.
+
+#### Regras operacionais
+
+| Cód. | Regra | Dados envolvidos |
+|---|---|---|
+| RN01 | Toda visita começa com a entrega de uma pulseira numerada pelo segurança. O cliente não é cadastrado. | Visita: `data_hora_abertura` e `status` (aberta). Comanda: `codigo` e `status` (em uso). |
+| RN02 | O número da pulseira vai de 0 a 9.999, em ordem crescente, e volta a zero depois do 9.999. Ele é único entre as comandas em uso. | Comanda: `codigo`. |
+| RN03 | Se o cliente perde a pulseira, a comanda fica como perdida e a conta é localizada pelo garçom que tirou o pedido e pela mesa. | Comanda: `status` (perdida). Pedido: funcionário que atende. Visita: mesa. |
+| RN04 | Todo consumo pertence a uma visita aberta. A visita só é fechada depois de a conta ser quitada, e a pulseira é baixada pelo caixa na saída. | Visita: `status` (fechada) e `data_hora_fechamento`. Comanda: `status` (baixada). |
+| RN05 | Cada mesa pertence a um único ambiente (salão, deck ou subsolo). Uma visita pode ocupar mais de uma mesa. | Mesa: `numero` e ambiente. |
+| RN06 | **(Proposta)** A entrada em um ambiente segue a ordem de chegada, conduzida pela gerência. Cada solicitação registra a visita, o ambiente, a hora do pedido de entrada e o número de pessoas. Toda entrada e toda saída são registradas. | Acesso: `data_hora_solicitacao`, `data_hora_entrada`, `data_hora_saida`, `quant_pessoas` e `status` (aguardando, no ambiente, encerrado ou desistiu). |
+| RN07 | **(Proposta)** Um ambiente não recebe mais pessoas do que a sua capacidade. O que passar disso aguarda na fila. | Ambiente: `capacidade_maxima`. Acesso: `quant_pessoas` e `status`. |
+| RN08 | Todos os ambientes vendem comida e bebida. Nenhuma categoria do cardápio é restrita a um ambiente. | Prato e categoria. |
+| RN09 | O garçom registra o pedido no aparelho de mão. Todo pedido tem uma visita, um funcionário que atende, data e hora, e ao menos um item. | Pedido: `data_hora` e `status`. |
+| RN10 | Cada item guarda o prato, a quantidade, as observações e o preço do momento do pedido. O preço do cardápio muda pouco, e o valor cobrado fica registrado no item mesmo se ele mudar depois. | Item: `qtd` (maior que zero), `preco_unitario` e `observacao`. |
+| RN11 | Ao finalizar o pedido, cada item segue para o setor da categoria do prato. | Categoria: `setor_producao` (bar, cozinha, narguilé, comida japonesa ou pizzaria). |
+| RN12 | Cada prato pertence a uma única categoria. | Prato e categoria. |
+| RN13 | Só a gerência cancela, e o cancelamento é feito por item. O item cancelado permanece registrado e não conta como venda. | Item: `status` (ativo ou cancelado). |
+| RN14 | Estornos e alterações em conta fechada são feitos só pela gerência. | Pagamento e visita. |
+
+#### Pagamento e caixa
+
+| Cód. | Regra | Dados envolvidos |
+|---|---|---|
+| RN15 | A taxa de serviço é de 10% do consumo e é registrada no pagamento. | Pagamento: `valor_taxa_servico`. |
+| RN16 | Todo pagamento tem nota fiscal, e o número da nota é registrado. A emissão é feita fora do banco. | Pagamento: `numero_nf` (único). |
+| RN17 | A conta pode ser dividida em mais de um pagamento. A soma dos pagamentos da visita corresponde ao consumo mais a taxa. As formas aceitas são dinheiro, crédito, débito, pix e ticket. | Pagamento: `valor_total` (maior que zero) e `forma_pgto`. |
+| RN18 | O garçom ou o caixa pode receber o pagamento, e todo pagamento é finalizado em um caixa. | Pagamento, funcionário e caixa. |
+| RN19 | O caixa abre com R$ 150, em cada um dos dois turnos, e é fechado só pelo maître ou pela gerência. Não há sangria: valores externos são tratados com a administração. | Caixa: `valor_abertura`, `data_hora_abertura`, `valor_fechamento`, `data_hora_fechamento` e `status`. |
+
+#### Estoque e compras
+
+| Cód. | Regra | Dados envolvidos |
+|---|---|---|
+| RN20 | A saída de bebida do estoque é registrada por requisição do bar, com a quantidade retirada. | Movimentação: `tipo` (saída), `qtd`, `data_hora`, produto e funcionário. |
+| RN21 | O maître conta o estoque todos os dias. A divergência vira um ajuste positivo ou negativo com o motivo, e a quebra é o motivo mais comum. As movimentações nunca são apagadas nem alteradas. | Movimentação: `tipo` (ajuste positivo ou negativo), `qtd` e `motivo`. |
+| RN22 | Cada produto tem um estoque mínimo, definido e acompanhado pelos maîtres. Quando a quantidade atual chega ao mínimo, o produto é sinalizado. | Produto: `qtd_atual` e `estoque_minimo`. |
+| RN23 | Só a bebida vendida como vem (garrafa ou lata) se liga a um produto de estoque. Drinks e doses são feitos com as garrafas disponíveis e não baixam o estoque por receita. | Prato e produto de estoque. |
+| RN24 | A compra é feita pelo gerente geral a um fornecedor cadastrado e tem ao menos um item. | Fornecedor: `razao_social`, `cnpj` e `telefone`. Compra: `data_compra`, `valor_total` e `status` (pedida). Item: produto, `qtd` e `custo_unitario`. |
+| RN25 | A mercadoria é recebida e conferida pelos maîtres. No recebimento, a compra passa a recebida e as entradas no estoque ficam ligadas a ela. A compra cancelada permanece registrada. | Compra: `data_recebimento` e `status` (recebida ou cancelada). Movimentação: `tipo` (entrada). |
+
+#### Restrições legais e organizacionais
+
+| Cód. | Regra | Dados envolvidos |
+|---|---|---|
+| RN26 | Bebida alcoólica só é vendida a maiores de idade. O garçom confere a idade em documento físico ou carteira digital, e a idade não é registrada. | Nenhum dado do cliente é guardado. |
+| RN27 | O banco não guarda dados pessoais de clientes. O único dado pessoal é o nome do funcionário, com acesso restrito à gerência e à auditoria, e toda consulta fica no log de acesso. | Funcionário: `nome_func`. |
+| RN28 | O acesso ao sistema depende do cargo: cada setor tem a sua aba, com um nível de acesso diferente. | Funcionário: `cargo`. |
+| RN29 | Toda operação identifica o funcionário que a fez: pedido, pagamento, movimentação de estoque, compra e caixa. | Funcionário: `id_func` e `cargo`. |
+
+#### Regras prováveis não incluídas
+
+| Regra comum em restaurantes | Por que ficou de fora |
+|---|---|
+| Reserva de mesas | O responsável informou que as reservas são tratadas manualmente pela administração, fora do sistema de atendimento. |
+| Escala e folha de pagamento | A administração trata manualmente. O funcionário entra no modelo só para registrar quem fez cada operação e o seu cargo. |
+| Registros sanitários e de vigilância | A casa mantém esses registros com a administração, fora do sistema. O estoque controla só quantidades, sem lote nem validade. |
+| Emissão de nota fiscal | A emissão é feita por sistema fiscal externo. O banco guarda só o número da nota no pagamento. |
+| Cadastro de clientes, fidelidade e LGPD sobre dados de clientes | A casa não cadastra clientes e não tem pontos nem níveis. O cliente é identificado só pela pulseira. |
+| Delivery e retirada | O delivery é feito por aplicativos de terceiros, fora do sistema da casa. |
+| Ficha técnica (insumos por prato) | O controle é de bebidas. Os drinks não baixam o estoque por receita. |
+| Sangria do caixa | Não existe no Ponto A. Valores externos são tratados com a administração. |
+| Cobrança pela perda da pulseira | A entrevista não indicou cobrança. A casa só localiza a conta pelo garçom e pela mesa. |
+| Horário de funcionamento, áreas restritas aos funcionários e normas de conduta | São políticas da casa que orientam a operação e não geram dado próprio para registrar. |
 
 ---
+
+
 
 #### DER conceitual revisado (Caso A)
  
@@ -218,29 +283,84 @@ A tabela registra cada apontamento da correção da Entrega 1 e o que foi feito.
 - Justificar as **restrições** aplicadas (unicidade, obrigatoriedade, valores permitidos etc.), citando o código da regra de negócio (`RNxx`) que cada restrição implementa, quando houver.  
 - Justificar **decisões arquiteturais** gerais do modelo.
 
+---
+
 ### 1.6 Proposta de Arquitetura Analítica para BI e IA
 
-*(vale 7,5%)*
+### Informações estratégicas
 
-- **Informações estratégicas** que podem ser extraídas dos dados para a gestão da organização.  
-- **Indicadores e métricas gerenciais** propostos (KPIs).  
-- **Potencial dos dados para BI:** como a estrutura apoia dashboards/relatórios.  
-- **Aplicações analíticas e de IA:** como o modelo pode alimentar análises preditivas, recomendações etc.
+- Em quais ambientes e horários há lotação, fila ou ociosidade, e quanto o cliente espera para entrar no Deck, para decidir equipe e layout.
+- Risco de ruptura de estoque, consumo médio de bebidas e diferenças entre as saídas de estoque e as vendas.
+- Ticket médio e faturamento por ambiente, período e forma de pagamento.
+- Itens cancelados e o consumo de cada visita e de cada mesa.
+- Gasto com compras por fornecedor e prazo de recebimento da mercadoria.
+- Diferenças de caixa no fechamento e pagamentos sem nota fiscal.
 
-**Rastreabilidade:** inclua uma tabela que ligue cada problema declarado na caracterização da organização e cada KPI proposto às tabelas que o sustentam e à consulta do script SQL que o responde (pelo código da consulta — ver seção 3):
+A gerência do Ponto A pediu para acompanhar ruptura de estoque, cancelamentos, ticket médio e tempo de espera do Deck. Esses quatro assuntos correspondem aos KPIs K4, K8, K7 e K2, que são os principais. O responsável também pediu um informativo mais detalhado sobre o consumo de cada mesa (K16) e prefere relatórios mensais, por isso todas as consultas podem ser agrupadas por mês.
+
+### Indicadores e métricas gerenciais (KPIs)
+
+| Cód. | KPI | Fórmula (tabelas do DER) | Período | Meta proposta |
+|---|---|---|---|---|
+| K1 | Taxa de ocupação por ambiente | `quant_pessoas` (CONTROLE_ACESSO) dos acessos com entrada e sem saída ÷ `capacidade_maxima` (AMBIENTE) × 100 | hora / dia | ≤ 100% (ideal de 70% a 90%) |
+| K2 | Tempo médio de espera na fila | média de (`data_hora_entrada` − `data_hora_solicitacao`) em CONTROLE_ACESSO, só nos acessos com entrada | dia / mês | ≤ 15 min |
+| K3 | Taxa de desistência da fila | acessos com status "desistiu" ÷ total de acessos solicitados × 100 (CONTROLE_ACESSO) | semana / mês | ≤ 10% |
+| K4 | Produtos abaixo do estoque mínimo | nº de produtos com `qtd_atual` ≤ `estoque_minimo` (PRODUTO_ESTOQUE) | dia | 0 |
+| K5 | Taxa de ajustes de estoque | soma da `qtd` das movimentações de ajuste ÷ soma da `qtd` de todas as movimentações × 100 (MOVIMENTACAO_ESTOQUE) | mês | ≤ 2% |
+| K6 | Consumo médio diário de bebidas | soma da `qtd` das movimentações de saída ÷ dias do período, por produto (MOVIMENTACAO_ESTOQUE, PRODUTO_ESTOQUE) | semana / mês | comparar com o histórico |
+| K7 | Ticket médio por ambiente | soma do `valor_total` dos pagamentos ÷ nº de visitas pagas. O ambiente vem da mesa da visita; se a visita usa mesas de ambientes diferentes, vale o ambiente da mesa de menor `id_mesa` | dia / mês | a definir com o responsável |
+| K8 | Taxa de cancelamento de itens | itens com status "cancelado" ÷ total de itens × 100 (ITEM_PEDIDO) | semana / mês | ≤ 3% |
+| K9 | Diferença entre saídas de estoque e vendas | saídas registradas (MOVIMENTACAO_ESTOQUE) − quantidade vendida do produto, contando só itens ativos de pratos ligados ao produto, ou seja, garrafa e lata (ITEM_PEDIDO, PRATO, PRODUTO_ESTOQUE) | dia / semana | 0 |
+| K10 | Faturamento por ambiente e hora | soma do `valor_total` dos pagamentos por ambiente e hora do pagamento. Mesma regra de ambiente do K7 | dia / mês | comparar com o histórico |
+| K11 | Pagamentos sem número de nota fiscal | pagamentos com `numero_nf` vazio ÷ total de pagamentos × 100 (PAGAMENTO) | mês | 0% |
+| K12 | Diferença de caixa no fechamento | `valor_fechamento` − (`valor_abertura` + pagamentos em dinheiro do caixa), por caixa (CAIXA, PAGAMENTO) | turno / dia | 0 |
+| K13 | Gasto de compras por fornecedor | soma de `qtd` × `custo_unitario` (ITEM_COMPRA) por fornecedor, sem compras canceladas (COMPRA, FORNECEDOR) | mês | comparar com o orçamento |
+| K14 | Prazo médio de recebimento da mercadoria | média de (`data_recebimento` − `data_compra`) por fornecedor, só nas compras recebidas (COMPRA) | mês | a definir |
+| K15 | Faturamento por período e forma de pagamento | soma do `valor_total` por `forma_pgto` e por dia ou mês (PAGAMENTO) | dia / mês | comparar com o histórico |
+| K16 | Consumo por visita e mesa | soma de `qtd` × `preco_unitario` dos itens ativos, por visita e por mesa (ITEM_PEDIDO, PEDIDO, VISITA, MESA) | visita / mês | sem meta (informativo) |
+
+As metas são propostas do grupo, a confirmar com o responsável: o tempo de espera do Deck não é medido hoje. Uma consulta de auditoria confere que o `valor_total` de cada compra é igual à soma dos seus itens, para que o K13 seja confiável. O K9 só cobre bebidas vendidas como vêm (garrafa e lata), porque os drinks e as doses não baixam o estoque por receita.
+
+### Potencial dos dados para BI
+
+- **Painel de ocupação:** lotação, fila e tempo de espera por ambiente (K1 a K3).
+- **Painel de estoque:** produtos abaixo do mínimo, ajustes, consumo e diferenças entre saídas e vendas (K4 a K6, K9).
+- **Painel financeiro:** faturamento, ticket médio, horários de pico e forma de pagamento (K7, K10, K15).
+- **Painel de compras:** gasto e prazo de recebimento por fornecedor (K13, K14).
+- **Painel de caixa e conformidade:** diferença de caixa e pagamentos sem nota (K11, K12).
+- **Painel de atendimento:** itens cancelados e consumo por visita e mesa (K8, K16).
+
+### Aplicações analíticas e de IA
+
+- Previsão de demanda por ambiente e horário (base: CONTROLE_ACESSO e VISITA), para dimensionar a equipe. A casa recebe cerca de 500 pessoas por dia útil e 1.000 em fim de semana.
+- Previsão de consumo e reposição de bebidas (base: MOVIMENTACAO_ESTOQUE), indicando quando cada produto chega ao estoque mínimo.
+- Previsão de compras considerando o prazo de recebimento de cada fornecedor.
+- Detecção de anomalias em itens cancelados, quebras e ajustes de estoque, diferenças entre saídas e vendas (K9) e diferenças de caixa (K12).
+- Análise de cesta (itens que aparecem juntos em ITEM_PEDIDO), para apoiar decisões de cardápio.
+- Estimativa do tempo de fila esperado por ambiente e horário (base: CONTROLE_ACESSO), para apoiar a gerência no planejamento da equipe.
+
+### Rastreabilidade
 
 | Problema ou KPI | Tabelas envolvidas | Consulta no script |
-| :---- | :---- | :---- |
-| *ex.: P1 — ruptura de estoque de bebidas* | *PRODUTO, MOVIMENTACAO\_ESTOQUE* | *G03* |
-| *ex.: ticket médio por ambiente* | *PEDIDO, ITEM\_PEDIDO, AMBIENTE* | *G05* |
-
-&nbsp;
-
-*KPI sem consulta no script que o calcule não é considerado KPI. Cada problema declarado deve ter pelo menos uma consulta que o responda.*
-
-> **O que é KPI:** *Key Performance Indicator* (indicador-chave de desempenho) é um número que mostra, de forma objetiva, se a organização está indo bem em algo que importa para a gestão dela. Um KPI tem **fórmula** (como é calculado), **período** (por dia, semana, mês) e, de preferência, uma **meta** para comparação. Exemplos: ticket médio por venda, taxa de cancelamento de pedidos, produtos abaixo do estoque mínimo, tempo médio de atendimento, número de beneficiários atendidos por mês, percentual de doações recorrentes. "Melhorar o atendimento" não é KPI; "tempo médio entre o pedido e a entrega, por semana" é.
-
-> **Como levantar:** é recomendável usar pesquisas e ferramentas de IA para descobrir quais indicadores são usados por organizações do mesmo tipo (ex.: "principais KPIs de uma pizzaria", "indicadores de gestão de uma ONG de doação de alimentos") e quais análises de BI e de IA costumam ser aplicadas a elas. Depois, **filtre pelo que o seu banco consegue calcular**: um KPI só vale se as tabelas do modelo tiverem os dados necessários e se houver uma consulta no script que o calcule (ver *Rastreabilidade*, abaixo). Se possível, confirme com o responsável pela organização quais indicadores seriam úteis para ele. Registre esse uso de IA na seção 6\.
+|---|---|---|
+| P1: acesso ao Deck | AMBIENTE, CONTROLE_ACESSO | G01, G02, G03 |
+| P2: estoque de bebidas | PRODUTO_ESTOQUE, MOVIMENTACAO_ESTOQUE, PRATO, ITEM_PEDIDO | G04, G05, G06, G09 |
+| K1: taxa de ocupação | AMBIENTE, CONTROLE_ACESSO | G01 |
+| K2: tempo médio de espera | CONTROLE_ACESSO | G02 |
+| K3: taxa de desistência | CONTROLE_ACESSO | G03 |
+| K4: produtos abaixo do mínimo | PRODUTO_ESTOQUE | G04 |
+| K5: taxa de ajustes de estoque | MOVIMENTACAO_ESTOQUE | G05 |
+| K6: consumo médio de bebidas | MOVIMENTACAO_ESTOQUE, PRODUTO_ESTOQUE | G06 |
+| K7: ticket médio por ambiente | PAGAMENTO, VISITA, MESA, AMBIENTE | G07 |
+| K8: taxa de cancelamento de itens | ITEM_PEDIDO | G08 |
+| K9: saídas de estoque x vendas | MOVIMENTACAO_ESTOQUE, ITEM_PEDIDO, PRATO, PRODUTO_ESTOQUE | G09 |
+| K10: faturamento por ambiente e hora | PAGAMENTO, VISITA, MESA, AMBIENTE | G10 |
+| K11: pagamentos sem nota fiscal | PAGAMENTO | G11 |
+| K12: diferença de caixa | CAIXA, PAGAMENTO | G12 |
+| K13: gasto de compras por fornecedor | COMPRA, ITEM_COMPRA, FORNECEDOR | G13 |
+| K14: prazo de recebimento | COMPRA, FORNECEDOR | G14 |
+| K15: faturamento por forma de pagamento | PAGAMENTO | G15 |
+| K16: consumo por visita e mesa | ITEM_PEDIDO, PEDIDO, VISITA, MESA | G16 |
 
 ---
 
