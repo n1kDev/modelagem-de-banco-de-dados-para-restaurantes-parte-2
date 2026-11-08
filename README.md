@@ -73,27 +73,140 @@ Os dois problemas foram confirmados pelo responsável como os que a casa quer re
 
 ---
 
-**Processos de negócio**
+### Processos de negócio
 
-*Apresente os **principais processos mapeados** na organização — ex.: cadastro de clientes/beneficiários/fiéis, controle de estoque ou doações, vendas ou arrecadação, emissão de pedidos ou solicitações, entregas ou distribuição, organização de eventos/rituais/mutirões.*
+Os processos abaixo foram mapeados na entrevista e na observação no Ponto A. A coluna "Situação" diz se o processo já existe na casa ou se é uma proposta do banco para resolver um problema declarado. Os nomes entre crases são as colunas do modelo.
 
-- **Levante os processos típicos do tipo de organização.** É recomendável usar pesquisas e ferramentas de IA para descobrir quais processos são comuns em organizações do mesmo tipo (ex.: o que toda pizzaria, ONG de doação de alimentos ou oficina mecânica costuma fazer) e conferir se eles existem na organização escolhida. Isso pode exigir **uma nova visita à organização** para confirmar como cada processo funciona lá. Registre esse uso de IA na seção 6\.  
-- **Inclua os processos que existem na organização**, mesmo os que não estão ligados aos problemas declarados — o banco de dados reúne todos os dados da organização (ver *Escopo do sistema* acima).  
-- **Justifique os processos prováveis não incluídos:** se um processo comum nesse tipo de organização ficou de fora (ex.: compras de fornecedores, cancelamentos, escala da equipe), explique por quê — por exemplo, a organização não o realiza, ou ele é feito por terceiros.
+| Cód. | Processo | Quem executa | Dados envolvidos | Situação |
+|---|---|---|---|---|
+| PR01 | **Entrega da pulseira e abertura da visita.** O cliente chega sem cadastro e recebe uma pulseira numerada. | Segurança | Comanda: `codigo` (de 0 a 9.999, em ordem, voltando a zero depois do 9.999) e `status` (em uso). Visita: `data_hora_abertura` e `status` (aberta). Mesa(s) ocupada(s). | Existe |
+| PR02 | **Controle de acesso aos ambientes (P1).** Hoje a fila do Deck é por ordem de chegada, sem registro. O banco passa a registrar a solicitação, a entrada e a saída de cada visita. | Gerência | Acesso: visita, ambiente, `data_hora_solicitacao`, `data_hora_entrada`, `data_hora_saida`, `quant_pessoas` e `status` (aguardando, no ambiente, encerrado ou desistiu). Ambiente: `capacidade_maxima`. | Proposto |
+| PR03 | **Registro do pedido.** O garçom anota no aparelho de mão e o sistema envia uma comanda a cada setor. | Garçom | Pedido: visita, funcionário que atende, `data_hora` e `status`. Item: prato, `qtd`, `preco_unitario` (preço do momento) e `observacao` (ex.: ponto da carne). | Existe |
+| PR04 | **Preparo e envio aos setores.** Cada setor recebe a sua comanda e prepara os itens. | Bar, cozinha, narguilé, sushiman e pizzaiolo | Setor de produção da categoria do prato (`setor_producao`) e `status` do pedido (registrado, em preparo, pronto, entregue). | Existe |
+| PR05 | **Cancelamento de item.** Só a gerência cancela, e o cancelamento sobe ao sistema com a comanda do setor. O item permanece registrado. | Gerência | Item: `status` (ativo ou cancelado). | Existe |
+| PR06 | **Pagamento e fechamento da conta.** A conta pode ser dividida em vários pagamentos, e o garçom pode receber na mesa. Ao final, o caixa dá baixa na pulseira. Estornos e alterações em conta fechada são só da gerência. | Garçom, caixa e gerência | Pagamento: `valor_total`, `valor_taxa_servico` (10%), `forma_pgto` (dinheiro, crédito, débito, pix ou ticket), `data_hora` e `numero_nf`. Visita: `data_hora_fechamento` e `status` (fechada). Comanda: `status` (baixada). | Existe |
+| PR07 | **Abertura e fechamento do caixa.** Cada turno abre com R$ 150. Não há sangria. | Caixa abre; maître ou gerência fecha | Caixa: `data_hora_abertura`, `valor_abertura`, `data_hora_fechamento`, `valor_fechamento`, `status` e funcionário responsável. | Existe |
+| PR08 | **Controle de estoque de bebidas (P2).** A saída é registrada por requisição do bar. O maître conta o estoque todo dia, lança os ajustes (a quebra é o mais comum) e acompanha o estoque mínimo. | Bar e maître | Movimentação: produto, funcionário, `tipo` (entrada, saída, ajuste positivo ou negativo), `qtd`, `data_hora` e `motivo`. Produto: `qtd_atual` e `estoque_minimo`. | Existe, com controle manual e sem direcionar a contagem |
+| PR09 | **Compra e recebimento de mercadoria.** O gerente geral compra com base nas informações dos setores. Os maîtres recebem e conferem a entrega. | Gerente e maître | Fornecedor: `razao_social`, `cnpj` e `telefone`. Compra: `data_compra`, `valor_total`, `status` (pedida, recebida ou cancelada) e `data_recebimento`. Item: produto, `qtd` e `custo_unitario`. As entradas de estoque ficam ligadas à compra. | Existe |
+| PR10 | **Manutenção dos cadastros de apoio.** Cardápio (prato, `preco`, categoria), mesas e ambientes, produtos de estoque, fornecedores e funcionários (`cargo`). | Gerência | Prato: `nome_prato`, `preco` e categoria. Mesa: `numero` e ambiente. Funcionário: `nome_func` e `cargo`. | Existe |
+
+#### Processos prováveis não incluídos
+
+| Processo comum em restaurantes | Por que ficou de fora |
+|---|---|
+| Reserva de mesas | O responsável informou que as reservas são tratadas manualmente pela administração, fora do sistema de atendimento. |
+| Escala e folha de pagamento da equipe | São tratadas manualmente pela administração. O funcionário entra no modelo só para registrar quem fez cada operação e o seu cargo. |
+| Registros sanitários e de vigilância | A casa precisa manter esses registros, mas eles ficam com a administração e não fazem parte do sistema de atendimento. |
+| Emissão da nota fiscal | A nota é emitida por sistema fiscal próprio. O banco guarda só o número da nota em cada pagamento. |
+| Cadastro de clientes e programa de fidelidade | A casa não cadastra clientes: o cliente é identificado só pela pulseira, e dados de clientes não são guardados. |
+| Ficha técnica (insumos de cada prato) | O controle de estoque é de bebidas. Os drinks são feitos com as garrafas disponíveis, sem baixa por receita. |
+| Sangria do caixa | Não existe no Ponto A: valores externos são tratados com a administração. |
+| Delivery e retirada | O delivery é feito por aplicativos de terceiros, fora do sistema da casa. O modelo cobre o atendimento presencial no salão, no deck e no subsolo. |
+| Serviço de valet | É um serviço de apoio, sem relação com o atendimento, o estoque ou o caixa, e não gera dados do modelo. O valet aparece só como cargo de funcionário. |
 
 ---
 
-**Requisitos**
+### Requisitos funcionais
 
-*Apresente os requisitos do sistema, atualizados com base na correção da Entrega 1 (ou elaborados agora, para quem trocou de organização):*
+Cada requisito indica o processo que ele atende (entre parênteses) e os dados envolvidos. Os problemas declarados são o **P1** (controle de acesso aos ambientes e triagem de mesas) e o **P2** (controle de estoque de bebidas).
 
-- **Requisitos Funcionais:** o que o sistema precisa **fazer**, com os dados envolvidos (ex.: "o sistema deve permitir registrar uma venda com data, cliente, vendedor, forma de pagamento e, para cada item, produto, quantidade e preço unitário"). Cada um com um código (`RF01`, `RF02`…).  
-- **Requisitos Não Funcionais:** características de qualidade (ex.: desempenho, segurança, usabilidade, disponibilidade). Cada um com um código (`RNF01`, `RNF02`…).  
-- **Levante os requisitos típicos do tipo de organização.** Assim como nos processos, é recomendável usar pesquisas e ferramentas de IA para descobrir quais requisitos funcionais e não funcionais são comuns em sistemas de organizações semelhantes e conferir se eles se aplicam à organização escolhida — o que pode exigir confirmação com o responsável. Registre esse uso de IA na seção 6\.  
-- **Justifique os requisitos prováveis não incluídos:** se um requisito comum nesse tipo de organização ficou de fora, explique por quê (ex.: a organização não realiza o processo correspondente, ou a necessidade não existe no porte dela).
+**Atendimento e acesso**
 
-*Na Entrega 1, os erros mais comuns foram: requisitos de um sistema diferente do que foi mapeado (ex.: cardápio por QR Code ou motor de recomendação, quando o processo real é o garçom anotar o pedido), problemas declarados sem nenhum requisito que os resolva e requisitos técnicos (autenticação por JWT, hospedagem em nuvem) listados como funcionais. Os requisitos devem corresponder aos processos de negócio descritos acima e cobrir todos os problemas declarados (`P1`, `P2`…).*
+- **RF01** — O sistema deve permitir abrir uma visita quando a pulseira é entregue, registrando o número da pulseira (de 0 a 9.999), a situação "em uso" e a data e hora de abertura, **sem pedir nenhum dado do cliente**. Deve impedir abrir um número de pulseira que já esteja em uso, porque a numeração volta a zero depois do 9.999. *(PR01)*
+- **RF02** — O sistema deve permitir ligar a visita a uma ou mais mesas e consultar as mesas ocupadas, com número da mesa, ambiente, número da pulseira, hora de abertura da visita e consumo acumulado. *(PR01 — P1)*
+- **RF03** — O sistema deve permitir registrar o pedido de entrada de uma visita em um ambiente, com ambiente, data e hora da solicitação, número de pessoas e a situação "aguardando", e listar a fila de cada ambiente por ordem de chegada. *(PR02 — P1)*
+- **RF04** — O sistema deve permitir registrar a entrada (data e hora), a saída (data e hora) e a desistência de cada pedido de acesso, e mostrar a ocupação atual de cada ambiente comparada à sua capacidade máxima. *(PR02 — P1)*
 
+**Pedidos**
+
+- **RF05** — O sistema deve permitir registrar um pedido com a visita, o garçom, a data e hora e, para cada item, o prato ou bebida, a quantidade, o preço do momento e as observações (por exemplo, o ponto da carne). *(PR03)*
+- **RF06** — O sistema deve enviar os itens do pedido ao setor de produção da categoria de cada prato (bar, cozinha, narguilé, comida japonesa ou pizzaria), listar por setor o que há para preparar e permitir acompanhar a situação do pedido (registrado, em preparo, pronto ou entregue). *(PR04)*
+- **RF07** — O sistema deve permitir que **somente a gerência** cancele um item do pedido. O item cancelado continua registrado e deixa de contar na conta. *(PR05)*
+
+**Conta, pagamento e caixa**
+
+- **RF08** — O sistema deve calcular a conta da visita: a soma dos itens não cancelados (quantidade × preço do momento) mais 10% de taxa de serviço. *(PR06)*
+- **RF09** — O sistema deve permitir registrar um ou mais pagamentos para a mesma visita (divisão de conta), com valor, taxa de serviço, forma de pagamento (dinheiro, crédito, débito, pix ou ticket), data e hora, número da nota fiscal, o caixa e o funcionário que recebeu (caixa ou garçom, na mesa). *(PR06)*
+- **RF10** — O sistema deve fechar a visita quando a conta estiver quitada, registrando a data e hora de fechamento, e baixar a pulseira, liberando o número para reutilização. *(PR06)*
+- **RF11** — O sistema deve permitir marcar a pulseira como perdida e localizar a conta pelo garçom que tirou o pedido e pela mesa. *(PR06)*
+- **RF12** — O sistema deve permitir que **somente a gerência** estorne ou altere um pagamento de conta fechada, sem apagar o registro do pagamento. *(PR06)*
+- **RF13** — O sistema deve permitir abrir o caixa com data e hora, valor de abertura (R$ 150) e operador, e fechá-lo com data e hora e valor de fechamento, **somente por maître ou gerência**. No fechamento, deve mostrar o total recebido por forma de pagamento e a diferença em relação ao valor esperado. *(PR07)*
+
+**Estoque e compras**
+
+- **RF14** — O sistema deve permitir registrar a saída de bebidas por requisição do bar, com produto, quantidade, data e hora e funcionário responsável, atualizando a quantidade atual do produto. *(PR08 — P2)*
+- **RF15** — O sistema deve permitir registrar o resultado da contagem diária e as quebras como ajustes (positivo ou negativo), com produto, quantidade, motivo, data e hora e o maître responsável, atualizando a quantidade atual. *(PR08 — P2)*
+- **RF16** — O sistema deve listar, todos os dias, os produtos cuja quantidade atual está igual ou abaixo do estoque mínimo. *(PR08 — P2)*
+- **RF17** — O sistema deve emitir, por produto e período, o comparativo **vendido × retirado**: as unidades vendidas por garrafa ou lata (itens não cancelados), as saídas por requisição do bar, os ajustes e a diferença entre eles. *(PR08 — P2)*
+- **RF18** — O sistema deve permitir registrar uma compra com fornecedor, gerente que comprou, data da compra e, para cada item, produto, quantidade e custo unitário, calculando o valor total. *(PR09)*
+- **RF19** — O sistema deve permitir registrar o recebimento da compra, com data de recebimento, gerando uma entrada no estoque para cada item, ligada à compra, e atualizando a quantidade atual. *(PR09)*
+
+**Cadastros de apoio**
+
+- **RF20** — O sistema deve permitir cadastrar categorias do cardápio (nome e setor de produção) e pratos e bebidas (nome, preço e **uma única** categoria). A bebida vendida como vem (garrafa ou lata) deve poder ser ligada ao seu produto de estoque. *(PR10)*
+- **RF21** — O sistema deve permitir cadastrar ambientes (nome, capacidade máxima e situação) e mesas (número e ambiente). *(PR10)*
+- **RF22** — O sistema deve permitir cadastrar funcionários com nome e cargo, escolhido em uma lista fixa que define o acesso ao sistema. *(PR10)*
+- **RF23** — O sistema deve permitir cadastrar produtos de estoque (nome, quantidade atual e estoque mínimo) e fornecedores (razão social, CNPJ e telefone). *(PR10)*
+
+**Relatórios gerenciais (mensais)**
+
+- **RF24** — O sistema deve emitir o relatório de cancelamentos: quantidade e valor dos itens cancelados, por setor e por garçom, e a taxa de cancelamento sobre o total de itens. *(PR05)*
+- **RF25** — O sistema deve emitir o ticket médio: valor pago dividido pelo número de visitas pagas, por mês e por ambiente. *(PR06)*
+- **RF26** — O sistema deve emitir o tempo médio e o maior tempo de espera no Deck (entrada menos solicitação), por mês, dia da semana e faixa de horário, e o número de desistências. *(PR02 — P1)*
+- **RF27** — O sistema deve emitir o relatório de ruptura: para cada produto, os dias em que a quantidade ficou abaixo do estoque mínimo ou zerada. *(PR08 — P2)*
+- **RF28** — O sistema deve emitir o consumo de cada visita e de cada mesa, que atende o pedido da gerência por um informativo mais detalhado sobre cada mesa. *(PR03, PR06 — P1)*
+
+### Requisitos não funcionais
+
+*Os números abaixo são metas propostas pelo grupo a partir dos volumes informados na entrevista. O responsável não os citou.*
+
+- **RNF01 — Desempenho:** registrar um pedido e consultar a fila do Deck, as mesas ocupadas, a conta da visita e os produtos abaixo do mínimo deve levar até 2 segundos, nos picos de 2.000 a 5.000 pedidos por dia e com garçons, caixas, bar e gerência usando o sistema ao mesmo tempo. Os relatórios mensais podem demorar mais.
+- **RNF02 — Disponibilidade:** a casa funciona de segunda a segunda, em dois turnos. O sistema deve estar disponível durante todo o funcionamento, e a manutenção deve ser feita fora dele.
+- **RNF03 — Acesso por cargo:** cada funcionário entra com login próprio e vê só as funções do seu cargo, como já acontece no xMenu (uma aba por setor):
+  - **Segurança:** pulseira e controle de acesso.
+  - **Garçom:** pedidos, pedidos de acesso e pagamento na mesa.
+  - **Produção (bar, cozinha, narguilé, sushiman e pizzaiolo):** situação dos pedidos do seu setor.
+  - **Caixa:** contas e pagamentos.
+  - **Bar:** saídas de estoque.
+  - **Maître:** contagem, quebras, recebimento de mercadoria e fechamento de caixa.
+  - **Gerência:** tudo o que os demais fazem, mais cancelamentos, estornos, compras, cadastros e relatórios.
+- **RNF04 — Histórico:** pedidos, itens, pagamentos, movimentações de estoque, compras e caixas não são apagados. Cancelamentos, estornos e ajustes mudam a situação do registro e ficam com o responsável e a data e hora.
+- **RNF05 — LGPD:** o sistema não coleta nome, CPF, telefone nem data de nascimento de clientes, mantendo a prática da casa. A idade continua sendo conferida em documento, sem registro. Os dados de funcionários se limitam a nome e cargo, com acesso restrito à gerência e ao RH.
+- **RNF06 — Integridade e concorrência:** o registro do pedido com seus itens, o fechamento da conta e o recebimento de uma compra devem ser gravados por inteiro ou não ser gravados. Dois usuários não podem abrir a mesma pulseira em uso nem quitar a mesma conta duas vezes.
+- **RNF07 — Backup:** cópia completa diária, feita fora do horário de maior movimento, para que uma falha não apague pedidos, pagamentos ou estoque.
+- **RNF08 — Dia operacional:** como o funcionamento passa da meia-noite, os relatórios diários e o caixa devem seguir o turno e um horário de corte definido pela casa, e não o dia do calendário.
+- **RNF09 — Volume:** o banco deve comportar cerca de 1,8 milhão de pedidos por ano (5.000 por dia), além de 400 a 800 itens de cardápio e 40 a 60 fornecedores.
+- **RNF10 — Usabilidade no aparelho de mão:** o garçom deve buscar o item por nome ou categoria e escrever observações livres, sem digitar nenhum dado do cliente.
+
+#### Requisitos prováveis não incluídos
+
+| Requisito comum em sistemas de restaurante e bar | Por que ficou de fora |
+|---|---|
+| Cardápio por QR Code, aplicativo do cliente ou totem de autoatendimento | O pedido é anotado pelo garçom no aparelho de mão. Não há autoatendimento. |
+| Reserva de mesas | As reservas são tratadas manualmente pela administração, fora do sistema. |
+| Escala e ponto da equipe | São tratados manualmente pela administração. |
+| Cadastro de clientes, fidelidade e recomendação | Nenhum dado de cliente é guardado, e isso iria contra o RNF05. |
+| Registro digital da verificação de idade | A idade é conferida no documento, sem registro. Guardar o dado criaria tratamento de dado pessoal sem necessidade. |
+| Emissão da nota fiscal | A nota sai de um sistema fiscal próprio. O banco guarda só o número em cada pagamento (RF09). |
+| Sangria de caixa | Não existe: valores externos são tratados com a administração. |
+| Registros sanitários e de vigilância | Ficam com a administração, fora do sistema de atendimento. |
+| Financeiro (contas a pagar, folha, DRE) | É tratado pela administração. |
+| Delivery e integração com aplicativos de entrega | É feito por aplicativos de terceiros, fora do sistema da casa. |
+| Controle do serviço de valet | É um serviço de apoio, sem relação com atendimento, estoque ou caixa. |
+| Baixa automática de estoque por ficha técnica de drinks e doses | Os drinks são feitos com as garrafas disponíveis, sem separação. O controle possível é o comparativo vendido × retirado (RF17). |
+| Bloqueio automático de item esgotado | Depende da baixa automática, que não existe. O estoque mínimo é conferido todo dia pelos maîtres. |
+| Tempo de preparo por item nos setores | A casa não mede o tempo de preparo. O banco guarda só a situação do pedido (RF06). |
+
+#### Cobertura dos problemas e dos indicadores pedidos
+
+| Problema ou indicador | Requisitos | Processos |
+|---|---|---|
+| **P1** — Controle de acesso e triagem de mesas | RF02, RF03, RF04, RF21, RF26, RF28 | PR01, PR02 |
+| **P2** — Controle de estoque de bebidas | RF14, RF15, RF16, RF17, RF19, RF23, RF27 | PR08, PR09 |
+| Ruptura de estoque | RF16, RF27 | PR08 |
+| Cancelamentos | RF07, RF24 | PR05 |
+| Ticket médio | RF08, RF09, RF25 | PR06 |
+| Tempo de espera no Deck | RF03, RF04, RF26 | PR02 |
 ---
 
 
