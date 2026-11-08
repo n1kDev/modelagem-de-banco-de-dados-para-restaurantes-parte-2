@@ -73,7 +73,7 @@ Os dois problemas foram confirmados pelo responsável como os que a casa quer re
 
 ---
 
-**Processos de negócio (todos os grupos)**
+**Processos de negócio**
 
 *Apresente os **principais processos mapeados** na organização — ex.: cadastro de clientes/beneficiários/fiéis, controle de estoque ou doações, vendas ou arrecadação, emissão de pedidos ou solicitações, entregas ou distribuição, organização de eventos/rituais/mutirões.*
 
@@ -81,7 +81,9 @@ Os dois problemas foram confirmados pelo responsável como os que a casa quer re
 - **Inclua os processos que existem na organização**, mesmo os que não estão ligados aos problemas declarados — o banco de dados reúne todos os dados da organização (ver *Escopo do sistema* acima).  
 - **Justifique os processos prováveis não incluídos:** se um processo comum nesse tipo de organização ficou de fora (ex.: compras de fornecedores, cancelamentos, escala da equipe), explique por quê — por exemplo, a organização não o realiza, ou ele é feito por terceiros.
 
-**Requisitos (todos os grupos)**
+---
+
+**Requisitos**
 
 *Apresente os requisitos do sistema, atualizados com base na correção da Entrega 1 (ou elaborados agora, para quem trocou de organização):*
 
@@ -94,11 +96,12 @@ Os dois problemas foram confirmados pelo responsável como os que a casa quer re
 
 ---
 
-### Regras de negócio
+
+**Regras de negócio**
 
 As regras abaixo vêm da entrevista no Ponto A e da observação no local. As que dependem de uma proposta do banco (RN06 e RN07) estão marcadas. Os nomes entre crases são as colunas do modelo.
 
-#### Regras operacionais
+**Regras operacionais**
 
 | Cód. | Regra | Dados envolvidos |
 |---|---|---|
@@ -127,7 +130,7 @@ As regras abaixo vêm da entrevista no Ponto A e da observação no local. As qu
 | RN18 | O garçom ou o caixa pode receber o pagamento, e todo pagamento é finalizado em um caixa. | Pagamento, funcionário e caixa. |
 | RN19 | O caixa abre com R$ 150, em cada um dos dois turnos, e é fechado só pelo maître ou pela gerência. Não há sangria: valores externos são tratados com a administração. | Caixa: `valor_abertura`, `data_hora_abertura`, `valor_fechamento`, `data_hora_fechamento` e `status`. |
 
-#### Estoque e compras
+**Estoque e compras**
 
 | Cód. | Regra | Dados envolvidos |
 |---|---|---|
@@ -138,7 +141,7 @@ As regras abaixo vêm da entrevista no Ponto A e da observação no local. As qu
 | RN24 | A compra é feita pelo gerente geral a um fornecedor cadastrado e tem ao menos um item. | Fornecedor: `razao_social`, `cnpj` e `telefone`. Compra: `data_compra`, `valor_total` e `status` (pedida). Item: produto, `qtd` e `custo_unitario`. |
 | RN25 | A mercadoria é recebida e conferida pelos maîtres. No recebimento, a compra passa a recebida e as entradas no estoque ficam ligadas a ela. A compra cancelada permanece registrada. | Compra: `data_recebimento` e `status` (recebida ou cancelada). Movimentação: `tipo` (entrada). |
 
-#### Restrições legais e organizacionais
+**Restrições legais e organizacionais**
 
 | Cód. | Regra | Dados envolvidos |
 |---|---|---|
@@ -147,7 +150,7 @@ As regras abaixo vêm da entrevista no Ponto A e da observação no local. As qu
 | RN28 | O acesso ao sistema depende do cargo: cada setor tem a sua aba, com um nível de acesso diferente. | Funcionário: `cargo`. |
 | RN29 | Toda operação identifica o funcionário que a fez: pedido, pagamento, movimentação de estoque, compra e caixa. | Funcionário: `id_func` e `cargo`. |
 
-#### Regras prováveis não incluídas
+**Regras prováveis não incluídas**
 
 | Regra comum em restaurantes | Por que ficou de fora |
 |---|---|
@@ -167,6 +170,198 @@ As regras abaixo vêm da entrevista no Ponto A e da observação no local. As qu
 
 
 #### DER conceitual revisado (Caso A)
+
+**Software utilizado:** BRModelo Web, na notação do brModelo (entidades em retângulos, relacionamentos em losangos, atributos em círculos, chaves em círculos preenchidos e cardinalidades mínima e máxima nos dois lados de cada relacionamento). Arquivo: [DER.jpg](DER.jpg).
+
+O DER revisado tem **17 entidades** e **22 relacionamentos**. Ele cobre o atendimento (da pulseira entregue na chegada até o pagamento) e os dois problemas declarados: o controle de acesso aos ambientes (P1) e o controle de estoque de bebidas (P2). Também cobre o caixa e as compras de insumos. Não há chaves estrangeiras no DER; elas aparecem apenas no modelo lógico.
+
+##### Entidades e atributos
+
+Os atributos em **negrito** são os identificadores (chaves primárias).
+
+| Entidade | Atributos |
+|---|---|
+| MESA | **id_mesa**, numero |
+| AMBIENTE | **id_ambiente**, nome_ambiente, capacidade_maxima, status |
+| CONTROLE_ACESSO | **id_controle_acesso**, data_hora_solicitacao, data_hora_entrada, data_hora_saida, quant_pessoas, status |
+| VISITA | **id_visita**, data_hora_abertura, data_hora_fechamento, status |
+| COMANDA | **id_comanda**, codigo, status |
+| PAGAMENTO | **id_pgto**, valor_total, valor_taxa_servico, forma_pgto, data_hora, numero_nf |
+| FUNCIONARIO | **id_func**, nome_func, cargo |
+| PEDIDO | **id_pedido**, status, data_hora |
+| ITEM_PEDIDO | **id_item**, qtd, preco_unitario, observacao, status |
+| PRATO | **id_prato**, nome_prato, preco |
+| CATEGORIA_PRATO | **id_categ**, nome, setor_producao |
+| PRODUTO_ESTOQUE | **id_produto**, nome, qtd_atual, estoque_minimo |
+| MOVIMENTACAO_ESTOQUE | **id_movimentacao**, tipo, qtd, data_hora, motivo |
+| FORNECEDOR | **id_fornecedor**, razao_social, cnpj, telefone |
+| COMPRA | **id_compra**, data_compra, data_recebimento, valor_total, status |
+| ITEM_COMPRA | **id_item_compra**, qtd, custo_unitario |
+| CAIXA | **id_caixa**, data_hora_abertura, valor_abertura, data_hora_fechamento, valor_fechamento, status |
+
+##### Relacionamentos e cardinalidades
+
+O par (mín,máx) ao lado de cada entidade indica quantas vezes ela participa do relacionamento.
+
+| Relacionamento | Entidade A | Card. A | Card. B | Entidade B | Leitura |
+|---|---|---|---|---|---|
+| Recebe | MESA | (0,n) | (1,n) | VISITA | Uma mesa recebe várias visitas, e uma visita pode ocupar mais de uma mesa |
+| Possui | AMBIENTE | (1,n) | (1,1) | MESA | Cada mesa pertence a um único ambiente |
+| Controla | AMBIENTE | (0,n) | (1,1) | CONTROLE_ACESSO | Cada registro de acesso é de um único ambiente |
+| Solicita | VISITA | (0,n) | (1,1) | CONTROLE_ACESSO | Cada registro de acesso (solicitação, entrada e saída) é de uma única visita |
+| Identifica | VISITA | (1,1) | (1,1) | COMANDA | Cada visita tem uma comanda (pulseira) e cada comanda identifica uma visita |
+| Gera | VISITA | (1,n) | (1,1) | PEDIDO | Uma visita gera vários pedidos, e cada pedido pertence a uma visita |
+| Quita | VISITA | (1,n) | (1,1) | PAGAMENTO | Uma visita é quitada por um ou mais pagamentos (divisão de conta) |
+| Atende | FUNCIONARIO | (1,n) | (1,1) | PEDIDO | Cada pedido é atendido por um único funcionário |
+| Arrecada | FUNCIONARIO | (1,n) | (1,n) | PAGAMENTO | O garçom cobra e o caixa finaliza: mais de um funcionário por pagamento |
+| Contem | PEDIDO | (1,n) | (1,1) | ITEM_PEDIDO | Todo pedido tem ao menos um item, e cada item pertence a um pedido |
+| Refere-se a | PRATO | (0,n) | (1,1) | ITEM_PEDIDO | Cada item se refere a um único prato |
+| Classifica | CATEGORIA_PRATO | (1,n) | (1,1) | PRATO | Cada prato pertence a uma única categoria |
+| Corresponde a | PRATO | (0,1) | (0,n) | PRODUTO_ESTOQUE | Só bebida vendida como vem (lata, garrafa) corresponde a um produto de estoque |
+| Executa | FUNCIONARIO | (0,n) | (1,1) | MOVIMENTACAO_ESTOQUE | Cada movimentação é feita por um funcionário |
+| Movimenta | PRODUTO_ESTOQUE | (0,n) | (1,1) | MOVIMENTACAO_ESTOQUE | Cada movimentação é de um único produto |
+| Abastece | COMPRA | (0,n) | (0,1) | MOVIMENTACAO_ESTOQUE | A compra recebida origina as movimentações de entrada |
+| Efetua | FUNCIONARIO | (0,n) | (1,1) | COMPRA | Cada compra é feita por um funcionário |
+| Fornece | FORNECEDOR | (0,n) | (1,1) | COMPRA | Cada compra é de um único fornecedor |
+| Inclui | COMPRA | (1,n) | (1,1) | ITEM_COMPRA | Toda compra tem ao menos um item |
+| É comprado em | PRODUTO_ESTOQUE | (0,n) | (1,1) | ITEM_COMPRA | Cada item de compra é de um único produto |
+| Opera | FUNCIONARIO | (0,n) | (1,1) | CAIXA | Cada turno de caixa é operado por um funcionário |
+| Recebe | CAIXA | (0,n) | (1,1) | PAGAMENTO | Todo pagamento é finalizado em um caixa |
+
+##### Revisão do modelo (Caso A)
+
+A tabela registra cada apontamento da correção da Entrega 1 e o que foi feito.
+
+| Apontamento da correção | O que foi feito | Por quê |
+|---|---|---|
+| `contém` (PEDIDO–PRATO) N:N sem quantidade nem preço praticado | Criada a entidade ITEM_PEDIDO com `qtd`, `preco_unitario` e `observacao`, ligada a PEDIDO (`contem`) e a PRATO (`refere-se a`) | Sem ela não é possível saber quanto de cada prato foi pedido nem o preço cobrado na época |
+| PRATO sem nome | Acrescentado `nome_prato` | O cardápio precisa identificar cada prato |
+| Sem ambiente, embora o acesso ao Deck seja problema declarado (P1) | Criadas AMBIENTE (`capacidade_maxima`) e CONTROLE_ACESSO (solicitação, entrada, saída, `quant_pessoas`, `status`) | Permite calcular a lotação e o tempo de espera de cada ambiente |
+| Sem estoque, embora o controle de bebidas seja problema declarado (P2) | Criadas PRODUTO_ESTOQUE (`qtd_atual`, `estoque_minimo`) e MOVIMENTACAO_ESTOQUE (`tipo`, `qtd`, `data_hora`, `motivo`), com o relacionamento `corresponde a` ligando bebida do cardápio ao produto | Registra toda entrada, saída e ajuste (conferência) e permite sinalizar estoque abaixo do mínimo |
+| Caixa (abertura e fechamento) ausente | Criada a entidade CAIXA e o relacionamento `recebe` entre CAIXA e PAGAMENTO | O processo existe no Ponto A e encerra a visita |
+| Compra e recebimento de mercadoria, fornecedor ausentes | Criadas FORNECEDOR, COMPRA e ITEM_COMPRA, ligadas ao estoque por `abastece` e `é comprado em` | Garante que a compra seja de fornecedor cadastrado e que a entrada no estoque seja rastreável |
+| Cancelamento ausente | Registrado no atributo `status` de ITEM_PEDIDO ("cancelado"); o item permanece no banco | Cancelamento exige histórico, não exclusão, e no Ponto A ele é feito por item |
+| Taxa de serviço, cupom fiscal e perda da pulseira sem registro | Acrescentados `valor_taxa_servico` e `numero_nf` em PAGAMENTO e `status` em COMANDA (em uso, baixada ou perdida) | Permitem aplicar e auditar essas regras |
+| Atributos sobrepostos em COMANDA_ACESSO | Entidade redesenhada como COMANDA, com `id_comanda`, `codigo` e `status` legíveis | Falha de legibilidade do desenho |
+| Mínimo (1,n) impedia mesa nunca usada | MESA passou a (0,n) no relacionamento `Recebe` | O banco deve admitir mesa ainda sem uso |
+| Reservas, escala da equipe, normas sanitárias e horário de funcionamento ausentes | **Mantidos fora do modelo.** O responsável confirmou que reservas, escala e registros sanitários são tratados manualmente pela administração, fora do sistema de atendimento | Justificativa de processo não incluído |
+
+##### Mudanças feitas após a entrevista
+
+A entrevista com o responsável no Ponto A confirmou a maior parte do modelo e levou a estes ajustes.
+
+| O que o responsável informou | O que mudou no DER | Por quê |
+|---|---|---|
+| O cliente não é cadastrado: é reconhecido só pelo número da pulseira, e dados de clientes não são guardados | Removidos CLIENTE e o relacionamento `Realiza`; a visita se liga à comanda e à mesa | O modelo deve refletir o que a casa faz e não guardar dados pessoais de clientes |
+| Não há sangria; valores externos são tratados com a administração | Removidos SANGRIA e o relacionamento `Sofre` | O processo não existe no Ponto A |
+| Cada prato fica em uma única categoria | `Classifica` passou de N:N para 1:N | Evita uma tabela de ligação que a casa não usa |
+| O cancelamento é feito só pela gerência, por item | `status` em ITEM_PEDIDO; PEDIDO deixa de ter o valor "cancelado" | Registra o cancelamento na granularidade em que ele acontece |
+| O horário em que o pedido chega ao cliente não é registrado | Removido `data_hora_entrega` de PEDIDO | Atributo sem fonte de dados |
+| A quebra é a divergência de estoque mais comum | Acrescentado `motivo` em MOVIMENTACAO_ESTOQUE | Permite separar quebra, perda, cortesia e consumo interno nos ajustes |
+| A entrada nos ambientes é por ordem de chegada, sem registro | Mantido CONTROLE_ACESSO, como proposta de registro de solicitação, entrada e saída | É a solução para o P1; hoje o tempo de espera não é medido |
+
+##### Decisões de modelagem
+
+- **VISITA é o eixo do modelo.** Pedidos, pagamentos, comanda e acessos aos ambientes partem dela, e é ela que liga as mesas (N:N, para mesas unidas). O cliente é identificado apenas pela comanda, sem cadastro.
+- **FUNCIONARIO é uma única entidade**, com o atributo `cargo`, porque todos os papéis compartilham os mesmos atributos e relacionamentos.
+- **ITEM_PEDIDO e ITEM_COMPRA** são entidades próprias, com atributos, no lugar de relacionamentos N:N sem dados, para guardar quantidade e preço praticado de cada item.
+- **Os N:N que permanecem** (MESA–VISITA e FUNCIONARIO–PAGAMENTO) viram tabelas associativas no modelo lógico.
+
+**Software utilizado:** BRModelo Web, na notação do brModelo (entidades em retângulos, relacionamentos em losangos, atributos em círculos, chaves em círculos preenchidos e cardinalidades mínima e máxima nos dois lados de cada relacionamento). Arquivo: [DER.jpg](DER.jpg).
+
+O DER revisado tem **17 entidades** e **22 relacionamentos**. Ele cobre o atendimento (da pulseira entregue na chegada até o pagamento) e os dois problemas declarados: o controle de acesso aos ambientes (P1) e o controle de estoque de bebidas (P2). Também cobre o caixa e as compras de insumos. Não há chaves estrangeiras no DER; elas aparecem apenas no modelo lógico.
+
+##### Entidades e atributos
+
+Os atributos em **negrito** são os identificadores (chaves primárias).
+
+| Entidade | Atributos |
+|---|---|
+| MESA | **id_mesa**, numero |
+| AMBIENTE | **id_ambiente**, nome_ambiente, capacidade_maxima, status |
+| CONTROLE_ACESSO | **id_controle_acesso**, data_hora_solicitacao, data_hora_entrada, data_hora_saida, quant_pessoas, status |
+| VISITA | **id_visita**, data_hora_abertura, data_hora_fechamento, status |
+| COMANDA | **id_comanda**, codigo, status |
+| PAGAMENTO | **id_pgto**, valor_total, valor_taxa_servico, forma_pgto, data_hora, numero_nf |
+| FUNCIONARIO | **id_func**, nome_func, cargo |
+| PEDIDO | **id_pedido**, status, data_hora |
+| ITEM_PEDIDO | **id_item**, qtd, preco_unitario, observacao, status |
+| PRATO | **id_prato**, nome_prato, preco |
+| CATEGORIA_PRATO | **id_categ**, nome, setor_producao |
+| PRODUTO_ESTOQUE | **id_produto**, nome, qtd_atual, estoque_minimo |
+| MOVIMENTACAO_ESTOQUE | **id_movimentacao**, tipo, qtd, data_hora, motivo |
+| FORNECEDOR | **id_fornecedor**, razao_social, cnpj, telefone |
+| COMPRA | **id_compra**, data_compra, data_recebimento, valor_total, status |
+| ITEM_COMPRA | **id_item_compra**, qtd, custo_unitario |
+| CAIXA | **id_caixa**, data_hora_abertura, valor_abertura, data_hora_fechamento, valor_fechamento, status |
+
+##### Relacionamentos e cardinalidades
+
+O par (mín,máx) ao lado de cada entidade indica quantas vezes ela participa do relacionamento.
+
+| Relacionamento | Entidade A | Card. A | Card. B | Entidade B | Leitura |
+|---|---|---|---|---|---|
+| Recebe | MESA | (0,n) | (1,n) | VISITA | Uma mesa recebe várias visitas, e uma visita pode ocupar mais de uma mesa |
+| Possui | AMBIENTE | (1,n) | (1,1) | MESA | Cada mesa pertence a um único ambiente |
+| Controla | AMBIENTE | (0,n) | (1,1) | CONTROLE_ACESSO | Cada registro de acesso é de um único ambiente |
+| Solicita | VISITA | (0,n) | (1,1) | CONTROLE_ACESSO | Cada registro de acesso (solicitação, entrada e saída) é de uma única visita |
+| Identifica | VISITA | (1,1) | (1,1) | COMANDA | Cada visita tem uma comanda (pulseira) e cada comanda identifica uma visita |
+| Gera | VISITA | (1,n) | (1,1) | PEDIDO | Uma visita gera vários pedidos, e cada pedido pertence a uma visita |
+| Quita | VISITA | (1,n) | (1,1) | PAGAMENTO | Uma visita é quitada por um ou mais pagamentos (divisão de conta) |
+| Atende | FUNCIONARIO | (1,n) | (1,1) | PEDIDO | Cada pedido é atendido por um único funcionário |
+| Arrecada | FUNCIONARIO | (1,n) | (1,n) | PAGAMENTO | O garçom cobra e o caixa finaliza: mais de um funcionário por pagamento |
+| Contem | PEDIDO | (1,n) | (1,1) | ITEM_PEDIDO | Todo pedido tem ao menos um item, e cada item pertence a um pedido |
+| Refere-se a | PRATO | (0,n) | (1,1) | ITEM_PEDIDO | Cada item se refere a um único prato |
+| Classifica | CATEGORIA_PRATO | (1,n) | (1,1) | PRATO | Cada prato pertence a uma única categoria |
+| Corresponde a | PRATO | (0,1) | (0,n) | PRODUTO_ESTOQUE | Só bebida vendida como vem (lata, garrafa) corresponde a um produto de estoque |
+| Executa | FUNCIONARIO | (0,n) | (1,1) | MOVIMENTACAO_ESTOQUE | Cada movimentação é feita por um funcionário |
+| Movimenta | PRODUTO_ESTOQUE | (0,n) | (1,1) | MOVIMENTACAO_ESTOQUE | Cada movimentação é de um único produto |
+| Abastece | COMPRA | (0,n) | (0,1) | MOVIMENTACAO_ESTOQUE | A compra recebida origina as movimentações de entrada |
+| Efetua | FUNCIONARIO | (0,n) | (1,1) | COMPRA | Cada compra é feita por um funcionário |
+| Fornece | FORNECEDOR | (0,n) | (1,1) | COMPRA | Cada compra é de um único fornecedor |
+| Inclui | COMPRA | (1,n) | (1,1) | ITEM_COMPRA | Toda compra tem ao menos um item |
+| É comprado em | PRODUTO_ESTOQUE | (0,n) | (1,1) | ITEM_COMPRA | Cada item de compra é de um único produto |
+| Opera | FUNCIONARIO | (0,n) | (1,1) | CAIXA | Cada turno de caixa é operado por um funcionário |
+| Recebe | CAIXA | (0,n) | (1,1) | PAGAMENTO | Todo pagamento é finalizado em um caixa |
+
+##### Revisão do modelo (Caso A)
+
+A tabela registra cada apontamento da correção da Entrega 1 e o que foi feito.
+
+| Apontamento da correção | O que foi feito | Por quê |
+|---|---|---|
+| `contém` (PEDIDO–PRATO) N:N sem quantidade nem preço praticado | Criada a entidade ITEM_PEDIDO com `qtd`, `preco_unitario` e `observacao`, ligada a PEDIDO (`contem`) e a PRATO (`refere-se a`) | Sem ela não é possível saber quanto de cada prato foi pedido nem o preço cobrado na época |
+| PRATO sem nome | Acrescentado `nome_prato` | O cardápio precisa identificar cada prato |
+| Sem ambiente, embora o acesso ao Deck seja problema declarado (P1) | Criadas AMBIENTE (`capacidade_maxima`) e CONTROLE_ACESSO (solicitação, entrada, saída, `quant_pessoas`, `status`) | Permite calcular a lotação e o tempo de espera de cada ambiente |
+| Sem estoque, embora o controle de bebidas seja problema declarado (P2) | Criadas PRODUTO_ESTOQUE (`qtd_atual`, `estoque_minimo`) e MOVIMENTACAO_ESTOQUE (`tipo`, `qtd`, `data_hora`, `motivo`), com o relacionamento `corresponde a` ligando bebida do cardápio ao produto | Registra toda entrada, saída e ajuste (conferência) e permite sinalizar estoque abaixo do mínimo |
+| Caixa (abertura e fechamento) ausente | Criada a entidade CAIXA e o relacionamento `recebe` entre CAIXA e PAGAMENTO | O processo existe no Ponto A e encerra a visita |
+| Compra e recebimento de mercadoria, fornecedor ausentes | Criadas FORNECEDOR, COMPRA e ITEM_COMPRA, ligadas ao estoque por `abastece` e `é comprado em` | Garante que a compra seja de fornecedor cadastrado e que a entrada no estoque seja rastreável |
+| Cancelamento ausente | Registrado no atributo `status` de ITEM_PEDIDO ("cancelado"); o item permanece no banco | Cancelamento exige histórico, não exclusão, e no Ponto A ele é feito por item |
+| Taxa de serviço, cupom fiscal e perda da pulseira sem registro | Acrescentados `valor_taxa_servico` e `numero_nf` em PAGAMENTO e `status` em COMANDA (em uso, baixada ou perdida) | Permitem aplicar e auditar essas regras |
+| Atributos sobrepostos em COMANDA_ACESSO | Entidade redesenhada como COMANDA, com `id_comanda`, `codigo` e `status` legíveis | Falha de legibilidade do desenho |
+| Mínimo (1,n) impedia mesa nunca usada | MESA passou a (0,n) no relacionamento `Recebe` | O banco deve admitir mesa ainda sem uso |
+| Reservas, escala da equipe, normas sanitárias e horário de funcionamento ausentes | **Mantidos fora do modelo.** O responsável confirmou que reservas, escala e registros sanitários são tratados manualmente pela administração, fora do sistema de atendimento | Justificativa de processo não incluído |
+
+##### Mudanças feitas após a entrevista
+
+A entrevista com o responsável no Ponto A confirmou a maior parte do modelo e levou a estes ajustes.
+
+| O que o responsável informou | O que mudou no DER | Por quê |
+|---|---|---|
+| O cliente não é cadastrado: é reconhecido só pelo número da pulseira, e dados de clientes não são guardados | Removidos CLIENTE e o relacionamento `Realiza`; a visita se liga à comanda e à mesa | O modelo deve refletir o que a casa faz e não guardar dados pessoais de clientes |
+| Não há sangria; valores externos são tratados com a administração | Removidos SANGRIA e o relacionamento `Sofre` | O processo não existe no Ponto A |
+| Cada prato fica em uma única categoria | `Classifica` passou de N:N para 1:N | Evita uma tabela de ligação que a casa não usa |
+| O cancelamento é feito só pela gerência, por item | `status` em ITEM_PEDIDO; PEDIDO deixa de ter o valor "cancelado" | Registra o cancelamento na granularidade em que ele acontece |
+| O horário em que o pedido chega ao cliente não é registrado | Removido `data_hora_entrega` de PEDIDO | Atributo sem fonte de dados |
+| A quebra é a divergência de estoque mais comum | Acrescentado `motivo` em MOVIMENTACAO_ESTOQUE | Permite separar quebra, perda, cortesia e consumo interno nos ajustes |
+| A entrada nos ambientes é por ordem de chegada, sem registro | Mantido CONTROLE_ACESSO, como proposta de registro de solicitação, entrada e saída | É a solução para o P1; hoje o tempo de espera não é medido |
+
+##### Decisões de modelagem
+
+- **VISITA é o eixo do modelo.** Pedidos, pagamentos, comanda e acessos aos ambientes partem dela, e é ela que liga as mesas (N:N, para mesas unidas). O cliente é identificado apenas pela comanda, sem cadastro.
+- **FUNCIONARIO é uma única entidade**, com o atributo `cargo`, porque todos os papéis compartilham os mesmos atributos e relacionamentos.
+- **ITEM_PEDIDO e ITEM_COMPRA** são entidades próprias, com atributos, no lugar de relacionamentos N:N sem dados, para guardar quantidade e preço praticado de cada item.
+- **Os N:N que permanecem** (MESA–VISITA e FUNCIONARIO–PAGAMENTO) viram tabelas associativas no modelo lógico.
  
 *DER conceitual revisado do Ponto A*
  
