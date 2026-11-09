@@ -1,10 +1,10 @@
-# Entrega 2 — Modelo Lógico, Implementação SQL e Apresentação Final
+# **Entrega 2 — Modelo Lógico, Implementação SQL e Apresentação Final**
 
-### Modelagem de um sistema de gestão de informações para um restaurante
 
 
 ## 1\. Relatório Técnico Final
 
+### Modelagem de um sistema de gestão de informações para um restaurante
 
 ### Integrantes
 
@@ -15,10 +15,11 @@
 | Nicolas Vieira de Lima | 47212021 | n1kDev |
 | Renan Caio de Lima | 46915575 | SnyQ285 |
 
+---
 
 ## 1.1 Revisão do Modelo Conceitual
  
-### Caracterização da organização
+**Caracterização da organização**
  
 **Nome e natureza.** Ponto A – Restaurante e Pizzaria, restaurante real com fins lucrativos, na Rua Dante Pellacani, 192, Vila Regente Feijó, São Paulo (SP). A casa tem salão, deck e subsolo, e vende pratos de cozinha, pizzas, comida japonesa, bebidas e narguilé.
  
@@ -35,7 +36,7 @@
 | Itens do cardápio | de 400 a 800, em 5 categorias (bar, cozinha, narguilé, comida japonesa e pizzaria) |
 | Fornecedores | de 40 a 60, com entregas de segunda a sábado |
  
-A equipe tem garçons (11), bar (6), caixa (3), valet (5), cozinha (15), narguilé (3), limpeza (4), sushiman (2), pizzaiolo (2), segurança (5), cumim (4), RH (1), maître (3) e gerente (3). O pedido é feito por aparelho de mão (Palmer) e a casa usa hoje o sistema xMenu.
+A equipe tem garçons (11), bar (6), caixa (3), valet (5), cozinha (15), narguilé (3), limpeza (4), sushiman (2), pizzaiolo (2), segurança (5), cumim (4), RH (1), maître (3) e gerente (3). O pedido é feito por aparelho de mão (Palm) e a casa usa hoje o sistema xMenu.
  
 **Problemas e necessidades identificados.**
  
@@ -45,7 +46,7 @@ Os dois problemas foram confirmados pelo responsável como os que a casa quer re
  
 **Escopo do sistema.** O banco reúne os dados de todo o atendimento: pulseira e visita, mesas e ambientes, controle de acesso, pedidos e itens, pagamentos e caixa, cardápio, estoque, compras e fornecedores, e funcionários. Ficam fora do modelo as reservas, a escala da equipe e os registros sanitários, que a administração trata manualmente fora do sistema de atendimento.
  
-**Justificativa da escolha.** O Ponto A tem volume alto, vários processos ligados entre si (acesso, pedido, estoque, compra e caixa) e dois problemas de gestão de informação que um banco de dados resolve. Além de ser um lugar onde um dos integrantes do grupo trabalha e convive com esses problemas diariamente e por acaso decidiu dar a ideia para tentarmos resolver essa questão.
+**Justificativa da escolha.** O Ponto A tem volume alto, vários processos ligados entre si (acesso, pedido, estoque, compra e caixa) e dois problemas de gestão de informação que um banco de dados resolve. Um dos integrantes do grupo trabalha no Ponto A e convive diariamente com esses problemas, o que facilitou o acesso à casa e deu origem à ideia do projeto. Esse vínculo não dispensa a entrevista com o responsável, que foi feita no local.
  
 **Evidências da organização.**
  
@@ -59,10 +60,10 @@ Os dois problemas foram confirmados pelo responsável como os que a casa quer re
 
 ### Relato da entrevista
  
-- **Quem:** Luiz Eduardo Almeida, maître. Entrevistador: Renan Caio de Lima. Outros integrantes presentes: apenas o Renan.
+- **Quem:** Luiz Eduardo Almeida, maître. Entrevistador: Renan Caio de Lima. Nenhum outro integrante estava presente.
 - **Quando e onde:** 06/11/2026, no Ponto A – Restaurante e Pizzaria, no ambiente da organização.
 - **Comprovação:** foto da entrevista em [evidencia](evidencias/Fotoentrevista2.jpg).
-- **O que foi levantado.** A entrevista teve 39 perguntas sobre porte, atendimento, controle de acesso, estoque, compras, caixa, regras e indicadores. Ela confirmou os dois problemas declarados e trouxe os volumes da casa. Também mudou o modelo em quatro pontos: o cliente não é cadastrado e só a pulseira o identifica, não há sangria no caixa, cada prato fica em uma só categoria e o cancelamento é feito pela gerência, item a item. O levantamento completo está em [levantamento/levantamento.md](levantamento/levantamento.md).
+- **O que foi levantado.** A entrevista teve 39 perguntas sobre porte, atendimento, controle de acesso, estoque, compras, caixa, regras e indicadores. Ela confirmou os dois problemas declarados e trouxe os volumes da casa. Também mudou o modelo em sete pontos, entre eles: o cliente não é cadastrado e só a pulseira o identifica, não há sangria no caixa, cada prato fica em uma só categoria e o cancelamento é feito pela gerência, item a item. A lista completa está em "Mudanças feitas após a entrevista", na revisão do DER. O levantamento completo está em [levantamento/levantamento.md](levantamento/levantamento.md).
 **Observação presencial** (o que o grupo viu, separado das respostas):
  
 - O pedido sai do aparelho do garçom e o sistema envia uma comanda a cada setor.
@@ -210,7 +211,7 @@ Cada requisito indica o processo que ele atende (entre parênteses) e os dados e
 ---
 
 
-**Regras de negócio**
+### Regras de negócio
 
 As regras abaixo vêm da entrevista no Ponto A e da observação no local. As que dependem de uma proposta do banco (RN06 e RN07) estão marcadas. Os nomes entre crases são as colunas do modelo.
 
@@ -233,7 +234,7 @@ As regras abaixo vêm da entrevista no Ponto A e da observação no local. As qu
 | RN13 | Só a gerência cancela, e o cancelamento é feito por item. O item cancelado permanece registrado e não conta como venda. | Item: `status` (ativo ou cancelado). |
 | RN14 | Estornos e alterações em conta fechada são feitos só pela gerência. | Pagamento e visita. |
 
-#### Pagamento e caixa
+**Pagamento e caixa**
 
 | Cód. | Regra | Dados envolvidos |
 |---|---|---|
@@ -280,15 +281,16 @@ As regras abaixo vêm da entrevista no Ponto A e da observação no local. As qu
 
 ---
 
+### DER conceitual revisado (Caso A)
 
 
-#### DER conceitual revisado (Caso A)
 
 **Software utilizado:** BRModelo Web, na notação do brModelo (entidades em retângulos, relacionamentos em losangos, atributos em círculos, chaves em círculos preenchidos e cardinalidades mínima e máxima nos dois lados de cada relacionamento). Arquivo: [DER.jpg](DER.jpg).
 
 O DER revisado tem **17 entidades** e **22 relacionamentos**. Ele cobre o atendimento (da pulseira entregue na chegada até o pagamento) e os dois problemas declarados: o controle de acesso aos ambientes (P1) e o controle de estoque de bebidas (P2). Também cobre o caixa e as compras de insumos. Não há chaves estrangeiras no DER; elas aparecem apenas no modelo lógico.
 
-##### Entidades e atributos
+---
+#### Entidades e atributos
 
 Os atributos em **negrito** são os identificadores (chaves primárias).
 
@@ -312,13 +314,14 @@ Os atributos em **negrito** são os identificadores (chaves primárias).
 | ITEM_COMPRA | **id_item_compra**, qtd, custo_unitario |
 | CAIXA | **id_caixa**, data_hora_abertura, valor_abertura, data_hora_fechamento, valor_fechamento, status |
 
-##### Relacionamentos e cardinalidades
+---
+#### Relacionamentos e cardinalidades
 
 O par (mín,máx) ao lado de cada entidade indica quantas vezes ela participa do relacionamento.
 
 | Relacionamento | Entidade A | Card. A | Card. B | Entidade B | Leitura |
 |---|---|---|---|---|---|
-| Recebe | MESA | (0,n) | (1,n) | VISITA | Uma mesa recebe várias visitas, e uma visita pode ocupar mais de uma mesa |
+| Ocupa | MESA | (0,n) | (1,n) | VISITA | Uma mesa é ocupada por várias visitas ao longo do tempo, e uma visita pode ocupar mais de uma mesa |
 | Possui | AMBIENTE | (1,n) | (1,1) | MESA | Cada mesa pertence a um único ambiente |
 | Controla | AMBIENTE | (0,n) | (1,1) | CONTROLE_ACESSO | Cada registro de acesso é de um único ambiente |
 | Solicita | VISITA | (0,n) | (1,1) | CONTROLE_ACESSO | Cada registro de acesso (solicitação, entrada e saída) é de uma única visita |
@@ -339,9 +342,10 @@ O par (mín,máx) ao lado de cada entidade indica quantas vezes ela participa do
 | Inclui | COMPRA | (1,n) | (1,1) | ITEM_COMPRA | Toda compra tem ao menos um item |
 | É comprado em | PRODUTO_ESTOQUE | (0,n) | (1,1) | ITEM_COMPRA | Cada item de compra é de um único produto |
 | Opera | FUNCIONARIO | (0,n) | (1,1) | CAIXA | Cada turno de caixa é operado por um funcionário |
-| Recebe | CAIXA | (0,n) | (1,1) | PAGAMENTO | Todo pagamento é finalizado em um caixa |
+| Registra | CAIXA | (0,n) | (1,1) | PAGAMENTO | Todo pagamento é finalizado e registrado em um caixa |
 
-##### Revisão do modelo (Caso A)
+---
+#### Revisão do modelo (Caso A)
 
 A tabela registra cada apontamento da correção da Entrega 1 e o que foi feito.
 
@@ -351,15 +355,17 @@ A tabela registra cada apontamento da correção da Entrega 1 e o que foi feito.
 | PRATO sem nome | Acrescentado `nome_prato` | O cardápio precisa identificar cada prato |
 | Sem ambiente, embora o acesso ao Deck seja problema declarado (P1) | Criadas AMBIENTE (`capacidade_maxima`) e CONTROLE_ACESSO (solicitação, entrada, saída, `quant_pessoas`, `status`) | Permite calcular a lotação e o tempo de espera de cada ambiente |
 | Sem estoque, embora o controle de bebidas seja problema declarado (P2) | Criadas PRODUTO_ESTOQUE (`qtd_atual`, `estoque_minimo`) e MOVIMENTACAO_ESTOQUE (`tipo`, `qtd`, `data_hora`, `motivo`), com o relacionamento `corresponde a` ligando bebida do cardápio ao produto | Registra toda entrada, saída e ajuste (conferência) e permite sinalizar estoque abaixo do mínimo |
-| Caixa (abertura e fechamento) ausente | Criada a entidade CAIXA e o relacionamento `recebe` entre CAIXA e PAGAMENTO | O processo existe no Ponto A e encerra a visita |
+| Caixa (abertura e fechamento) ausente | Criada a entidade CAIXA e o relacionamento `registra` entre CAIXA e PAGAMENTO | O processo existe no Ponto A e encerra a visita |
 | Compra e recebimento de mercadoria, fornecedor ausentes | Criadas FORNECEDOR, COMPRA e ITEM_COMPRA, ligadas ao estoque por `abastece` e `é comprado em` | Garante que a compra seja de fornecedor cadastrado e que a entrada no estoque seja rastreável |
 | Cancelamento ausente | Registrado no atributo `status` de ITEM_PEDIDO ("cancelado"); o item permanece no banco | Cancelamento exige histórico, não exclusão, e no Ponto A ele é feito por item |
 | Taxa de serviço, cupom fiscal e perda da pulseira sem registro | Acrescentados `valor_taxa_servico` e `numero_nf` em PAGAMENTO e `status` em COMANDA (em uso, baixada ou perdida) | Permitem aplicar e auditar essas regras |
 | Atributos sobrepostos em COMANDA_ACESSO | Entidade redesenhada como COMANDA, com `id_comanda`, `codigo` e `status` legíveis | Falha de legibilidade do desenho |
-| Mínimo (1,n) impedia mesa nunca usada | MESA passou a (0,n) no relacionamento `Recebe` | O banco deve admitir mesa ainda sem uso |
+| Mínimo (1,n) impedia mesa nunca usada | MESA passou a (0,n) no relacionamento `Ocupa` | O banco deve admitir mesa ainda sem uso |
 | Reservas, escala da equipe, normas sanitárias e horário de funcionamento ausentes | **Mantidos fora do modelo.** O responsável confirmou que reservas, escala e registros sanitários são tratados manualmente pela administração, fora do sistema de atendimento | Justificativa de processo não incluído |
 
-##### Mudanças feitas após a entrevista
+---
+
+#### Mudanças feitas após a entrevista
 
 A entrevista com o responsável no Ponto A confirmou a maior parte do modelo e levou a estes ajustes.
 
@@ -373,234 +379,262 @@ A entrevista com o responsável no Ponto A confirmou a maior parte do modelo e l
 | A quebra é a divergência de estoque mais comum | Acrescentado `motivo` em MOVIMENTACAO_ESTOQUE | Permite separar quebra, perda, cortesia e consumo interno nos ajustes |
 | A entrada nos ambientes é por ordem de chegada, sem registro | Mantido CONTROLE_ACESSO, como proposta de registro de solicitação, entrada e saída | É a solução para o P1; hoje o tempo de espera não é medido |
 
-##### Decisões de modelagem
+---
+
+#### Decisões de modelagem
 
 - **VISITA é o eixo do modelo.** Pedidos, pagamentos, comanda e acessos aos ambientes partem dela, e é ela que liga as mesas (N:N, para mesas unidas). O cliente é identificado apenas pela comanda, sem cadastro.
 - **FUNCIONARIO é uma única entidade**, com o atributo `cargo`, porque todos os papéis compartilham os mesmos atributos e relacionamentos.
 - **ITEM_PEDIDO e ITEM_COMPRA** são entidades próprias, com atributos, no lugar de relacionamentos N:N sem dados, para guardar quantidade e preço praticado de cada item.
 - **Os N:N que permanecem** (MESA–VISITA e FUNCIONARIO–PAGAMENTO) viram tabelas associativas no modelo lógico.
 
-**Software utilizado:** BRModelo Web, na notação do brModelo (entidades em retângulos, relacionamentos em losangos, atributos em círculos, chaves em círculos preenchidos e cardinalidades mínima e máxima nos dois lados de cada relacionamento). Arquivo: [DER.jpg](DER.jpg).
-
-O DER revisado tem **17 entidades** e **22 relacionamentos**. Ele cobre o atendimento (da pulseira entregue na chegada até o pagamento) e os dois problemas declarados: o controle de acesso aos ambientes (P1) e o controle de estoque de bebidas (P2). Também cobre o caixa e as compras de insumos. Não há chaves estrangeiras no DER; elas aparecem apenas no modelo lógico.
-
-##### Entidades e atributos
-
-Os atributos em **negrito** são os identificadores (chaves primárias).
-
-| Entidade | Atributos |
-|---|---|
-| MESA | **id_mesa**, numero |
-| AMBIENTE | **id_ambiente**, nome_ambiente, capacidade_maxima, status |
-| CONTROLE_ACESSO | **id_controle_acesso**, data_hora_solicitacao, data_hora_entrada, data_hora_saida, quant_pessoas, status |
-| VISITA | **id_visita**, data_hora_abertura, data_hora_fechamento, status |
-| COMANDA | **id_comanda**, codigo, status |
-| PAGAMENTO | **id_pgto**, valor_total, valor_taxa_servico, forma_pgto, data_hora, numero_nf |
-| FUNCIONARIO | **id_func**, nome_func, cargo |
-| PEDIDO | **id_pedido**, status, data_hora |
-| ITEM_PEDIDO | **id_item**, qtd, preco_unitario, observacao, status |
-| PRATO | **id_prato**, nome_prato, preco |
-| CATEGORIA_PRATO | **id_categ**, nome, setor_producao |
-| PRODUTO_ESTOQUE | **id_produto**, nome, qtd_atual, estoque_minimo |
-| MOVIMENTACAO_ESTOQUE | **id_movimentacao**, tipo, qtd, data_hora, motivo |
-| FORNECEDOR | **id_fornecedor**, razao_social, cnpj, telefone |
-| COMPRA | **id_compra**, data_compra, data_recebimento, valor_total, status |
-| ITEM_COMPRA | **id_item_compra**, qtd, custo_unitario |
-| CAIXA | **id_caixa**, data_hora_abertura, valor_abertura, data_hora_fechamento, valor_fechamento, status |
-
-##### Relacionamentos e cardinalidades
-
-O par (mín,máx) ao lado de cada entidade indica quantas vezes ela participa do relacionamento.
-
-| Relacionamento | Entidade A | Card. A | Card. B | Entidade B | Leitura |
-|---|---|---|---|---|---|
-| Recebe | MESA | (0,n) | (1,n) | VISITA | Uma mesa recebe várias visitas, e uma visita pode ocupar mais de uma mesa |
-| Possui | AMBIENTE | (1,n) | (1,1) | MESA | Cada mesa pertence a um único ambiente |
-| Controla | AMBIENTE | (0,n) | (1,1) | CONTROLE_ACESSO | Cada registro de acesso é de um único ambiente |
-| Solicita | VISITA | (0,n) | (1,1) | CONTROLE_ACESSO | Cada registro de acesso (solicitação, entrada e saída) é de uma única visita |
-| Identifica | VISITA | (1,1) | (1,1) | COMANDA | Cada visita tem uma comanda (pulseira) e cada comanda identifica uma visita |
-| Gera | VISITA | (1,n) | (1,1) | PEDIDO | Uma visita gera vários pedidos, e cada pedido pertence a uma visita |
-| Quita | VISITA | (1,n) | (1,1) | PAGAMENTO | Uma visita é quitada por um ou mais pagamentos (divisão de conta) |
-| Atende | FUNCIONARIO | (1,n) | (1,1) | PEDIDO | Cada pedido é atendido por um único funcionário |
-| Arrecada | FUNCIONARIO | (1,n) | (1,n) | PAGAMENTO | O garçom cobra e o caixa finaliza: mais de um funcionário por pagamento |
-| Contem | PEDIDO | (1,n) | (1,1) | ITEM_PEDIDO | Todo pedido tem ao menos um item, e cada item pertence a um pedido |
-| Refere-se a | PRATO | (0,n) | (1,1) | ITEM_PEDIDO | Cada item se refere a um único prato |
-| Classifica | CATEGORIA_PRATO | (1,n) | (1,1) | PRATO | Cada prato pertence a uma única categoria |
-| Corresponde a | PRATO | (0,1) | (0,n) | PRODUTO_ESTOQUE | Só bebida vendida como vem (lata, garrafa) corresponde a um produto de estoque |
-| Executa | FUNCIONARIO | (0,n) | (1,1) | MOVIMENTACAO_ESTOQUE | Cada movimentação é feita por um funcionário |
-| Movimenta | PRODUTO_ESTOQUE | (0,n) | (1,1) | MOVIMENTACAO_ESTOQUE | Cada movimentação é de um único produto |
-| Abastece | COMPRA | (0,n) | (0,1) | MOVIMENTACAO_ESTOQUE | A compra recebida origina as movimentações de entrada |
-| Efetua | FUNCIONARIO | (0,n) | (1,1) | COMPRA | Cada compra é feita por um funcionário |
-| Fornece | FORNECEDOR | (0,n) | (1,1) | COMPRA | Cada compra é de um único fornecedor |
-| Inclui | COMPRA | (1,n) | (1,1) | ITEM_COMPRA | Toda compra tem ao menos um item |
-| É comprado em | PRODUTO_ESTOQUE | (0,n) | (1,1) | ITEM_COMPRA | Cada item de compra é de um único produto |
-| Opera | FUNCIONARIO | (0,n) | (1,1) | CAIXA | Cada turno de caixa é operado por um funcionário |
-| Recebe | CAIXA | (0,n) | (1,1) | PAGAMENTO | Todo pagamento é finalizado em um caixa |
-
-##### Revisão do modelo (Caso A)
-
-A tabela registra cada apontamento da correção da Entrega 1 e o que foi feito.
-
-| Apontamento da correção | O que foi feito | Por quê |
-|---|---|---|
-| `contém` (PEDIDO–PRATO) N:N sem quantidade nem preço praticado | Criada a entidade ITEM_PEDIDO com `qtd`, `preco_unitario` e `observacao`, ligada a PEDIDO (`contem`) e a PRATO (`refere-se a`) | Sem ela não é possível saber quanto de cada prato foi pedido nem o preço cobrado na época |
-| PRATO sem nome | Acrescentado `nome_prato` | O cardápio precisa identificar cada prato |
-| Sem ambiente, embora o acesso ao Deck seja problema declarado (P1) | Criadas AMBIENTE (`capacidade_maxima`) e CONTROLE_ACESSO (solicitação, entrada, saída, `quant_pessoas`, `status`) | Permite calcular a lotação e o tempo de espera de cada ambiente |
-| Sem estoque, embora o controle de bebidas seja problema declarado (P2) | Criadas PRODUTO_ESTOQUE (`qtd_atual`, `estoque_minimo`) e MOVIMENTACAO_ESTOQUE (`tipo`, `qtd`, `data_hora`, `motivo`), com o relacionamento `corresponde a` ligando bebida do cardápio ao produto | Registra toda entrada, saída e ajuste (conferência) e permite sinalizar estoque abaixo do mínimo |
-| Caixa (abertura e fechamento) ausente | Criada a entidade CAIXA e o relacionamento `recebe` entre CAIXA e PAGAMENTO | O processo existe no Ponto A e encerra a visita |
-| Compra e recebimento de mercadoria, fornecedor ausentes | Criadas FORNECEDOR, COMPRA e ITEM_COMPRA, ligadas ao estoque por `abastece` e `é comprado em` | Garante que a compra seja de fornecedor cadastrado e que a entrada no estoque seja rastreável |
-| Cancelamento ausente | Registrado no atributo `status` de ITEM_PEDIDO ("cancelado"); o item permanece no banco | Cancelamento exige histórico, não exclusão, e no Ponto A ele é feito por item |
-| Taxa de serviço, cupom fiscal e perda da pulseira sem registro | Acrescentados `valor_taxa_servico` e `numero_nf` em PAGAMENTO e `status` em COMANDA (em uso, baixada ou perdida) | Permitem aplicar e auditar essas regras |
-| Atributos sobrepostos em COMANDA_ACESSO | Entidade redesenhada como COMANDA, com `id_comanda`, `codigo` e `status` legíveis | Falha de legibilidade do desenho |
-| Mínimo (1,n) impedia mesa nunca usada | MESA passou a (0,n) no relacionamento `Recebe` | O banco deve admitir mesa ainda sem uso |
-| Reservas, escala da equipe, normas sanitárias e horário de funcionamento ausentes | **Mantidos fora do modelo.** O responsável confirmou que reservas, escala e registros sanitários são tratados manualmente pela administração, fora do sistema de atendimento | Justificativa de processo não incluído |
-
-##### Mudanças feitas após a entrevista
-
-A entrevista com o responsável no Ponto A confirmou a maior parte do modelo e levou a estes ajustes.
-
-| O que o responsável informou | O que mudou no DER | Por quê |
-|---|---|---|
-| O cliente não é cadastrado: é reconhecido só pelo número da pulseira, e dados de clientes não são guardados | Removidos CLIENTE e o relacionamento `Realiza`; a visita se liga à comanda e à mesa | O modelo deve refletir o que a casa faz e não guardar dados pessoais de clientes |
-| Não há sangria; valores externos são tratados com a administração | Removidos SANGRIA e o relacionamento `Sofre` | O processo não existe no Ponto A |
-| Cada prato fica em uma única categoria | `Classifica` passou de N:N para 1:N | Evita uma tabela de ligação que a casa não usa |
-| O cancelamento é feito só pela gerência, por item | `status` em ITEM_PEDIDO; PEDIDO deixa de ter o valor "cancelado" | Registra o cancelamento na granularidade em que ele acontece |
-| O horário em que o pedido chega ao cliente não é registrado | Removido `data_hora_entrega` de PEDIDO | Atributo sem fonte de dados |
-| A quebra é a divergência de estoque mais comum | Acrescentado `motivo` em MOVIMENTACAO_ESTOQUE | Permite separar quebra, perda, cortesia e consumo interno nos ajustes |
-| A entrada nos ambientes é por ordem de chegada, sem registro | Mantido CONTROLE_ACESSO, como proposta de registro de solicitação, entrada e saída | É a solução para o P1; hoje o tempo de espera não é medido |
-
-##### Decisões de modelagem
-
-- **VISITA é o eixo do modelo.** Pedidos, pagamentos, comanda e acessos aos ambientes partem dela, e é ela que liga as mesas (N:N, para mesas unidas). O cliente é identificado apenas pela comanda, sem cadastro.
-- **FUNCIONARIO é uma única entidade**, com o atributo `cargo`, porque todos os papéis compartilham os mesmos atributos e relacionamentos.
-- **ITEM_PEDIDO e ITEM_COMPRA** são entidades próprias, com atributos, no lugar de relacionamentos N:N sem dados, para guardar quantidade e preço praticado de cada item.
-- **Os N:N que permanecem** (MESA–VISITA e FUNCIONARIO–PAGAMENTO) viram tabelas associativas no modelo lógico.
- 
-*DER conceitual revisado do Ponto A*
- 
-**Software utilizado:** BRModelo Web, na notação do brModelo (entidades em retângulos, relacionamentos em losangos, atributos em círculos, chaves em círculos preenchidos e cardinalidades mínima e máxima nos dois lados de cada relacionamento). Arquivo: [DER.jpg](DER.jpg).
- 
-O DER revisado tem **19 entidades** e **24 relacionamentos**. Ele cobre o atendimento (do cliente que chega até o pagamento) e os dois problemas declarados: o controle de acesso aos ambientes (P1) e o controle de estoque de bebidas (P2). Também cobre o caixa e as compras de insumos. Não há chaves estrangeiras no DER; elas aparecem apenas no modelo lógico.
- 
-##### Entidades e atributos
- 
-Os atributos em **negrito** são os identificadores (chaves primárias).
- 
-| Entidade | Atributos |
-|---|---|
-| CLIENTE | **id_cliente**, nome_cliente, cpf_cliente, data_nasc, telefone |
-| MESA | **id_mesa**, numero |
-| AMBIENTE | **id_ambiente**, nome_ambiente, capacidade_maxima, status |
-| CONTROLE_ACESSO | **id_controle_acesso**, data_hora_solicitacao, data_hora_entrada, data_hora_saida, quant_pessoas, status |
-| VISITA | **id_visita**, data_hora_abertura, data_hora_fechamento, status |
-| COMANDA | **id_comanda**, codigo, status |
-| PAGAMENTO | **id_pgto**, valor_total, valor_taxa_servico, forma_pgto, data_hora, numero_nf |
-| FUNCIONARIO | **id_func**, nome_func, cargo |
-| PEDIDO | **id_pedido**, status, data_hora, data_hora_entrega |
-| ITEM_PEDIDO | **id_item**, qtd, preco_unitario, observacao |
-| PRATO | **id_prato**, nome_prato, preco |
-| CATEGORIA_PRATO | **id_categ**, nome, setor_producao |
-| PRODUTO_ESTOQUE | **id_produto**, nome, qtd_atual, estoque_minimo |
-| MOVIMENTACAO_ESTOQUE | **id_movimentacao**, tipo, qtd, data_hora |
-| FORNECEDOR | **id_fornecedor**, razao_social, cnpj, telefone |
-| COMPRA | **id_compra**, data_compra, data_recebimento, valor_total, status |
-| ITEM_COMPRA | **id_item_compra**, qtd, custo_unitario |
-| CAIXA | **id_caixa**, data_hora_abertura, valor_abertura, data_hora_fechamento, valor_fechamento, status |
-| SANGRIA | **id_sangria**, data_hora, valor, motivo |
- 
-##### Relacionamentos e cardinalidades
- 
-O par (mín,máx) ao lado de cada entidade indica quantas vezes ela participa do relacionamento.
- 
-| Relacionamento | Entidade A | Card. A | Card. B | Entidade B | Leitura |
-|---|---|---|---|---|---|
-| Realiza | CLIENTE | (0,n) | (1,n) | VISITA | Um cliente pode ter várias visitas, e uma visita reúne um ou mais clientes (grupo) |
-| Recebe | MESA | (0,n) | (1,n) | VISITA | Uma mesa recebe várias visitas, e uma visita pode ocupar mais de uma mesa |
-| Possui | AMBIENTE | (1,n) | (1,1) | MESA | Cada mesa pertence a um único ambiente |
-| Controla | AMBIENTE | (0,n) | (1,1) | CONTROLE_ACESSO | Cada registro de acesso é de um único ambiente |
-| Solicita | VISITA | (0,n) | (1,1) | CONTROLE_ACESSO | Cada registro de acesso (solicitação, entrada e saída) é de uma única visita |
-| Identifica | VISITA | (1,1) | (1,1) | COMANDA | Cada visita tem uma comanda (pulseira) e cada comanda identifica uma visita |
-| Gera | VISITA | (1,n) | (1,1) | PEDIDO | Uma visita gera vários pedidos, e cada pedido pertence a uma visita |
-| Quita | VISITA | (1,n) | (1,1) | PAGAMENTO | Uma visita é quitada por um ou mais pagamentos (divisão de conta) |
-| Atende | FUNCIONARIO | (1,n) | (1,1) | PEDIDO | Cada pedido é atendido por um único funcionário |
-| Arrecada | FUNCIONARIO | (1,n) | (1,n) | PAGAMENTO | O garçom cobra e o caixa finaliza: mais de um funcionário por pagamento |
-| Contem | PEDIDO | (1,n) | (1,1) | ITEM_PEDIDO | Todo pedido tem ao menos um item, e cada item pertence a um pedido |
-| Refere-se a | PRATO | (0,n) | (1,1) | ITEM_PEDIDO | Cada item se refere a um único prato |
-| Classifica | CATEGORIA_PRATO | (1,n) | (1,n) | PRATO | Um prato pode estar em mais de uma categoria |
-| Corresponde a | PRATO | (0,1) | (0,n) | PRODUTO_ESTOQUE | Só bebida vendida como vem (lata, garrafa) corresponde a um produto de estoque |
-| Executa | FUNCIONARIO | (0,n) | (1,1) | MOVIMENTACAO_ESTOQUE | Cada movimentação é feita por um funcionário |
-| Movimenta | PRODUTO_ESTOQUE | (0,n) | (1,1) | MOVIMENTACAO_ESTOQUE | Cada movimentação é de um único produto |
-| Abastece | COMPRA | (0,n) | (0,1) | MOVIMENTACAO_ESTOQUE | A compra recebida origina as movimentações de entrada |
-| Efetua | FUNCIONARIO | (0,n) | (1,1) | COMPRA | Cada compra é feita por um funcionário |
-| Fornece | FORNECEDOR | (0,n) | (1,1) | COMPRA | Cada compra é de um único fornecedor |
-| Inclui | COMPRA | (1,n) | (1,1) | ITEM_COMPRA | Toda compra tem ao menos um item |
-| É comprado em | PRODUTO_ESTOQUE | (0,n) | (1,1) | ITEM_COMPRA | Cada item de compra é de um único produto |
-| Opera | FUNCIONARIO | (0,n) | (1,1) | CAIXA | Cada turno de caixa é operado por um funcionário |
-| Recebe | CAIXA | (0,n) | (1,1) | PAGAMENTO | Todo pagamento é finalizado em um caixa |
-| Sofre | CAIXA | (0,n) | (1,1) | SANGRIA | Cada sangria é de um único caixa |
- 
-##### Revisão do modelo (Caso A)
- 
-A tabela registra cada apontamento da correção da Entrega 1 e o que foi feito.
- 
-| Apontamento da correção | O que foi feito | Por quê |
-|---|---|---|
-| `contém` (PEDIDO–PRATO) N:N sem quantidade nem preço praticado | Criada a entidade ITEM_PEDIDO com `qtd`, `preco_unitario` e `observacao`, ligada a PEDIDO (`contem`) e a PRATO (`refere-se a`) | Sem ela não é possível saber quanto de cada prato foi pedido nem o preço cobrado na época |
-| PRATO sem nome | Acrescentado `nome_prato` | O cardápio precisa identificar cada prato |
-| Sem ambiente, embora o acesso ao Deck seja problema declarado (P1) | Criadas AMBIENTE (`capacidade_maxima`) e CONTROLE_ACESSO (solicitação, entrada, saída, `quant_pessoas`, `status`) | Permite calcular a lotação e o tempo de espera de cada ambiente |
-| Sem estoque, embora o controle de bebidas seja problema declarado (P2) | Criadas PRODUTO_ESTOQUE (`qtd_atual`, `estoque_minimo`) e MOVIMENTACAO_ESTOQUE (`tipo`, `qtd`, `data_hora`), com o relacionamento `corresponde a` ligando bebida do cardápio ao produto | Registra toda entrada, saída e ajuste (conferência) e permite sinalizar estoque abaixo do mínimo |
-| Caixa (abertura, sangria, fechamento) ausente | Criadas CAIXA e SANGRIA, e o relacionamento `recebe` entre CAIXA e PAGAMENTO | O processo existe no Ponto A e encerra a visita |
-| Compra e recebimento de mercadoria, fornecedor ausentes | Criadas FORNECEDOR, COMPRA e ITEM_COMPRA, ligadas ao estoque por `abastece` e `é comprado em` | Garante que a compra seja de fornecedor cadastrado e que a entrada no estoque seja rastreável |
-| Cancelamento de pedido ausente | Mantido no atributo `status` de PEDIDO ("cancelado"); o pedido permanece no banco | Cancelamento exige histórico, não exclusão |
-| Taxa de serviço, cupom fiscal e perda da pulseira sem registro | Acrescentados `valor_taxa_servico` e `numero_nf` em PAGAMENTO e `status` em COMANDA (livre, em uso ou perdida) | Permitem aplicar e auditar essas regras |
-| Atributos sobrepostos em COMANDA_ACESSO | Entidade redesenhada como COMANDA, com `id_comanda`, `codigo` e `status` legíveis | Falha de legibilidade do desenho |
-| Mínimos (1,n) impediam cliente sem visita e mesa nunca usada | CLIENTE e MESA passaram a (0,n) nos relacionamentos `Realiza` e `Recebe` | O banco deve admitir cliente cadastrado ainda sem visita e mesa ainda sem uso |
-| Reservas, escala da equipe, normas sanitárias e horário de funcionamento ausentes | **Mantidos fora do modelo.** As reservas são feitas pelos próprios funcionários e serão tratadas em uma etapa futura; os demais itens são informações de gestão de pessoal e de conformidade, que não fazem parte do fluxo interno de atendimento, consumo, caixa e estoque que o banco controla | Justificativa de processo não incluído |
- 
-##### Decisões de modelagem
- 
-- **VISITA é o eixo do modelo.** Pedidos, pagamentos, comanda e acessos aos ambientes partem dela, e é ela que liga clientes e mesas (N:N, para grupos e mesas unidas).
-- **FUNCIONARIO é uma única entidade**, com o atributo `cargo` (garçom, caixa, produção ou gerente), porque todos os papéis compartilham os mesmos atributos e relacionamentos.
-- **ITEM_PEDIDO e ITEM_COMPRA** são entidades próprias, com atributos, no lugar de relacionamentos N:N sem dados, para guardar quantidade e preço praticado de cada item.
-- **Os N:N que permanecem** (CLIENTE–VISITA, MESA–VISITA, FUNCIONARIO–PAGAMENTO e CATEGORIA_PRATO–PRATO) viram tabelas associativas no modelo lógico.
-
 ---
 
-### 1.2 Conversão do Modelo Conceitual para o Modelo Lógico
+## 1.2 Conversão do Modelo Conceitual para o Modelo Lógico
 
-*(vale 7,5%)*
+O DER de 17 entidades e 22 relacionamentos foi convertido para um modelo relacional com **19 tabelas**: as 17 entidades e 2 tabelas associativas. O DER não tem generalização, atributos multivalorados nem atributos compostos, e por isso a conversão seguiu as regras diretas abaixo. Os tipos de dado e as restrições de cada coluna estão no dicionário de dados.
 
-- **Entidades → Tabelas:** *como cada entidade virou tabela.*  
-- **Atributos → Colunas:** *conversão correta dos atributos.*  
-- **Relacionamentos → Chaves:** *como os relacionamentos foram traduzidos.*  
-- **Cardinalidades:** *como cada cardinalidade (1:1, 1:N, N:N) foi tratada (inclusive tabelas associativas, se houver).*  
-- **Generalização/especialização:** *se o DER tiver, qual estratégia de conversão foi usada (tabela única, uma tabela por entidade ou só as especializadas) e por quê.*
+### Entidades → Tabelas
 
-### 1.3 Definição de Chaves Primárias e Estrangeiras
+Cada entidade virou uma tabela com o mesmo nome, em minúsculas e com sublinhado (`controle_acesso`, `item_pedido`, `produto_estoque`). Nenhuma entidade foi fundida com outra nem dividida.
 
-*Liste as PKs e FKs de cada tabela (serve de base para a justificativa técnica abaixo).*
+| Entidade | Tabela |
+|---|---|
+| MESA | `mesa` |
+| AMBIENTE | `ambiente` |
+| CONTROLE_ACESSO | `controle_acesso` |
+| VISITA | `visita` |
+| COMANDA | `comanda` |
+| PAGAMENTO | `pagamento` |
+| FUNCIONARIO | `funcionario` |
+| PEDIDO | `pedido` |
+| ITEM_PEDIDO | `item_pedido` |
+| PRATO | `prato` |
+| CATEGORIA_PRATO | `categoria_prato` |
+| PRODUTO_ESTOQUE | `produto_estoque` |
+| MOVIMENTACAO_ESTOQUE | `movimentacao_estoque` |
+| FORNECEDOR | `fornecedor` |
+| COMPRA | `compra` |
+| ITEM_COMPRA | `item_compra` |
+| CAIXA | `caixa` |
 
-### 1.4 Processo de Normalização (1FN, 2FN e 3FN)
+### Atributos → Colunas
 
-*(vale 7,5%)*
+- Cada atributo virou uma coluna com o mesmo nome do DER.
+- Cada identificador (`id_mesa`, `id_visita` e os demais) virou a chave primária da tabela, como inteiro com autoincremento.
+- Atributos de data e hora viraram `DATETIME`, valores em reais viraram `DECIMAL(10,2)` e textos viraram `VARCHAR`.
+- Atributos que só recebem valor depois de um evento viraram colunas que aceitam nulo: `data_hora_entrada`, `data_hora_saida`, `data_hora_fechamento`, `valor_fechamento`, `data_recebimento`, `numero_nf`, `observacao` e `motivo`.
+- Atributos com uma lista fixa de valores (`status`, `forma_pgto`, `tipo`, `cargo`, `setor_producao`) viraram colunas de texto com restrição de valores permitidos.
+- Nenhum atributo foi criado, removido ou renomeado na conversão. As colunas de chave estrangeira são as únicas colunas novas.
 
-- **1FN:** *eliminação de grupos repetitivos/atributos multivalorados.*  
-- **2FN:** *eliminação de dependências parciais.*  
-- **3FN:** *eliminação de dependências transitivas.*  
-- **Justificativa do processo:** *por que cada forma normal foi necessária no seu caso.*
+### Relacionamentos → Chaves
 
-### 1.5 Justificativas Técnicas das Decisões
+Cada relacionamento 1:N virou uma chave estrangeira na tabela do lado "N". Os N:N viraram tabelas associativas.
 
-*(vale 7,5%)*
+| Relacionamento | Entidades | Como foi traduzido |
+|---|---|---|
+| Possui | AMBIENTE → MESA | `mesa.id_ambiente`, obrigatória |
+| Controla | AMBIENTE → CONTROLE_ACESSO | `controle_acesso.id_ambiente`, obrigatória |
+| Solicita | VISITA → CONTROLE_ACESSO | `controle_acesso.id_visita`, obrigatória |
+| Identifica | VISITA → COMANDA | `comanda.id_visita`, obrigatória e única (1:1) |
+| Gera | VISITA → PEDIDO | `pedido.id_visita`, obrigatória |
+| Quita | VISITA → PAGAMENTO | `pagamento.id_visita`, obrigatória |
+| Atende | FUNCIONARIO → PEDIDO | `pedido.id_func`, obrigatória |
+| Contem | PEDIDO → ITEM_PEDIDO | `item_pedido.id_pedido`, obrigatória |
+| Refere-se a | PRATO → ITEM_PEDIDO | `item_pedido.id_prato`, obrigatória |
+| Classifica | CATEGORIA_PRATO → PRATO | `prato.id_categ`, obrigatória |
+| Corresponde a | PRODUTO_ESTOQUE → PRATO | `prato.id_produto`, opcional |
+| Executa | FUNCIONARIO → MOVIMENTACAO_ESTOQUE | `movimentacao_estoque.id_func`, obrigatória |
+| Movimenta | PRODUTO_ESTOQUE → MOVIMENTACAO_ESTOQUE | `movimentacao_estoque.id_produto`, obrigatória |
+| Abastece | COMPRA → MOVIMENTACAO_ESTOQUE | `movimentacao_estoque.id_compra`, opcional |
+| Efetua | FUNCIONARIO → COMPRA | `compra.id_func`, obrigatória |
+| Fornece | FORNECEDOR → COMPRA | `compra.id_fornecedor`, obrigatória |
+| Inclui | COMPRA → ITEM_COMPRA | `item_compra.id_compra`, obrigatória |
+| É comprado em | PRODUTO_ESTOQUE → ITEM_COMPRA | `item_compra.id_produto`, obrigatória |
+| Opera | FUNCIONARIO → CAIXA | `caixa.id_func`, obrigatória |
+| Registra | CAIXA → PAGAMENTO | `pagamento.id_caixa`, obrigatória |
+| Ocupa | MESA ↔ VISITA | tabela associativa `mesa_visita` |
+| Arrecada | FUNCIONARIO ↔ PAGAMENTO | tabela associativa `funcionario_pagamento` |
 
-- Justificar as **chaves primárias** escolhidas.  
-- Justificar as **chaves estrangeiras** e os relacionamentos que elas implementam.  
-- Justificar as **restrições** aplicadas (unicidade, obrigatoriedade, valores permitidos etc.), citando o código da regra de negócio (`RNxx`) que cada restrição implementa, quando houver.  
-- Justificar **decisões arquiteturais** gerais do modelo.
+### Cardinalidades
 
----
+- **1:N (19 relacionamentos).** A chave estrangeira fica na tabela que participa com máximo 1. Quando o mínimo desse lado é 1, a coluna é `NOT NULL`. Nos dois relacionamentos com mínimo 0 (`Corresponde a` e `Abastece`), a chave estrangeira aceita nulo: um prato que não é bebida de garrafa ou lata não tem produto de estoque, e uma movimentação de ajuste ou de saída não vem de uma compra.
+- **1:1 (`Identifica`).** A chave estrangeira ficou em `comanda` e é `UNIQUE`, de modo que cada visita tem no máximo uma comanda. A comanda foi escolhida como lado da chave porque ela só existe por causa de uma visita. A pulseira volta ao zero depois do 9.999, por isso cada visita cria uma nova linha em `comanda`, e o `codigo` repetido só é permitido em comandas que não estão mais em uso (baixadas ou perdidas).
+- **N:N (`Ocupa` e `Arrecada`).** Cada um virou uma tabela associativa. A chave primária é composta pelas duas chaves estrangeiras, o que impede repetir o par:
+  - `mesa_visita (id_mesa, id_visita)`: uma visita pode ocupar mais de uma mesa, e uma mesa é ocupada por várias visitas ao longo do tempo.
+  - `funcionario_pagamento (id_func, id_pgto)`: o garçom cobra e o caixa finaliza, então um pagamento tem mais de um funcionário.
+- **Mínimo 1 no lado N.** O SQL não consegue exigir, na criação das tabelas, que uma visita tenha ao menos uma mesa ou que um pedido tenha ao menos um item. Esses mínimos são verificados por consultas de auditoria no script (visita sem mesa, pedido sem item, compra sem item, pagamento sem funcionário, visita sem pagamento, ambiente sem mesa e categoria sem prato).
+- **Ações nas chaves estrangeiras.** Toda chave estrangeira bloqueia a exclusão do registro pai (`RESTRICT`), porque o histórico de visitas, pedidos, pagamentos e estoque não pode ser apagado.
 
-### 1.6 Proposta de Arquitetura Analítica para BI e IA
+### Generalização e especialização
+
+O DER não tem generalização. Os vários papéis de funcionário (garçom, bar, caixa, maître, gerente e outros) ficaram em uma única tabela `funcionario`, com a coluna `cargo`, porque todos têm os mesmos atributos e os mesmos relacionamentos. Tabelas separadas por cargo duplicariam as colunas e as chaves estrangeiras sem trazer nenhuma coluna própria.
+
+
+
+## 1.3 Definição de Chaves Primárias e Estrangeiras
+
+O modelo lógico tem 19 tabelas, 19 chaves primárias e 24 chaves estrangeiras. As colunas marcadas como opcionais aceitam nulo.
+
+| Tabela | Chave primária | Chaves estrangeiras |
+|---|---|---|
+| `ambiente` | `id_ambiente` | — |
+| `mesa` | `id_mesa` | `id_ambiente` → `ambiente` |
+| `visita` | `id_visita` | — |
+| `comanda` | `id_comanda` | `id_visita` → `visita` (única) |
+| `controle_acesso` | `id_controle_acesso` | `id_ambiente` → `ambiente`; `id_visita` → `visita` |
+| `funcionario` | `id_func` | — |
+| `caixa` | `id_caixa` | `id_func` → `funcionario` |
+| `pagamento` | `id_pgto` | `id_visita` → `visita`; `id_caixa` → `caixa` |
+| `pedido` | `id_pedido` | `id_visita` → `visita`; `id_func` → `funcionario` |
+| `item_pedido` | `id_item` | `id_pedido` → `pedido`; `id_prato` → `prato` |
+| `categoria_prato` | `id_categ` | — |
+| `prato` | `id_prato` | `id_categ` → `categoria_prato`; `id_produto` → `produto_estoque` (opcional) |
+| `produto_estoque` | `id_produto` | — |
+| `fornecedor` | `id_fornecedor` | — |
+| `compra` | `id_compra` | `id_func` → `funcionario`; `id_fornecedor` → `fornecedor` |
+| `item_compra` | `id_item_compra` | `id_compra` → `compra`; `id_produto` → `produto_estoque` |
+| `movimentacao_estoque` | `id_movimentacao` | `id_func` → `funcionario`; `id_produto` → `produto_estoque`; `id_compra` → `compra` (opcional) |
+| `mesa_visita` | (`id_mesa`, `id_visita`) | `id_mesa` → `mesa`; `id_visita` → `visita` |
+| `funcionario_pagamento` | (`id_func`, `id_pgto`) | `id_func` → `funcionario`; `id_pgto` → `pagamento` |
+
+
+## 1.4 Processo de Normalização (1FN, 2FN e 3FN)
+
+O DER já foi desenhado com entidades separadas, e a normalização foi usada para conferir cada tabela do modelo lógico e para decidir os pontos duvidosos. O resultado final está na 3FN.
+
+### 1FN: sem grupos repetitivos nem atributos multivalorados
+
+Uma tabela está na 1FN quando cada coluna guarda um único valor e não há grupos que se repetem. No Ponto A, os casos que poderiam ferir a 1FN eram:
+
+| Situação | Como ficaria fora da 1FN | Como ficou |
+|---|---|---|
+| Um pedido tem vários itens | colunas `item1`, `item2`, `item3` ou um campo com a lista de pratos | `item_pedido`, uma linha por item |
+| Uma compra tem vários itens | uma lista de produtos na compra | `item_compra`, uma linha por item |
+| Uma visita ocupa mais de uma mesa | um campo "mesas" com vários números | `mesa_visita`, uma linha por mesa da visita |
+| Um pagamento tem mais de um funcionário (garçom e caixa) | colunas `funcionario1` e `funcionario2` | `funcionario_pagamento`, uma linha por funcionário |
+| Uma visita pode ter vários pagamentos (divisão de conta) | vários valores no mesmo registro | `pagamento`, uma linha por pagamento |
+
+As demais colunas guardam valores atômicos. O nome do funcionário fica em uma coluna só (`nome_func`), porque o sistema nunca separa nome e sobrenome. Data e hora ficam juntas em uma coluna `DATETIME`, e a observação do item é um texto livre, sem lista.
+
+### 2FN: sem dependências parciais
+
+A 2FN exige que, em tabelas com chave composta, cada coluna dependa da chave inteira. Só duas tabelas têm chave composta, `mesa_visita` e `funcionario_pagamento`, e nenhuma delas tem outras colunas além da chave. Nas outras 17 tabelas a chave primária é uma coluna única, e uma dependência parcial é impossível.
+
+O ponto que parece uma dependência parcial e não é: `item_pedido.preco_unitario` poderia ser lido como "o preço do prato". Ele depende do item, porque guarda o preço praticado naquele momento, que pode ser diferente do preço atual em `prato.preco`. O mesmo vale para `item_compra.custo_unitario`. Os dois são fatos históricos e ficam nas tabelas dos itens.
+
+### 3FN: sem dependências transitivas
+
+A 3FN exige que cada coluna dependa só da chave, e não de outra coluna que não seja chave. Os dados de outra entidade ficam na tabela dela, e a tabela de origem guarda só a chave estrangeira:
+
+| Tabela | Não guarda | Porque depende de | Está em |
+|---|---|---|---|
+| `prato` | nome da categoria e `setor_producao` | da categoria, não do prato | `categoria_prato` |
+| `mesa` | nome e capacidade do ambiente | do ambiente, não da mesa | `ambiente` |
+| `pedido` | nome e cargo do funcionário | do funcionário, não do pedido | `funcionario` |
+| `item_pedido` | nome do prato | do prato, não do item | `prato` |
+| `compra` | razão social e CNPJ do fornecedor | do fornecedor, não da compra | `fornecedor` |
+| `movimentacao_estoque` e `item_compra` | nome do produto | do produto, não da movimentação | `produto_estoque` |
+| `controle_acesso` | capacidade do ambiente | do ambiente | `ambiente` |
+
+Duas colunas guardam um valor que dá para calcular a partir de outras linhas: `produto_estoque.qtd_atual` (soma das movimentações) e `compra.valor_total` (soma dos itens). Elas não dependem de outra coluna da mesma linha, então não ferem a 3FN, mas são redundância controlada. `qtd_atual` evita somar milhares de movimentações a cada consulta, e `valor_total` confere com a nota do fornecedor. Consultas de auditoria comparam cada valor com a soma dos registros de origem. O `pagamento.valor_total` não entra aqui: é o valor efetivamente pago, que muda com a divisão da conta, e por isso é um dado do pagamento e não um cálculo.
+
+### Justificativa do processo
+
+- **1FN:** a casa registra de 2.000 a 5.000 pedidos por dia, e cada pedido tem um número variável de itens. Sem itens em linhas separadas, não seria possível calcular o cancelamento por item, o consumo por mesa nem a diferença entre saídas de estoque e vendas.
+- **2FN:** as duas tabelas associativas guardam só a ligação entre os registros. Sem outras colunas, não há como surgir uma dependência parcial, e o preço do momento fica no item.
+- **3FN:** o cardápio, as categorias e os funcionários mudam com frequência. Cada dado fica em um só lugar, então trocar o setor de uma categoria, o cargo de um funcionário ou o telefone de um fornecedor é uma única alteração, sem risco de dados diferentes para o mesmo fato.
+
+## 1.5 Justificativas Técnicas das Decisões
+
+### Chaves primárias
+
+Todas as tabelas de entidade usam uma chave primária própria, inteira e gerada pelo sistema (`id_*`). Nenhum dado do negócio serve como chave:
+
+- `comanda.codigo` volta a zero depois do 9.999, então se repete ao longo do tempo (RN02).
+- `mesa.numero` e `ambiente.nome_ambiente` são rótulos que a casa pode mudar.
+- `pagamento.numero_nf` só existe depois da emissão da nota (RN16).
+- O banco não guarda CPF de funcionário nem de cliente (RN27), e por isso não há chave natural para `funcionario`.
+- Chaves inteiras são menores e mais rápidas nas tabelas grandes (`pedido` e `item_pedido`), e nas chaves estrangeiras que as referenciam.
+
+As duas tabelas associativas usam chave composta pelas duas chaves estrangeiras. Isso impede repetir o mesmo par e dispensa uma coluna a mais.
+
+### Chaves estrangeiras
+
+| Chave estrangeira | Relacionamento que implementa | Por quê |
+|---|---|---|
+| `mesa.id_ambiente` | Possui | cada mesa pertence a um único ambiente (RN05) |
+| `controle_acesso.id_ambiente`, `controle_acesso.id_visita` | Controla, Solicita | cada acesso é de uma visita e de um ambiente, para medir fila e ocupação (RN06, RN07) |
+| `comanda.id_visita` (única) | Identifica | uma visita tem uma pulseira, e uma pulseira em uso identifica uma só visita (RN01) |
+| `pedido.id_visita`, `pedido.id_func` | Gera, Atende | todo consumo pertence a uma visita e a um funcionário responsável (RN04, RN09, RN29) |
+| `item_pedido.id_pedido`, `item_pedido.id_prato` | Contem, Refere-se a | liga cada item ao pedido e ao prato, com o preço do momento (RN10) |
+| `prato.id_categ` | Classifica | cada prato pertence a uma única categoria, que define o setor de produção (RN11, RN12) |
+| `prato.id_produto` (opcional) | Corresponde a | só a bebida vendida como vem (garrafa ou lata) baixa o estoque (RN23) |
+| `pagamento.id_visita`, `pagamento.id_caixa` | Quita, Registra | o pagamento quita uma visita e é finalizado em um caixa (RN17, RN18) |
+| `caixa.id_func` | Opera | cada turno de caixa tem um funcionário responsável (RN19, RN29) |
+| `movimentacao_estoque.id_func`, `id_produto` | Executa, Movimenta | toda movimentação identifica quem a fez e o produto (RN20, RN21, RN29) |
+| `movimentacao_estoque.id_compra` (opcional) | Abastece | a entrada vinda de uma compra fica rastreável (RN25) |
+| `compra.id_func`, `compra.id_fornecedor` | Efetua, Fornece | a compra é de um fornecedor cadastrado e feita por um funcionário (RN24, RN29) |
+| `item_compra.id_compra`, `item_compra.id_produto` | Inclui, É comprado em | liga cada item da compra ao produto, com o custo do momento (RN24) |
+| `mesa_visita` (duas chaves) | Ocupa | uma visita ocupa uma ou mais mesas (RN05) |
+| `funcionario_pagamento` (duas chaves) | Arrecada | o garçom cobra e o caixa finaliza (RN18, RN29) |
+
+Todas as chaves estrangeiras bloqueiam a exclusão do registro pai (`RESTRICT`), porque o histórico de visitas, pedidos, pagamentos e estoque não pode ser apagado (RN13, RN21).
+
+### Restrições (unicidade, obrigatoriedade e valores permitidos)
+
+| Tabela e coluna | Restrição | Regra | Por quê |
+|---|---|---|---|
+| `comanda.codigo` | de 0 a 9.999; único entre as comandas em uso | RN02 | a pulseira se repete depois do 9.999, mas duas comandas em uso nunca têm o mesmo número |
+| `comanda.status` | em uso, baixada ou perdida; padrão em uso | RN03, RN04 | controla a pulseira da entrega à baixa |
+| `visita.status`, `data_hora_fechamento` | aberta ou fechada; fechada exige data de fechamento, nunca anterior à abertura | RN04 | a visita só fecha com a conta quitada |
+| `controle_acesso.quant_pessoas` | maior que zero | RN06, RN07 | entra no cálculo da ocupação |
+| `controle_acesso.data_hora_entrada`, `data_hora_saida` | entrada não anterior à solicitação; saída só com entrada e não anterior a ela | RN06 | a ocupação corrente só é calculável se toda entrada e saída forem registradas |
+| `controle_acesso.status` | aguardando, no ambiente, encerrado ou desistiu | RN06 | acompanha a fila |
+| `ambiente.capacidade_maxima` | maior que zero | RN07 | base do cálculo de ocupação |
+| `ambiente.nome_ambiente`, `mesa.numero` | únicos e obrigatórios | RN05 | identificam o ambiente e a mesa, sem repetição |
+| `pedido.status` | registrado, em preparo, pronto ou entregue | RN09 | acompanha o pedido |
+| `item_pedido.qtd`, `preco_unitario` | maiores que zero | RN10 | o item guarda a quantidade e o preço do momento |
+| `item_pedido.status` | ativo ou cancelado; padrão ativo | RN13 | o cancelamento é por item, e o item permanece |
+| `prato.preco` | maior que zero | RN10 | preço vigente do cardápio |
+| `prato.id_categ` | obrigatória | RN12 | cada prato tem uma única categoria |
+| `categoria_prato.setor_producao`, `nome` | setor entre bar, cozinha, narguilé, comida japonesa e pizzaria; nome único | RN11 | define para onde o item segue |
+| `pagamento.valor_total` | maior que zero | RN17 | cada pagamento quita uma parte da conta |
+| `pagamento.valor_taxa_servico` | de zero até `valor_total`; padrão zero | RN15 | a taxa é parte do pagamento |
+| `pagamento.forma_pgto` | dinheiro, cartão de crédito, cartão de débito, pix ou ticket | RN17 | formas aceitas pela casa |
+| `pagamento.numero_nf` | único quando preenchido | RN16 | duas contas não dividem a mesma nota; fica vazio até a emissão |
+| `caixa.valor_abertura` | maior ou igual a zero; padrão 150,00 | RN19 | fundo de troco do Ponto A |
+| `caixa.data_hora_fechamento`, `valor_fechamento` | obrigatórios quando o caixa está fechado | RN19 | o fechamento é conferido pelo maître ou pela gerência |
+| `produto_estoque.qtd_atual`, `estoque_minimo` | maiores ou iguais a zero | RN22 | o estoque nunca fica negativo |
+| `produto_estoque.nome` | único e obrigatório | RN22 | um produto por linha |
+| `movimentacao_estoque.tipo`, `qtd` | entrada, saída, ajuste positivo ou ajuste negativo; quantidade maior que zero | RN20, RN21 | o sentido da movimentação é dado pelo tipo |
+| `movimentacao_estoque.motivo` | obrigatório quando o tipo é ajuste | RN21 | explica a divergência (quebra, perda, cortesia) |
+| `fornecedor.cnpj` | único e obrigatório; `telefone` obrigatório | RN24 | a compra é só de fornecedor cadastrado |
+| `compra.valor_total`, `status` | maior que zero; pedida, recebida ou cancelada; padrão pedida | RN24, RN25 | a compra cancelada permanece registrada |
+| `compra.data_recebimento` | obrigatória quando recebida | RN25 | registra quando os maîtres conferem a entrega |
+| `item_compra.qtd`, `custo_unitario` | maiores que zero | RN24 | guarda o custo do momento |
+| `funcionario.nome_func`, `cargo` | obrigatórios; cargo entre os 14 do Ponto A | RN28, RN29 | o nível de acesso depende do cargo |
+
+Algumas regras não viram restrição no banco e ficam no controle de acesso, no processo ou em consultas de auditoria:
+
+- **RN07:** o limite de capacidade do ambiente é verificado pela consulta de ocupação, porque depende da soma das visitas presentes.
+- **RN13, RN14, RN28:** quem cancela, estorna ou altera conta fechada é definido pelos privilégios por cargo, e não por uma coluna.
+- **RN21:** a imutabilidade das movimentações de estoque é garantida retirando os privilégios de alteração e exclusão dessa tabela.
+- **RN08 e RN26:** não geram dado. A venda de bebida e comida em todos os ambientes e a conferência da idade são do processo.
+
+### Decisões arquiteturais gerais
+
+- **Histórico preservado.** Nada é apagado: cancelamentos, estornos e compras canceladas viram `status`, e as chaves estrangeiras usam `RESTRICT`. Isso sustenta os indicadores de cancelamento, de diferença de caixa e de estoque.
+- **Preço do momento.** O preço e o custo ficam no item (`preco_unitario` e `custo_unitario`), para o faturamento e o gasto continuarem corretos quando o cardápio ou o fornecedor mudarem.
+- **Valores permitidos como texto com restrição.** Status, tipo, forma de pagamento e cargo são `VARCHAR` com `CHECK`, e não `ENUM`, para mudar a lista de valores sem alterar a estrutura da tabela.
+- **Mínimo 1 do lado N.** O SQL não impõe esse mínimo (por exemplo, visita com ao menos uma mesa). Consultas de auditoria no script verificam esses casos.
+- **Colunas calculáveis mantidas.** `qtd_atual` e `compra.valor_total` ficam gravados, por desempenho e por conferência com a nota do fornecedor, com auditoria comparando-os com a soma dos registros.
+- **Sem cadastro de clientes.** O modelo não tem tabela de clientes: a pulseira identifica a visita, e nenhum dado pessoal de cliente é guardado (RN27).
+- **Uma tabela de funcionários.** O cargo é uma coluna de `funcionario`, porque todos os cargos têm os mesmos atributos e relacionamentos.
+- **Tecnologia.** MySQL 8, motor InnoDB, conjunto de caracteres `utf8mb4`. O InnoDB dá suporte às chaves estrangeiras e às transações que o registro de pagamentos e de estoque exige, e o MySQL 8 aceita `CHECK` e colunas geradas.
+
+
+## 1.6 Proposta de Arquitetura Analítica para BI e IA
 
 ### Informações estratégicas
 
@@ -677,184 +711,307 @@ As metas são propostas do grupo, a confirmar com o responsável: o tempo de esp
 | K15: faturamento por forma de pagamento | PAGAMENTO | G15 |
 | K16: consumo por visita e mesa | ITEM_PEDIDO, PEDIDO, VISITA, MESA | G16 |
 
----
 
-## 2\. Modelo Lógico Relacional
 
-*(diagrama separado — vale 10% na Dimensão Procedimental)*
+## 2. Modelo Lógico
 
-O modelo lógico deve seguir a **notação visual do brModelo** para o modelo lógico, como no exemplo abaixo. Informe no README **em qual software ou aplicativo ele foi criado**.
 
-![Exemplo de modelo lógico na notação do brModelo](Exemplo_Logico.png)
+O modelo lógico foi gerado no brModelo a partir do DER conceitual revisado (seção 1.2) e tem **19 tabelas**: as 17 entidades do DER mais duas tabelas associativas criadas na conversão dos relacionamentos muitos-para-muitos. [Modelo Lógico](modelo_logico.jpg)
 
-| Elemento | Como aparece | No exemplo |
-| :---- | :---- | :---- |
-| **Tabela** | retângulo com o nome da tabela no topo e uma linha por coluna | `Entity 1`, `Entity 5` |
-| **Coluna** | nome da coluna, à esquerda, com o tipo de dado à direita | `Attribute 30` — `INT` |
-| **Chave primária** | marca `PK` ao lado do tipo | `Chave 1`, em `Entity 1`; `Chave 50` \+ `Chave 51`, em `Entity 5` (chave primária composta) |
-| **Chave estrangeira** | marca `FK` ao lado do tipo | `Chave 3`, em `Entity 4` |
-| **Coluna que é chave primária e estrangeira** | marcas `PK, FK` | `Chave 1`, em `Entity 2` |
-| **Ligação entre tabelas** | linha entre a tabela da FK e a tabela referenciada, com a cardinalidade `(mín, máx)` em cada ponta | `Entity 3` — `Entity 4`: `(1, 1)` e `(0, n)` |
+- `mesa_visita`: liga a visita às mesas que ela ocupa, já que uma visita pode usar mais de uma mesa. A chave primária é composta (`id_mesa`, `id_visita`).
+- `funcionario_pagamento`: liga o pagamento aos funcionários que o receberam, já que o garçom ou o caixa pode receber e a conta pode ser dividida. A chave primária é composta (`id_pgto`, `id_func`).
 
-&nbsp;
+No total são **19 chaves primárias** e **24 chaves estrangeiras**. Os pontos que merecem atenção na leitura do modelo são:
 
-Deve apresentar claramente:
+- **Visita e comanda (1:1).** A chave estrangeira fica em `comanda.id_visita`, com restrição `UNIQUE`, para que cada visita tenha uma única pulseira.
+- **Chaves estrangeiras opcionais.** `prato.id_produto` pode ficar vazia, porque drinks e doses não baixam o estoque, e só a bebida vendida como vem se liga a um produto. `movimentacao_estoque.id_compra` só é preenchida nas entradas de estoque que vêm de uma compra.
+- **Preço do momento.** O valor cobrado fica em `item_pedido.preco_unitario`, e não só em `prato.preco`, para que mudanças no cardápio não alterem as contas já feitas.
+- **Cardinalidades.** O brModelo mostra cada ligação do lado da tabela de origem como (1,1) e do lado da tabela dependente como (0,n), e (0,1) nas ligações 1:1. Isso é só a convenção da ferramenta e não muda as regras do DER.
 
-- Tabelas  
-- Atributos (colunas), com seus tipos de dados  
-- Chaves primárias  
-- Chaves estrangeiras  
-- Cardinalidades já convertidas
+Os tipos de dados do brModelo são limitados, então o modelo mostra só a estrutura (tabelas, chaves e ligações). Os tipos finais (`INT`, `VARCHAR(n)`, `DECIMAL(10,2)`, `DATETIME`), as restrições `CHECK` e as regras de exclusão (`RESTRICT` em todas as chaves estrangeiras) estão definidos no script da seção 3 e no dicionário de dados.
 
-As **demais restrições de integridade** — obrigatoriedade (`NOT NULL`), unicidade (`UNIQUE`), valores permitidos (`CHECK`), valores padrão (`DEFAULT`) — não aparecem no diagrama do brModelo e devem ser documentadas no **dicionário de dados** (seção 5\) e implementadas no **script SQL** (seção 3).
 
----
+## 3. Script SQL
 
-## 3\. Script SQL Completo
+O script está em [`docs/script.sql`](docs/script.sql) e roda do zero em um banco vazio (começa com `DROP DATABASE IF EXISTS` e `CREATE DATABASE ponto_a`). Ele segue esta ordem:
 
-*(arquivo `.sql` — vale 12% na Dimensão Procedimental)*
+1. **CREATE DATABASE** (`utf8mb4`).
+2. **CREATE TABLE** das 19 tabelas, com chaves primárias, chaves estrangeiras (todas `RESTRICT`), `UNIQUE`, `NOT NULL` e `CHECK`. Cada restrição tem nome (`pk_`, `fk_`, `uq_`, `ck_`).
+3. **INSERT** da massa de dados (a mesma de `docs/massa_de_dados.sql`).
+4. **SELECT com JOIN** (S01–S05).
+5. **UPDATE** (U01–U03) e **DELETE** (D01), mais exemplos comentados de operações que o banco recusa.
+6. **Consultas gerenciais** G01–G16, uma para cada indicador K1–K16 da seção 1.6. Cada uma traz no cabeçalho a pergunta e o `Atende:`.
+7. **Consultas de auditoria** A01–A22. Cada uma traz o `Verifica:` com a regra de negócio. Uma auditoria que retorna zero linhas indica que a regra está sendo cumprida.
 
-O script completo é **um arquivo no formato `.sql` disponível no repositório**, de preferência numa pasta chamada **`docs`** (ex.: `docs/script.sql`), com link no README. Script colado só no README, em PDF, em imagem ou em outro formato não é aceito.
+Decisões que não estão no modelo conceitual:
+- `VARCHAR` com `CHECK` no lugar de `ENUM`, para os valores aceitos ficarem visíveis na própria tabela.
+- A unicidade do número da pulseira entre as comandas em uso é feita com uma coluna gerada (`codigo_em_uso`) com `UNIQUE`.
+- As FKs opcionais são `prato.id_produto` (drinks e doses não ligam ao estoque) e `movimentacao_estoque.id_compra` (só as entradas ligam a uma compra).
 
-**SGBD:** MySQL — o disponível no laboratório ou outra instalação equivalente a que o grupo tenha acesso. O script deve executar no MySQL.
+Auditorias que retornam linhas de propósito: A16 (2 pagamentos sem nota fiscal), A19 (5 pratos vendidos por preço diferente do atual, o que mostra o preço do momento guardado no item) e A22 (3 pulseiras perdidas localizadas por garçom e mesa).
 
-O script deve conter, nesta ordem lógica:
 
-1. `CREATE DATABASE`  
-2. `CREATE TABLE` (todas as tabelas, com tipos de dados adequados)  
-3. **Constraints** (PK, FK, `NOT NULL`, `UNIQUE`, `CHECK` etc.)  
-4. `INSERT INTO` (carga da massa de dados — ver seção 4\)  
-5. `SELECT` com `JOIN` (consultas que cruzam múltiplas tabelas)  
-6. `UPDATE`  
-7. `DELETE`  
-8. **Consultas gerenciais** (que respondem perguntas de gestão, ex.: faturamento/arrecadação por período, número de atendimentos/beneficiários)  
-9. **Consultas de auditoria** (que verificam consistência/integridade dos dados)
 
-Cada **consulta gerencial** e cada **consulta de auditoria** deve ter um cabeçalho em comentário com um código (`G01`, `G02`… para gerenciais; `A01`, `A02`… para auditoria), a pergunta que ela responde em português e o que ela atende:
+## 4. Massa de dados
 
-```sql
--- G03 — Quais bebidas estão abaixo do estoque mínimo hoje?
--- Atende: P1 (ruptura de estoque de bebidas)
-SELECT ...
+Arquivo: [`docs/massa_de_dados.sql`](docs/massa_de_dados.sql). Os dados são fictícios e cobrem a semana de 26/10/2026 (segunda) a 01/11/2026 (domingo), com as compras da semana anterior para formar o estoque.
 
--- A02 — Existe pedido registrado sem nenhum item?
--- Verifica: RN04 (todo pedido tem ao menos um item)
-SELECT ...
-```
+| Tabela | Linhas | Tabela | Linhas |
+|---|---|---|---|
+| ambiente | 3 | compra | 82 |
+| mesa | 55 | item_compra | 102 |
+| funcionario | 67 | movimentacao_estoque | 458 |
+| categoria_prato | 5 | visita / comanda | 183 / 183 |
+| prato | 400 | controle_acesso | 190 |
+| produto_estoque | 60 | pedido | 1.354 |
+| fornecedor | 50 | item_pedido | 2.427 |
+| caixa | 14 | pagamento | 240 |
+| mesa_visita | 236 | funcionario_pagamento | 323 |
 
-&nbsp;
+**Por que esse volume.** O Ponto A tem 55 mesas, 67 funcionários, 400 a 800 itens de cardápio e 2.000 a 5.000 pedidos por dia. O cadastro (mesas, funcionários, produtos, fornecedores) está em escala real. O movimento é uma amostra: cerca de um décimo do volume diário em uma semana, o suficiente para os indicadores terem o que mostrar sem tornar o script pesado para o professor rodar.
 
-- **Consultas gerenciais** respondem aos problemas declarados e aos KPIs da seção 1.6 — pelo menos uma por problema declarado e por KPI.  
-- **Consultas de auditoria** verificam regras de negócio, citando o código da regra (`RNxx`) que cada uma confere.  
-- Essas mesmas consultas são as usadas na demonstração da apresentação final (seção 7).
+**Variedade incluída de propósito:**
+- itens cancelados (93) e pedidos em todos os status;
+- produtos no estoque mínimo ou abaixo (8) e dois em ruptura;
+- as cinco formas de pagamento e contas divididas em mais de um pagamento;
+- fila com desistências (Deck, nos dias de maior movimento) e acessos ainda no ambiente;
+- ajustes de estoque (quebra, perda, sobra, cortesia);
+- pulseiras perdidas, compras recebidas, pedidas e canceladas;
+- diferenças de caixa no fechamento e pagamentos sem nota fiscal.
 
-*Teste o script do zero (banco vazio) antes de entregar, para garantir que ele executa sem erros.*
+Obs.: o DELETE D01 remove um dos fornecedores sem compra, por isso o banco termina com 49 fornecedores depois de rodar o script inteiro.
 
----
+**Como testar:** `mysql -u root -p < docs/script.sql` em um banco vazio.
 
-## 4\. Massa de Dados
 
-*(incluída no script ou em arquivo separado — parte da nota de Implementação SQL, 12%)*
-
-Se a massa de dados ficar em arquivo separado, ele deve seguir a mesma regra do script: **um arquivo no formato `.sql` no repositório**, de preferência na pasta **`docs`** (ex.: `docs/massa_de_dados.sql`), com link no README.
-
-- **Dados reais da organização (nomes de clientes, fiéis, beneficiários, doadores, valores reais etc.) não devem ser utilizados, em respeito à privacidade dessas informações.** A massa de dados deve ser **fictícia**, mas **coerente com as operações modeladas** (mesmos tipos de processo, volumes e regras observados na organização real).  
-- Volume de registros **coerente com a realidade da organização** (nada de 3 linhas de exemplo — mas também nada artificialmente inflado sem sentido).  
-- **Explique como o volume real da organização** — os números informados em *Contexto e porte* (seção 1.1), como clientes ativos, pedidos por mês, atendimentos por semana, itens no estoque — **justifica a quantidade de registros de cada tabela** da massa de dados.  
-- Dados consistentes o suficiente para validar os processos organizacionais modelados (ex.: pedidos que referenciam clientes e produtos existentes, ou doações que referenciam doadores e campanhas existentes).  
-- **Variedade e quantidade coerentes com a organização, para que os testes sejam possíveis:** os dados devem cobrir as situações reais — não só o caso comum, mas também pedidos cancelados, clientes sem compras, produtos abaixo do estoque mínimo, pagamentos em formas diferentes, registros em períodos diferentes. Sem essa variedade, as consultas gerenciais e de auditoria (seção 3\) não têm o que mostrar: uma consulta de produtos abaixo do estoque mínimo que retorna vazio não demonstra nada.  
-- **Documente o uso de LLMs** para gerar essa massa de dados na seção 6 (**Uso de Inteligência Artificial**), incluindo ferramentas, prompts e ajustes feitos manualmente.
-
----
 
 ## 5\. Repositório GitHub
 
-*(vale 13% — Documentação e Repositório)*
-
-O repositório deve conter:
-
-- Relatório Técnico (no `README.md`)  
-- **Dicionário de Dados** atualizado, no modelo do arquivo `02-03g_Exemplo_Dicionario_Dados.pdf` e com as restrições de integridade de cada coluna (obrigatoriedade, unicidade, valores permitidos, valor padrão), em **um único arquivo HTML** no repositório. **Exceção — turma de GTI:** o dicionário é apresentado em **um único arquivo Markdown (`.md`) separado do README**, seguindo o mesmo modelo do `02-03g_Exemplo_Dicionario_Dados.pdf`.  
-- Diagramas (DER revisado e modelo lógico)  
-- Levantamento (pasta `levantamento`, recomendada) e evidências da organização e da entrevista (fotos JPG ou PNG)  
-- Script SQL completo em arquivo `.sql` (de preferência na pasta `docs`)  
-- **Histórico de commits** que evidencie o desenvolvimento ao longo do tempo (evite um único commit final)  
-- **Evidências de colaboração entre os membros do grupo:** é a listagem de commits do repositório, que deve estar **equilibrada entre os integrantes** — a quantidade de commits deve se distribuir de forma proporcional entre todos os membros do grupo, cada um fazendo commits com a própria conta do GitHub. O integrante precisa ser **identificável na conta do GitHub**: o nome configurado na conta deve ser compatível com o nome do aluno na tabela de Integrantes, onde também deve constar o usuário do GitHub de cada um
+- Relatório técnico: este `README.md`.
+- [Dicionário de dados](dicionario_dados.html)
+- [DER revisado](DER.jpg) e [modelo lógico](modelo_logico.jpg)
+- [Levantamento](levantamento/levantamento.md) e [evidência 1](evidencias/fotoEntrevista.jpg) [evidência 2](evidencias/fotoEntrevista2.jpg) [evidência 3](fotoFachada.jpg)
+- [Script SQL](docs/script.sql) e [massa de dados](docs/massa_de_dados.sql)
 
 ---
 
-## 6\. Uso de Inteligência Artificial
+## Seção 6 — Uso de Inteligência Artificial
 
-*(documentação obrigatória — não é opcional se o grupo usou IA em qualquer etapa: pesquisa, levantamento de processos, requisitos e regras típicos, escrita, organização de ideias, revisão de texto, geração de massa de dados ou apoio a scripts SQL)*
+> Rascunho acumulado durante a Entrega 2.
+> Ferramenta em todas as entradas: **Claude (Anthropic), modelo Claude Sonnet 5.5**, via Claude Code / claude.ai.
+> Integrantes (conforme correção da Entrega 1): Diego Xavier Ribeiro, Luiz Felipe de Brito Carvalho, Nicolas Vieira de Lima, Renan Caio de Lima.
 
-Para cada uso relevante de ferramenta de IA (ChatGPT, Claude, Gemini, Perplexity etc.), registre:
+---
 
-| Item | O que registrar |
-| :---- | :---- |
-| **Ferramenta e etapa** | Qual IA foi usada e em qual parte do trabalho (ex.: normalização, geração da massa de dados, escrita de queries SQL, redação do relatório, preparação dos slides). |
-| **Motivação** | Por que o grupo recorreu à IA nesse ponto específico. |
-| **Prompt(s) utilizados** | Texto exato (ou muito próximo) do que foi perguntado/pedido à IA. |
-| **Resposta recebida** | Resumo ou trecho relevante da resposta da IA. |
-| **Fontes consultadas e verificadas** | Se a IA citou fontes/dados, quais foram checadas pelo grupo e como. |
-| **Trechos rejeitados ou corrigidos** | O que da resposta da IA foi descartado, editado ou corrigido manualmente (ex.: query SQL ajustada, dado fictício alterado), e por quê. |
-| **Justificativa da escolha final** | Por que o grupo manteve, adaptou ou rejeitou o que a IA sugeriu. |
-| **Reflexão crítica** | Limites, vieses ou erros identificados no uso da IA nessa etapa (ex.: normalização incorreta sugerida pela IA, script SQL com erro de sintaxe, dado fictício incoerente com o volume real da organização). |
+### Uso 01 — Análise do esqueleto da Entrega 2
+- **Ferramenta e etapa:** Claude — leitura e resumo do esqueleto `00-d_Esqueleto_Entrega_2` (planejamento da entrega).
+- **Motivação:** entender de uma vez todas as exigências, pesos e armadilhas do arquivo antes de produzir qualquer artefato.
+- **Prompt:** "Estamos agora na entrega 2, analise todo o arquivo primeiro" (anexo: esqueleto da Entrega 2 em .odt).
+- **Resposta recebida:** resumo por seção (README, 1.1 a 1.6, modelo lógico, script SQL, massa de dados, repositório, seção 6, apresentação, pesos), com pontos de atenção para o projeto (escopo do DER, evidências da organização real, requisitos, entidade associativa de itens, notação brModelo).
+- **Fontes consultadas e verificadas:** apenas o próprio esqueleto fornecido pelo professor.
+- **Trechos rejeitados ou corrigidos:** nenhum 
+- **Justificativa da escolha final:** usado como checklist de trabalho.
+- **Reflexão crítica:** resumo de IA pode omitir detalhes; o esqueleto original continua sendo a fonte oficial. A IA cometeu um erro de redação no resumo ("Brasil/Ponto A é real"), apontando falha de revisão que precisou ser ignorada.
 
-&nbsp;
+### Uso 02 — Mapeamento da correção da Entrega 1 (Caso A, seção 1.1)
+- **Ferramenta e etapa:** Claude — transformar a correção recebida em tabela de apontamentos → ações.
+- **Motivação:** o esqueleto trata apontamento não citado na tabela como não corrigido.
+- **Prompt:** colagem do texto integral da correção da Entrega 1 (nota 1,100/1,60) com o comentário "colei a correção"; depois: "os integrantes são os mesmos no texto colado e na correção".
+- **Resposta recebida:** tabela de apontamentos (ITEM_PEDIDO, nome no PRATO, AMBIENTE/ACESSO, ESTOQUE, CAIXA, FORNECEDOR/COMPRA, requisitos de outro sistema, regras e processos faltantes, dicionário, entrevista com responsável) e alertas (integrantes, declaração de uso de IA, números de porte).
+- **Fontes consultadas e verificadas:** texto da correção do professor. 
+- **Trechos rejeitados ou corrigidos:** nenhum
+- **Justificativa da escolha final:** usado para guiar os integrantes
+- **Reflexão crítica:** a IA assumiu inicialmente uma lista de integrantes diferente da correção; o grupo corrigiu. Registro importante: na Entrega 1 o grupo declarou não ter usado IA; nesta entrega o uso é declarado.
 
-*Se o grupo não usou nenhuma ferramenta de IA em alguma dessas etapas, declare isso explicitamente.*
+### Uso 03 — Revisão do DER ampliado (BRModelo Web)
+- **Ferramenta e etapa:** Claude — conferência do DER revisado enviado em PDF (`Personal - Conceptual model - BRMW.pdf`) contra a correção e o esqueleto.
+- **Motivação:** verificar se o DER cobre os problemas P1 (acesso ao Deck) e P2 (estoque de bebidas) antes de converter para o modelo lógico.
+- **Prompt:** envio do PDF do DER com o texto "Mandei o arquivo do DER com algumas coisas a mais que coloquei".
+- **Resposta recebida:** DER lido com 14 entidades (inclui AMBIENTE, CONTROLE_ACESSO, ITEM_PEDIDO, MOVIMENTACAO_ESTOQUE, PRODUTO_ESTOQUE). Pontos levantados: cardinalidades (1,n) nos dois lados de CONTROLE_ACESSO, ITEM_PEDIDO e MOVIMENTACAO_ESTOQUE (o lado "filho" deveria ser (1,1)); MOVIMENTACAO_ESTOQUE e PRODUTO_ESTOQUE sem atributos; FUNCIONARIO sem nome; faltam datas/horas em VISITA e PEDIDO e forma de pagamento em PAGAMENTO (necessários para KPIs e para a massa de dados); sem ligação entre PRATO (bebida) e PRODUTO_ESTOQUE.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
 
-**Uso de IA observado e não declarado será penalizado.**
+---
+*Próximos usos previstos:* modelo lógico, normalização, script SQL, massa de dados (inclui prompts e ajustes manuais), consultas G/A, dicionário HTML, README e slides.
+
+### Uso 04 — Ajuste das cardinalidades e inclusão de FORNECEDOR, COMPRA, CAIXA
+- **Ferramenta e etapa:** Claude — definição das cardinalidades corrigidas e dos novos relacionamentos do DER revisado.
+- **Motivação:** aplicar os apontamentos da correção (itens ausentes: fornecedor/compra e caixa; estoque sem ligação com o cardápio).
+- **Prompt:** "me ajude a aplicar o item 1 (dizendo o que tem de cada lado), 5 (vamos criar esse relacionamento, e vamos criar o fornecedor e o caixa)".
+- **Resposta recebida:** tabela com (mín,máx) dos dois lados de seis relacionamentos corrigidos; relacionamento PRATO (0,1) – PRODUTO_ESTOQUE (0,n); novas entidades FORNECEDOR, COMPRA, ITEM_COMPRA, CAIXA e SANGRIA com atributos e cardinalidades; renomeação de quatro relacionamentos "registra".
+- **Fontes consultadas e verificadas:** correção da Entrega 1; processos do Ponto A (caixa com abertura, sangria e fechamento).
+- **Trechos rejeitados ou corrigidos:** nenhum
+- **Justificativa da escolha final:** primeira parte do projeto "feita" (mudou depois da entrevista).
+- **Reflexão crítica:** a IA propôs "1 prato = 1 unidade do produto" sem fator de conversão (simplificação); a necessidade de ITEM_COMPRA e SANGRIA como entidades foi decisão de modelagem a validar.
+
+### Uso 05 — Conferência do DER ampliado (19 entidades)
+- **Ferramenta e etapa:** Claude — revisão do DER redesenhado no BRModelo Web (PDF `Personal - Conceptual model - BRMW.pdf`, 2ª versão) contra a correção da Entrega 1 e o esqueleto da Entrega 2.
+- **Motivação:** confirmar que o DER cobre os problemas P1 e P2 e os apontamentos do professor antes da conversão para o modelo lógico.
+- **Prompt:** "agora cobre tudo que precisamos?" (anexo: PDF do DER atualizado).
+- **Resposta recebida:** confirmação das cardinalidades corrigidas e dos novos relacionamentos; lacunas: PAGAMENTO sem `forma_pagamento`/`data_hora` (e sem taxa de serviço e cupom fiscal), COMANDA sem `status`, losango `Rel` sem nome, `recebe` repetido, PEDIDO sem `data_hora_entrega`, ITEM_PEDIDO sem `observacao`, CATEGORIA_PRATO sem setor de produção, mínimos (1,n) que impedem cliente sem visita; processos a justificar (reservas, escala, normas sanitárias, horário).
+- **Fontes consultadas e verificadas:** correção do professor, esqueleto da Entrega 2 e DER enviado.
+- **Trechos rejeitados ou corrigidos:** nenhum
+- **Justificativa da escolha final:** ...
+- **Reflexão crítica:** a IA leu o DER a partir de imagem rasterizada do PDF; pequenos rótulos podem ter sido mal lidos e precisam ser conferidos no BRModelo.
+
+### Uso 06 — Conferência final do DER e decisão sobre processos não incluídos
+- **Ferramenta e etapa:** Claude — conferência do DER após as alterações do grupo (PDF `Personal - Conceptual model - BRMW.pdf`, 3ª versão) e redação de justificativa para processos omitidos.
+- **Motivação:** garantir que o DER revisado corresponde à correção antes de converter para o modelo lógico.
+- **Prompt:** "analise agora. As reservas, escala, normas, horarios ficam de fora por serem informações que ao meu ver não caberiam num banco de dados focado no processo interno do restaurante, a reserva por exemplo funcionarios podem fazer e seria tratado num outro momento, todo o resto são coisas individuais".
+- **Resposta recebida:** confirmação de que PAGAMENTO, COMANDA, ITEM_PEDIDO e CATEGORIA_PRATO receberam os atributos sugeridos e os losangos foram renomeados; pendências: erros de digitação (`observances`, `setor_produto`), padronização de nomes (`qtd`/`quantidade`, `id_movis`), mínimos (1,n) em Cliente e Mesa, ausência de `data_hora_entrega`; rascunho de justificativa no README para reservas, escala, normas sanitárias e horário.
+- **Decisão do grupo (não da IA):** reservas, escala da equipe, normas sanitárias e horário de funcionamento ficam fora do modelo, por não pertencerem ao processo interno de atendimento, consumo, caixa e estoque; reservas serão tratadas em outro momento.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 07 — Conversão do DER para o modelo lógico
+- **Ferramenta e etapa:** Claude — conversão do DER revisado (19 entidades) em modelo lógico relacional: 23 tabelas, PKs/FKs, tipos, restrições; diagrama gerado com Graphviz a partir de um esquema em Python.
+- **Motivação:** produzir o modelo lógico (seções 1.2 e 1.3 e diagrama) a partir do DER aprovado pelo grupo.
+- **Prompt:** envio do DER final com o texto "acho que agora esta tudo certo" (continuação do pedido anterior de iniciar o modelo lógico).
+- **Resposta recebida:** `modelo_logico.md` (conversão, PKs/FKs, restrições por coluna), `modelo_logico.png/.svg` (diagrama com (mín,máx) nas pontas). Decisões: 4 tabelas associativas para os N:N; `visita.id_comanda` UNIQUE NOT NULL para o 1:1; FKs opcionais em `prato.id_produto` e `movimentacao_estoque.id_compra`.
+- **Fontes consultadas e verificadas:** DER do grupo (BRModelo Web).
+- **Trechos rejeitados ou corrigidos:** erros de digitação do DER (`cps_cliente`, `std`) interpretados como `cpf_cliente` e `quantidade`. **[GRUPO]** outros ajustes.
+- **Justificativa da escolha final:** ...
+- **Reflexão crítica:** o diagrama foi gerado com Graphviz (não é o brModelo); o esqueleto pede a notação visual do brModelo, então o grupo precisa refazer o desenho nele (ou aceitar o risco). A IA ajustou rótulos que se sobrepunham. Tipos e tamanhos de coluna são sugestões a validar com os dados reais.
+
+### Uso 07 — Confirmação final do DER (19 entidades)
+- **Ferramenta e etapa:** Claude — última conferência do DER no BRModelo Web (4ª versão) antes do modelo lógico.
+- **Prompt:** "acho que agora esta tudo certo, apenas confirme isso por enquanto n precisa gerar nd" (anexo: PDF do DER).
+- **Resposta recebida:** DER cobre P1, P2 e os apontamentos; mínimos de Cliente e Mesa já em (0,n); `data_hora_entrega` adicionada; restaram dois erros de digitação de atributos (`cps_cliente` → `cpf_cliente`; `std` em ITEM_PEDIDO → `quantidade`/`qtd`).
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 08 — Comparação do README da Entrega 1 com as exigências da Entrega 2
+- **Ferramenta e etapa:** Claude — levantamento do que já está pronto, o que precisa de ajuste e o que falta.
+- **Motivação:** planejar o trabalho restante sem refazer o que já atende ao esqueleto.
+- **Prompt:** "agora analise a entrega 1 que esta acima e compare com a entrega 2 para saber oq ja esta feito" (colagem do README da Entrega 1).
+- **Resposta recebida:** tabela por seção do esqueleto com status (pronto, parcial, refazer, falta). Resultado: DER, evidências e justificativa prontos; requisitos e dicionário a refazer; seções 1.2 a 1.6, modelo lógico, SQL, massa de dados, slides e entrevista ainda inexistentes; pendências do grupo (usuários do GitHub, contato do responsável, entrevista, números de volume).
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 09 — Redação da seção do DER para o README (inclui tabela do Caso A)
+- **Ferramenta e etapa:** Claude — redação em Markdown da seção "Diagrama Entidade-Relacionamento (DER)" do README, a partir do DER final enviado pelo grupo.
+- **Motivação:** substituir a seção do DER da Entrega 1 (9 entidades) pela versão revisada (19 entidades), com a tabela de apontamentos do Caso A.
+- **Prompt:** "vamos já adicionar o DER na seção dele, preciso que me entregue em .md para ja substituir a seção".
+- **Resposta recebida:** arquivo `secao_der.md` com software utilizado (BRModelo Web), tabela de entidades e atributos, tabela de 24 relacionamentos com cardinalidades nos dois lados, tabela do Caso A (apontamento, o que foi feito, por quê) e decisões de modelagem.
+- **Fontes consultadas e verificadas:** DER do grupo (PDF) e correção da Entrega 1.
+- **Trechos rejeitados ou corrigidos / justificativa / reflexão:** nenhum(a)
+
+### Uso 10 — Alinhamento com o esqueleto da Entrega 2 em Markdown
+- **Ferramenta e etapa:** Claude — conferência do esqueleto em .md contra a análise feita a partir do .odt e ajuste do nível de título da seção do DER.
+- **Prompt:** "Aqui a entrega 2 num arquivo md também, assim falamos da mesma coisa" (anexo: esqueleto da Entrega 2 em .md).
+- **Resposta recebida:** confirmação de que o conteúdo é o mesmo do .odt; ajuste de `secao_der.md` para ficar dentro da seção 1.1 (título "DER conceitual revisado (Caso A)").
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 11 — Roteiro de entrevista para o responsável do Ponto A
+- **Ferramenta e etapa:** Claude — elaboração do roteiro de entrevista em Word (levantamento de requisitos, processos, regras e volumes).
+- **Motivação:** o esqueleto exige entrevista com o responsável no local, com números de porte, observação presencial e confirmação de processos, requisitos e regras.
+- **Prompt:** "um colega do grupo fará a entrevista, preciso de perguntas que sejam pertinentes e corroborem para o projeto e as decisões, exporte num word com áreas para ele colocar a resposta do entrevistado. campos para nome do entrevistado e entrevistador, cargo do entrevistado."
+- **Resposta recebida:** `roteiro_entrevista_ponto_a.docx` com campos de identificação, 39 perguntas em 8 blocos (porte, atendimento, acesso aos ambientes, estoque, compras, caixa, regras, KPIs), cada uma com a indicação de onde a resposta entra no projeto e área de resposta; seção de observação presencial e encerramento (autorização do nome e telefone, foto).
+- **Fontes consultadas e verificadas:** correção da Entrega 1, esqueleto da Entrega 2 e DER final.
+- **Trechos rejeitados ou corrigidos / justificativa / reflexão:** nenhum(a)
+
+### Uso 12 — Atualização do dicionário de dados (de 9 para 19 entidades)
+- **Ferramenta e etapa:** Claude — extensão do `dicionario_dados.html` da Entrega 1 para as 19 entidades do DER revisado, com restrições de integridade por coluna.
+- **Motivação:** o esqueleto exige dicionário atualizado, no modelo do exemplo, com obrigatoriedade, unicidade, valores permitidos e valor padrão de cada coluna.
+- **Prompt:** "já vamos adiantar o dicionário, preciso que você apenas adicione as outras entidades, o estilo continua o mesmo" (anexo: dicionario_dados.html da Entrega 1).
+- **Resposta recebida:** HTML v2.0 com as 10 entidades novas, atributos novos nas já existentes, relacionamentos (24), fluxo de dados, matriz de acesso e histórico de revisões. Decisões da IA a validar pelo grupo: domínios fechados de ambiente (ativo/inativo), acesso (aguardando/no ambiente/encerrado/desistiu), comanda (em uso/baixada/perdida), forma de pagamento (dinheiro/crédito/débito/pix), movimentação (entrada/saída/ajuste positivo/ajuste negativo) e setor de produção.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 13 — Análise do documento de regras não incluídas e KPIs feito por um integrante
+- **Ferramenta e etapa:** Claude — revisão de um rascunho de um integrante (regras de negócio não incluídas e arquitetura analítica para BI e IA) contra o DER final e o esqueleto da Entrega 2.
+- **Motivação:** descobrir contradições com o DER e o que falta para atender a seção 1.1 e a seção 1.6.
+- **Prompt:** "Documento que um dos integrantes fez, não está 100% ele disse, é só para dar uma analisada e ver o que falta" (anexo: documento1.odt).
+- **Resposta recebida:** lista de contradições (compras e fornecedores, taxa de serviço, fidelidade, LGPD, reservas), conferência de calculabilidade dos 11 KPIs (K5, K9 e K11 não calculáveis como escritos), metas sem origem, KPIs ausentes de compras e caixa, e itens do esqueleto não atendidos (rastreabilidade, justificativa de processos e requisitos não incluídos, lista de RN).
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 14 — Exportação das correções do documento de regras e KPIs em PNG
+- **Ferramenta e etapa:** Claude — transformação da análise do documento do integrante em uma imagem PNG para enviar ao grupo.
+- **Prompt:** "exporte essas correções para eu mandar pro outro integrante, export num png".
+- **Resposta recebida:** `correcoes_documento_regras_bi.png` com as cinco regras que contradizem o DER, a tabela de calculabilidade dos 11 KPIs, os itens a incluir e a observação sobre a tabela de rastreabilidade.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 15 — Segunda análise do documento de regras e BI (versão corrigida pelo integrante)
+- **Ferramenta e etapa:** Claude — conferência da versão corrigida (documento2.docx) contra o DER, o esqueleto e as correções anteriores.
+- **Prompt:** "analise agora a correção da parte do outro membro sobre BI e regras de negócio" (anexo: documento2.docx).
+- **Resposta recebida:** confirmação de que as contradições anteriores foram resolvidas; ajustes restantes: definição do K1 (inclui quem está na fila), regra de ambiente nos K7 e K10 ("primeira mesa" não calculável), K14 com duas definições, G05 ausente na rastreabilidade do P2, linha de horário de funcionamento/normas de conduta, framing da última aplicação de IA; pendências: lista de RN com códigos, justificativa de processos e requisitos não incluídos, confirmação na entrevista, script com G01 a G16.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 16 — Aplicação dos ajustes no documento de regras e BI
+- **Ferramenta e etapa:** Claude — edição do documento do integrante (regras não incluídas e arquitetura analítica 1.6) com os seis ajustes apontados na segunda análise.
+- **Motivação:** deixar o texto calculável contra o DER e no padrão de títulos do README.
+- **Prompt:** "certo, pode aplicar os ajustes".
+- **Resposta recebida:** `regras_e_bi_corrigido.md` com: K1 restrito a acessos com entrada e sem saída; K2 apenas com entrada; K7 e K10 usando o ambiente da mesa de menor `id_mesa`; K14 com uma só definição (qtd × custo_unitario, sem compras canceladas) e consulta de auditoria do `valor_total` das compras; G05 incluído na rastreabilidade do P2; linha de horário de funcionamento, áreas restritas e normas de conduta; última aplicação de IA reescrita para a gerência. Metas continuam propostas, a confirmar na entrevista.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 17 — Confronto das respostas da entrevista com o DER, o dicionário e as regras
+- **Ferramenta e etapa:** Claude — leitura das respostas da entrevista (roteiro preenchido, 06/10/26) e comparação com o DER de 19 entidades, o dicionário v2.0 e o documento de regras e BI.
+- **Motivação:** validar com o responsável os domínios e processos assumidos e achar o que a realidade do Ponto A muda no modelo.
+- **Prompt:** "Temos a entrevista!" (anexo: roteiro_entrevista_ponto_a preenchido).
+- **Resposta recebida:** lista de divergências: cliente não é cadastrado e nenhum dado de cliente é guardado (CLIENTE e LGPD), prato em uma só categoria (Classifica passa a 1:N), sem sangria (SANGRIA), bebidas sem vínculo com o estoque (K9 aproximado), pulseira de 0 a 9999 que reinicia (código único só entre as comandas em uso), mais cargos, ambientes e regras novas (cancelamento e estorno só pela gerência, salão só refeições, deck e subsolo só bebidas e fumódromo) e perguntas sem resposta.
+- **Fontes / rejeitado / justificativa / reflexão:** arquivo da entrevista, (pode ser visto por completo no [levantamento/levantamento.md](levantamento/levantamento.md))
+
+### Uso 18 — Conferência do DER corrigido e sincronização dos documentos
+- **Ferramenta e etapa:** Claude — leitura do DER final (17 entidades, 22 relacionamentos) contra a entrevista e os documentos do grupo; atualização do dicionário (v2.1) e da seção do DER para o README; comparação de tudo o que existe com as tarefas do esqueleto da Entrega 2.
+- **Motivação:** garantir que DER, dicionário, seção do README, regras e KPIs descrevam o mesmo modelo antes do modelo lógico.
+- **Prompt:** "certo, vamos pegar tudo que temos e comparar com as tarefas da entrega 2. Mandei o DER corrigido também" (anexo: DER.pdf).
+- **Resposta recebida:** confirmação de que o DER bate com o dicionário, com o atributo `motivo` acrescentado em MOVIMENTACAO_ESTOQUE; `secao_der.md` e `dicionario_dados.html` atualizados; lista do que falta por item do esqueleto.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 19 — Mapeamento dos processos de negócio e dos processos prováveis não incluídos
+- **Ferramenta e etapa:** Claude — organização dos processos do Ponto A a partir da entrevista e da observação presencial, com os dados de cada processo (campos do DER), e levantamento de processos comuns em restaurantes que ficaram de fora.
+- **Motivação:** o esqueleto pede os principais processos com os dados envolvidos, a inclusão dos processos que existem na casa e a justificativa dos prováveis não incluídos.
+- **Prompt:** "com as informações que temos dá para mapear os processos de negócio também".
+- **Resposta recebida:** dez processos (PR01 a PR10), dois deles com situação a confirmar, e uma tabela de nove processos prováveis fora do modelo, com justificativa. Delivery (aplicativo de terceiros) e valet (serviço de apoio) ficaram fora do modelo, por decisão do grupo.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 20 — Análise das regras de negócio e da seção de BI e IA contra a entrevista e o DER final
+- **Ferramenta e etapa:** Claude — conferência do documento de regras e BI (documento2.docx, de outro integrante) contra a entrevista, o DER de 17 entidades e o esqueleto da Entrega 2.
+- **Motivação:** garantir que regras, KPIs e rastreabilidade descrevam o modelo final e o que o responsável informou.
+- **Prompt:** "Vamos ver sobre as regras de negócio e seção de BI e IA. Mandei novamente o arquivo que outro membro fez já que é a parte dele e vamos analisar" (anexo: documento2.docx).
+- **Resposta recebida:** lista de trechos que contradizem a entrevista (cliente cadastrado, LGPD, reservas, gorjeta, delivery), KPIs que dependem de campos removidos (K12, sangria no K13, status cancelado em PEDIDO), ajustes pendentes de rodadas anteriores e itens do esqueleto ainda não atendidos (lista de regras com código, KPIs priorizados pela gerência).
+- **Fontes / rejeitado / justificativa / reflexão:** anexo de outro integrante do grupo para fins de correção e saber se está no assunto certo
+
+### Uso 21 — Lista de regras de negócio e nova seção de BI e IA
+- **Ferramenta e etapa:** Claude — montagem da lista de regras de negócio (RN01 a RN29) a partir da entrevista e da observação, e reescrita da seção 1.6 (informações estratégicas, KPIs, painéis, aplicações de IA e rastreabilidade) sobre o DER final.
+- **Motivação:** o esqueleto pede regras com código e dados envolvidos, e KPIs que o banco consiga calcular, com consulta no script e confirmação com o responsável.
+- **Prompt:** "vamos montar a lista de RN a partir da entrevista e refazer a parte de BI e IA".
+- **Resposta recebida:** `regras_negocio.md` com 29 regras (operacionais, de pagamento e caixa, de estoque e compras, legais) e a tabela das não incluídas; `bi_e_ia_secao_1_6.md` com 16 KPIs (K12 de entrega e a sangria saíram; entrou o consumo por visita e mesa), seis painéis, seis aplicações de IA e rastreabilidade para G01 a G16.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 22 — Verificação do DER e redação da seção 1.2 (conversão para o modelo lógico)
+- **Ferramenta e etapa:** Claude — verificação de que o DER final está pronto para a conversão e redação da seção 1.2 (entidades em tabelas, atributos em colunas, relacionamentos em chaves, tratamento das cardinalidades e da generalização).
+- **Motivação:** o esqueleto pede, para a conversão, o que virou tabela, coluna, chave, tabela associativa e a estratégia para generalização.
+- **Prompt:** "vamos para a seção 1.2, Conversão do Modelo Conceitual para o Modelo Lógico. O diagrama atualizado já está preparado para isso?"
+- **Resposta recebida:** confirmação de que o DER não tem generalização, atributos multivalorados nem compostos; texto da seção 1.2 com 19 tabelas (17 entidades e 2 associativas), 24 chaves estrangeiras (20 nas tabelas das entidades e 4 nas associativas) e a decisão de colocar a chave do 1:1 em comanda; registro de que os mínimos (1,n) serão verificados por consultas de auditoria.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 23 — Redação das seções 1.3, 1.4 e 1.5 (chaves, normalização e justificativas técnicas)
+- **Ferramenta e etapa:** Claude — lista de PKs e FKs das 19 tabelas, conferência da 1FN, 2FN e 3FN e justificativas técnicas (chaves, restrições com o código da regra, decisões arquiteturais).
+- **Motivação:** o esqueleto pede a lista de chaves, o processo de normalização com justificativa de cada forma e a justificativa de cada restrição citando a regra de negócio.
+- **Prompt:** "já pode emendar o 1.3, 1.4 e 1.5 que já estão praticamente montados".
+- **Resposta recebida:** `secoes_1_3_a_1_5.md` com 19 PKs e 24 FKs; normalização com os casos de cada forma, o preço do momento como fato histórico e três colunas calculáveis tratadas como redundância controlada; tabela de restrições com RN01 a RN29; lista das regras que não viram restrição de banco.
+- **Fontes / rejeitado / justificativa / reflexão:** seções já prontas devido as outras terem finalizado e o DER ter sido um dos focos iniciais
+
+### Uso 24 — Análise dos processos de negócio e dos requisitos escritos por outro integrante
+- **Ferramenta e etapa:** Claude — revisão dos dois arquivos da seção 1.1 (processos e requisitos) contra o esqueleto da Entrega 2, a entrevista, o DER final, o dicionário v2.1 e as RN/KPIs do grupo.
+- **Motivação:** o integrante responsável não sabia se estava na linha certa, se tinha passado do necessário ou se estava bom.
+- **Prompt:** "Esses são 2 arquivos que um integrante do grupo responsável pelos processos de negócio e os requisitos fez. Ele está em dúvida se está na linha certa, já passou do necessário ou não está bom. Dê uma analisada, por favor."
+- **Resposta recebida:** a versão 2 (somente entrevista, marcadores [E-n]) é a melhor base; a versão 1 passou do necessário (ajustes de DER, perguntas, metas inventadas). Ambas têm trechos desatualizados em relação às decisões posteriores (formas de pagamento, 55 mesas, segurança entrega a pulseira, cancelamento por item, sem `data_hora_entrega`, delivery e valet fora do escopo, status de PEDIDO e COMANDA).
+- **Fontes / rejeitado / justificativa / reflexão:** outro integrante do grupo apenas conferindo oq tinha feito e acabou descorindo que passou do "limite"
+- **Atualização:** a pedido do grupo, Claude gerou `secao_1_1_processos_e_requisitos_corrigida.md`: processos = PR01–PR10 do grupo; requisitos reescritos a partir da versão 2 do colega (28 RF e 10 RNF), sem metas inventadas além das marcadas como proposta, com tabela de não incluídos, cobertura de P1/P2 e KPIs e cinco pontos a confirmar.
+
+### Uso 25 — Revisão do modelo lógico e do SQL gerado pelo brModelo
+- **Ferramenta e etapa:** Claude — revisão dos PDFs do modelo lógico e dos scripts exportados pelo brModelo (seção 2).
+- **Motivação:** o assistente de conversão do brModelo colocou chaves estrangeiras do lado errado, criou a tabela `possui` e deixou colunas sobrando.
+- **Prompt:** "modelo logico atualizado e o script tambem. Faça a analise agora pfv".
+- **Resposta recebida:** lista de correções por rodada (FKs invertidas, colunas residuais, duplicidade de `id_produto` em `prato`, tipos); `roteiro_modelo_logico.md` com as 19 tabelas e as 24 ligações. Os tipos finais ficaram definidos no SQL, porque o brModelo tem poucos tipos.
+- **Fontes / rejeitado / justificativa / reflexão:** nenhum(a)
+
+### Uso 26 — Script SQL e massa de dados
+- **Ferramenta e etapa:** Claude — geração e teste do `script.sql` (DDL, SELECT com JOIN, UPDATE, DELETE, G01–G16 e auditorias A01–A22) e da `massa_de_dados.sql` (seção 3 e 4).
+- **Motivação:** o SQL do brModelo não serve como script final (só tipos INT, chave primária dupla, sem restrições nomeadas, sem regras de negócio).
+- **Prompt:** "agora sim colei o script certo".
+- **Resposta recebida:** DDL com 19 tabelas, restrições nomeadas e todas as FKs em RESTRICT; massa gerada por script (semana de 26/10 a 01/11/2026: 183 visitas, 1.354 pedidos, 2.427 itens, 240 pagamentos, 82 compras, 458 movimentações); consultas gerenciais ligadas aos KPIs K1–K16; auditorias ligadas às RN. Testado do zero em MariaDB 10.11, sem erro.
+- **Fontes / rejeitado / justificativa / reflexão:** O script funciona perfeitamente no mySQLWorkBench 8
 
 ---
 
 ## 7\. Apresentação Corporativa Final
 
-*(pitch cronometrado de **8 minutos** — vale 15%, maior peso individual da Dimensão Procedimental)*
-
-Formato: slides com estética limpa e minimalista — **proibida a leitura de blocos longos de texto**.
-
-O pitch deve conter, nesta ordem:
-
-1. **Contextualização do problema institucional/organizacional** solucionado  
-2. **Apresentação da solução** proposta  
-3. **Apresentação do modelo lógico**  
-4. **Demonstração da implementação** (SQL rodando)  
-5. **Demonstração de consultas** (gerenciais/auditoria)  
-6. **Potencial para BI e IA**  
-7. **Benefícios diretos** para a tomada de decisão da organização
-
-**Defesa do modelo lógico:** logo após o pitch, fora do tempo cronometrado, o grupo responde às perguntas do professor e da turma. **Cada pergunta deve ser respondida exclusivamente pelo aluno a quem foi dirigida** — os colegas não podem responder por ele.
-
-**Regras da apresentação:**
-
-- **Participação:** não é necessário e nem recomendável que todos os integrantes falem durante o pitch, mas é **obrigatório que todos participem** da apresentação e estejam presentes para a defesa.  
-- **Ausência:** o integrante ausente na apresentação terá **nota reduzida**, exceto em casos com justificativa legal (ex.: doença que impeça o comparecimento, com atestado).  
-- **Apresentação pessoal:** será avaliada. Postura e vestimenta adequadas a uma apresentação corporativa. Não são adequados bonés, bermudas, chinelos, camisas de time, roupas esportivas ou semelhantes.
-
----
-
-## Critérios Atitudinais (20%)
-
-**Estes critérios NÃO constam explicitamente como item de entrega nos artefatos do grupo.** Eles são avaliados por meio de **Avaliação 360º entre os integrantes do grupo** (cada membro avalia os colegas de equipe) e, no caso da colaboração, também pela **colaboração equilibrada no histórico de commits** do repositório GitHub (Seção 5\) e pela conduta do grupo na **Apresentação Corporativa Final** (seção 7\) — não pela leitura do relatório:
-
-- **Participação e colaboração (5%):** participação técnica ativa \+ colaboração com o grupo, incluindo colaboração equilibrada no histórico de commits do repositório GitHub.  
-- **Responsabilidade (5%):** cumprimento de prazos \+ entrega dos itens sob sua responsabilidade.  
-- **Postura profissional (5%):** comunicação profissional \+ conduta ética.  
-- **Autonomia e resolução de problemas (5%):** buscar soluções independentes \+ propor melhorias.
-
----
-
-## Resumo dos Pesos
-
-| Dimensão | Peso total | Itens principais |
-| :---- | :---- | :---- |
-| Conceitual | 30% | Conversão conceitual→lógico (7,5%), Normalização (7,5%), Justificativas técnicas (7,5%), Análise BI/IA (7,5%) |
-| Procedimental | 50% | Modelo lógico (10%), Implementação SQL (12%), Documentação/repositório (13%), Apresentação final (15%) |
-| Atitudinal | 20% | Participação/colaboração, responsabilidade, postura profissional, autonomia |
-
-&nbsp;
-
-**Entrega final:** Relatório Técnico \+ Dicionário de Dados \+ Modelo Conceitual \+ Modelo Lógico \+ Script SQL \+ Massa de Dados \+ Repositório GitHub, seguidos da Apresentação Corporativa Final perante o professor e a turma.
-
-&nbsp;
+[Link dos slides, a preencher.]

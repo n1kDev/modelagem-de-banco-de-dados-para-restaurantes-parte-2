@@ -82,7 +82,7 @@
 <table>
   <thead><tr><th>Entidade</th><th>Relaciona-se com</th><th>Cardinalidade</th></tr></thead>
   <tbody>
-    <tr><td>MESA</td><td>VISITA (Recebe)</td><td>N:N (0,n)–(1,n) — uma mesa recebe várias visitas ao longo do tempo, e uma visita pode ocupar mais de uma mesa</td></tr>
+    <tr><td>MESA</td><td>VISITA (Ocupa)</td><td>N:N (0,n)–(1,n) — uma mesa é ocupada por várias visitas ao longo do tempo, e uma visita pode ocupar mais de uma mesa</td></tr>
     <tr><td>AMBIENTE</td><td>MESA (Possui)</td><td>1:N (1,n)–(1,1) — um ambiente possui várias mesas, cada mesa pertence a um único ambiente</td></tr>
     <tr><td>AMBIENTE</td><td>CONTROLE_ACESSO (Controla)</td><td>1:N (0,n)–(1,1) — um ambiente tem vários registros de acesso, cada registro é de um único ambiente</td></tr>
     <tr><td>VISITA</td><td>CONTROLE_ACESSO (Solicita)</td><td>1:N (0,n)–(1,1) — uma visita pode solicitar acesso a vários ambientes (ou a nenhum), cada registro de acesso é de uma única visita</td></tr>
@@ -103,12 +103,12 @@
     <tr><td>COMPRA</td><td>ITEM_COMPRA (Inclui)</td><td>1:N (1,n)–(1,1) — uma compra tem ao menos um item, cada item pertence a uma única compra</td></tr>
     <tr><td>PRODUTO_ESTOQUE</td><td>ITEM_COMPRA (É comprado em)</td><td>1:N (0,n)–(1,1) — um produto pode constar em vários itens de compra (ou em nenhum), cada item é de um único produto</td></tr>
     <tr><td>FUNCIONARIO</td><td>CAIXA (Opera)</td><td>1:N (0,n)–(1,1) — um funcionário opera vários turnos de caixa, cada turno é operado por um único funcionário</td></tr>
-    <tr><td>CAIXA</td><td>PAGAMENTO (Recebe)</td><td>1:N (0,n)–(1,1) — um caixa recebe vários pagamentos, cada pagamento é finalizado em um único caixa</td></tr>
+    <tr><td>CAIXA</td><td>PAGAMENTO (Registra)</td><td>1:N (0,n)–(1,1) — um caixa registra vários pagamentos, cada pagamento é finalizado em um único caixa</td></tr>
   </tbody>
 </table>
 </div>
  
-<p>Neste modelo conceitual, ITEM_PEDIDO e ITEM_COMPRA são entidades próprias, com atributos, que resolvem as ligações entre pedido e prato e entre compra e produto de estoque. Os demais relacionamentos N:N (Recebe e Arrecada) são mantidos como relacionamentos, e sua transformação em entidades associativas ficará para o modelo lógico. VISITA é o eixo do modelo: liga mesa(s) e comanda e, a partir dela, derivam-se os acessos aos ambientes, os pedidos e os pagamentos.</p>
+<p>Neste modelo conceitual, ITEM_PEDIDO e ITEM_COMPRA são entidades próprias, com atributos, que resolvem as ligações entre pedido e prato e entre compra e produto de estoque. Os demais relacionamentos N:N (Ocupa e Arrecada) são mantidos como relacionamentos, e sua transformação em entidades associativas ficará para o modelo lógico. VISITA é o eixo do modelo: liga mesa(s) e comanda e, a partir dela, derivam-se os acessos aos ambientes, os pedidos e os pagamentos.</p>
  
 <p><b>Mesa</b> é o posto de atendimento do salão, identificado por um número e vinculado a um ambiente.</p>
 <p><b>Ambiente</b> é cada espaço físico do restaurante com capacidade própria (ex.: salão, deck, subsolo), cujo acesso é controlado.</p>
@@ -368,7 +368,7 @@ TP_FORMA_PAGAMENTO = [dinheiro | cartão de crédito | cartão de débito | pix 
 <h3>CAIXA</h3>
 <pre class="notation">CAIXA = @ID_CAIXA + DT_ABERTURA + VL_ABERTURA + (DT_FECHAMENTO) + (VL_FECHAMENTO) + TP_STATUS_CAIXA
 TP_STATUS_CAIXA = [aberto | fechado]</pre>
-<p><b>Leitura:</b> CAIXA representa um turno de caixa: abertura no início do turno e fechamento ao final; a casa funciona em dois turnos. DT_FECHAMENTO e VL_FECHAMENTO são opcionais porque só existem depois do fechamento. O funcionário que opera o caixa, os pagamentos recebidos e as sangrias são expressos pelos relacionamentos Opera e Recebe.</p>
+<p><b>Leitura:</b> CAIXA representa um turno de caixa: abertura no início do turno e fechamento ao final; a casa funciona em dois turnos. DT_FECHAMENTO e VL_FECHAMENTO são opcionais porque só existem depois do fechamento. O funcionário que opera o caixa, os pagamentos recebidos e as sangrias são expressos pelos relacionamentos Opera e Registra.</p>
 <div class="table-wrap">
 <table class="dict">
   <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>

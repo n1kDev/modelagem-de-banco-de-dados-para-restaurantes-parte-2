@@ -16,7 +16,7 @@ A equipe tem de 60 a 70 funcionários: 11 garçons, 6 no bar, 3 no caixa, 5 vale
 
 **Perda da pulseira.** O cliente é identificado pelo garçom que tirou o pedido e pela mesa em que estava. Tudo é registrado no momento do pedido. O responsável apontou que a falta de identificação do cliente deixa pontas soltas, como a própria perda da comanda.
 
-**Pedido.** O garçom anota o pedido em um aparelho de mão (Palmer): comida, bebida, ponto da carne e observações. Ao finalizar, o sistema envia uma comanda a cada setor responsável. O preço dos pratos não muda com frequência e fica registrado no pedido. As bebidas são vendidas por garrafa, lata e dose, e cada prato pertence a uma só categoria.
+**Pedido.** O garçom anota o pedido em um aparelho de mão (Palm): comida, bebida, ponto da carne e observações. Ao finalizar, o sistema envia uma comanda a cada setor responsável. O preço dos pratos não muda com frequência e fica registrado no pedido. As bebidas são vendidas por garrafa, lata e dose, e cada prato pertence a uma só categoria.
 
 **Cancelamento e estorno.** Só a gerência cancela um pedido. O cancelamento sobe ao sistema junto com a comanda de cada setor. Estornos e alterações em conta fechada também são feitos só pela gerência.
 
