@@ -1014,4 +1014,4 @@ Obs.: o DELETE D01 remove um dos fornecedores sem compra, por isso o banco termi
 
 ## 7\. Apresentação Corporativa Final
 
-[Link dos slides, a preencher.]
+[Link do video do grupo](https://youtu.be/Agk97OTuins)
